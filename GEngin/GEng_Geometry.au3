@@ -26,15 +26,44 @@
 #ce
 #EndRegion ###
 
+Func _GEng_PointToPoint_Dist($x0, $y0, $x, $y)
+	$x = $x - $x0
+	$y = $y - $y0
+	; ---
+	$tmp = ($x * $x) + ($y * $y)
+	; ---
+	Return Sqrt($tmp)
+EndFunc
+
+; Retourne l'angle "brute", par rapport au point d'origine de hSprite (Utile pour SetAngle)
+Func _GEng_PointToPoint_Angle($x0, $y0, $x, $y)
+	Local $difX = $x - $x0
+	Local $difY = $y - $y0
+	$tmp = Abs(ATan($difY / $difX))
+	; ---
+	If $difX < 0 Then $tmp = $__GEng_PI - $tmp
+	If $difY < 0 Then $tmp = $__GEng_PI + ($__GEng_PI - $tmp)
+	; ---
+	Return __GEng_GeometryRad2Deg($tmp)
+EndFunc
+
+Func _GEng_PointToPoint_Vector($x0, $y0, $x, $y, $iGrandeur = Default)
+	Local $angle = _GEng_PointToPoint_Angle($x0, $y0, $x, $y)
+	; ---
+	If $iGrandeur = Default Then $iGrandeur = _GEng_PointToPoint_Dist($x0, $y0, $x, $y)
+	; ---
+	Return _GEng_AngleToVector($angle, $iGrandeur)
+EndFunc
+
+
+; ##############################################################
+
 
 Func _GEng_SpriteToPoint_Dist(ByRef $hSprite, $x, $y)
 	If Not __GEng_Sprite_IsSprite($hSprite) Then Return SetError(1, 0, 0)
 	; ---
 	Local $x0, $y0
-	Local $tmp = _GEng_SpriteGetPos($hSprite)
-	$x0 = $tmp[0]
-	$y0 = $tmp[1]
-	$tmp = 0
+	_GEng_Sprite_PosGet($hSprite, $x0, $y0)
 	; ---
 	$x = $x - $x0
 	$y = $y - $y0
@@ -49,10 +78,7 @@ Func _GEng_SpriteToPoint_Angle(ByRef $hSprite, $x, $y)
 	If Not __GEng_Sprite_IsSprite($hSprite) Then Return SetError(1, 0, 0)
 	; ---
 	Local $x0, $y0
-	Local $tmp = _GEng_SpriteGetPos($hSprite) ; problème de l'inversion de l'angle
-	$x0 = $tmp[0]
-	$y0 = $tmp[1]
-	$tmp = 0
+	_GEng_Sprite_PosGet($hSprite, $x0, $y0) ; problème de l'inversion de l'angle = Reglé par _GEng_SpriteToPoint_AngleDiff
 	; ---
 	Local $difX = $x - $x0
 	Local $difY = $y - $y0
@@ -65,11 +91,13 @@ Func _GEng_SpriteToPoint_Angle(ByRef $hSprite, $x, $y)
 EndFunc
 
 ; Retourne la différence d'angle entre hSprite et la position donné (Utile pour SetAngleSpeed)
-Func _GEng_SpriteToPoint_AngleDiff(ByRef $hSprite, $x, $y) ; 0.2 ms
+;   (De 0 à 180 => Sens horaire, De 0 à -179 => Send Anti-Horaire)
+Func _GEng_SpriteToPoint_AngleDiff(ByRef $hSprite, $x, $y) ; 0.2 ms 
 	If Not __GEng_Sprite_IsSprite($hSprite) Then Return SetError(1, 0, 0)
 	; ---
 	Local $angleDiff = _GEng_SpriteToPoint_Angle($hSprite, $x, $y)
-	Local $angleCurr = _GEng_SpriteGetAngle($hSprite)
+	Local $angleCurr
+	_GEng_Sprite_AngleGet($hSprite, $angleCurr)
 	If $angleCurr = 0 Then $angleCurr = 360
 	; ---
 	Local $angleInverse = __GEng_GeometryReduceAngle($angleCurr + 180)
@@ -103,15 +131,11 @@ Func _GEng_SpriteToPoint_AngleDiff(ByRef $hSprite, $x, $y) ; 0.2 ms
 	Return $result
 EndFunc
 
-Func _GEng_SpriteToPoint_Vector(ByRef $hSprite, $x, $y, $iGrandeur = Default)
+Func _GEng_SpriteToPoint_Vector(ByRef $hSprite, $x, $y, $iGrandeur = 1)
 	If Not __GEng_Sprite_IsSprite($hSprite) Then Return SetError(1, 0, 0)
 	; ---
-	Local $x0, $y0
-	Local $tmp = _GEng_SpriteGetPos($hSprite)
-	$x0 = $tmp[0]
-	$y0 = $tmp[1]
-	$tmp = 0
-	; ---
+	Local $angle = _GEng_SpriteToPoint_Angle($hSprite, $x, $y)
+	Return _GEng_AngleToVector($angle, $iGrandeur)
 EndFunc
 
 ; ##############################################################
@@ -120,21 +144,36 @@ Func _GEng_SpriteToSprite_Dist(ByRef $hSprite, ByRef $hSprite2)
 	If Not __GEng_Sprite_IsSprite($hSprite) Then Return SetError(1, 0, 0)
 	If Not __GEng_Sprite_IsSprite($hSprite2) Then Return SetError(1, 0, 0)
 	; ---
-	
+	Local $x2, $y2
+	_GEng_Sprite_PosGet($hSprite2, $x2, $y2)
+	Return _GEng_SpriteToPoint_Dist($hSprite, $x2, $y2)
 EndFunc
 
 Func _GEng_SpriteToSprite_Angle(ByRef $hSprite, ByRef $hSprite2)
 	If Not __GEng_Sprite_IsSprite($hSprite) Then Return SetError(1, 0, 0)
 	If Not __GEng_Sprite_IsSprite($hSprite2) Then Return SetError(1, 0, 0)
 	; ---
-	
+	Local $x2, $y2
+	_GEng_Sprite_PosGet($hSprite2, $x2, $y2)
+	Return _GEng_SpriteToPoint_Angle($hSprite, $x2, $y2)
 EndFunc
 
-Func _GEng_SpriteToSprite_Vector(ByRef $hSprite, ByRef $hSprite2, $iGrandeur = Default)
+Func _GEng_SpriteToSprite_AngleDiff(ByRef $hSprite, ByRef $hSprite2)
 	If Not __GEng_Sprite_IsSprite($hSprite) Then Return SetError(1, 0, 0)
 	If Not __GEng_Sprite_IsSprite($hSprite2) Then Return SetError(1, 0, 0)
 	; ---
-	
+	Local $x2, $y2
+	_GEng_Sprite_PosGet($hSprite2, $x2, $y2)
+	Return _GEng_SpriteToPoint_AngleDiff($hSprite, $x2, $y2)
+EndFunc
+
+Func _GEng_SpriteToSprite_Vector(ByRef $hSprite, ByRef $hSprite2, $iGrandeur = 1)
+	If Not __GEng_Sprite_IsSprite($hSprite) Then Return SetError(1, 0, 0)
+	If Not __GEng_Sprite_IsSprite($hSprite2) Then Return SetError(1, 0, 0)
+	; ---
+	Local $x2, $y2
+	_GEng_Sprite_PosGet($hSprite2, $x2, $y2)
+	Return _GEng_SpriteToPoint_Vector($hSprite, $x2, $y2, $iGrandeur)
 EndFunc
 
 ; ##############################################################

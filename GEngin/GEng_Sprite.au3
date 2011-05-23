@@ -29,11 +29,11 @@ Global $__GEng_Sprites[1] = [0]
 Global Const $__GEng_SpritesArrayUB = 42
 Global Enum $GEng_Origin_Mid, $GEng_Origin_TL, $GEng_Origin_TR, $GEng_Origin_BL, $GEng_Origin_BR
 
-Func _GEng_SpriteCreate($sName, $hImage = Default)
+Func _GEng_Sprite_Create($sName, $hImage = Default)
 	Local $hSprite[$__GEng_SpritesArrayUB]
 	__GEng_Sprite_InitArray($hSprite, $sName)
 	; ---
-	If $hImage <> Default Then _GEng_SpriteSetImage($hSprite, $hImage)
+	If $hImage <> Default Then _GEng_Sprite_ImageSet($hSprite, $hImage)
 	_GEng_SpriteAnimRewind($hSprite)
 	; ---
 	_ArrayAdd($__GEng_Sprites, $sName)
@@ -42,7 +42,7 @@ Func _GEng_SpriteCreate($sName, $hImage = Default)
 	Return $hSprite
 EndFunc
 
-Func _GEng_SpriteSetImage(ByRef $hSprite, ByRef $hImage, $x = Default, $y = Default, $w = Default, $h = Default) ; If Default => 0,0,ImgW,ImgH
+Func _GEng_Sprite_ImageSet(ByRef $hSprite, ByRef $hImage, $x = Default, $y = Default, $w = Default, $h = Default) ; If Default => 0,0,ImgW,ImgH
 	If Not __GEng_Sprite_IsSprite($hSprite) Then Return SetError(1, 0, 0)
 	If Not __GEng_Image_IsImage($hImage) Then Return SetError(1, 0, 0)
 	; ---
@@ -64,12 +64,12 @@ Func _GEng_SpriteSetImage(ByRef $hSprite, ByRef $hImage, $x = Default, $y = Defa
 	;$hSprite[10] = $hSprite[4]
 	; ---
 	If $hSprite[9] = 0 And $hSprite[10] = 0 Then _ ; Si il n'y avait aucune image dans le sprite
-		_GEng_SpriteSetSize($hSprite, -1, -1) ; on initialiser la taille (Size) aux dimensions de l'image
+		_GEng_Sprite_SizeSet($hSprite, -1, -1) ; on initialiser la taille (Size) aux dimensions de l'image
 	; ---
 	Return 1
 EndFunc
 
-Func _GEng_SpriteSetImageRect(ByRef $hSprite, $x, $y, $w, $h, $InitSize = 1)
+Func _GEng_Sprite_ImageSetRect(ByRef $hSprite, $x, $y, $w, $h, $InitSize = 1)
 	If Not __GEng_Sprite_IsSprite($hSprite) Then Return SetError(1, 0, 0)
 	; ---
 	$hSprite[1] = $x
@@ -78,12 +78,12 @@ Func _GEng_SpriteSetImageRect(ByRef $hSprite, $x, $y, $w, $h, $InitSize = 1)
 	$hSprite[4] = $h
 	; ---
 	If $InitSize Then _
-	_GEng_SpriteSetSize($hSprite, -1, -1) ; Pour initialiser la taille (Size) aux dimensions de l'image
+	_GEng_Sprite_SizeSet($hSprite, -1, -1) ; Pour initialiser la taille (Size) aux dimensions de l'image
 	; ---
 	Return 1
 EndFunc
 
-Func _GEng_SpriteDraw(ByRef $hSprite, $iCalculateMovements = 1)
+Func _GEng_Sprite_Draw(ByRef $hSprite, $iCalculateMovements = 1)
 	If Not __GEng_Sprite_IsSprite($hSprite) Then Return SetError(1, 0, 0)
 	If Not __GEng_Sprite_ContainsImage($hSprite) Then Return SetError(1, 0, 0)
 	; ---
@@ -145,7 +145,7 @@ Func _GEng_SpriteDraw(ByRef $hSprite, $iCalculateMovements = 1)
 	Return $ret
 EndFunc
 
-Func _GEng_SpriteDel(ByRef $hSprite)
+Func _GEng_Sprite_Del(ByRef $hSprite)
 	If Not __GEng_Sprite_IsSprite($hSprite) Then Return SetError(1, 0, 0)
 	; ---
 	If $hSprite[5] <> "" Then

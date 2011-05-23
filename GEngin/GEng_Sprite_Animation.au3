@@ -27,7 +27,7 @@ Func _GEng_SpriteAnimate(ByRef $hSprite, ByRef $hAnim, $iStopFrame = Default)
 	Local $img
 	If $hSprite[41] = -1 Then
 		$img = __GEng_Anim_BuildImageFromFrame($hAnim, $hSprite[21])
-		_GEng_SpriteSetImage($hSprite, $img, $hAnim[$hSprite[21]][1], $hAnim[$hSprite[21]][2], $hAnim[$hSprite[21]][3], $hAnim[$hSprite[21]][4])
+		_GEng_Sprite_ImageSet($hSprite, $img, $hAnim[$hSprite[21]][1], $hAnim[$hSprite[21]][2], $hAnim[$hSprite[21]][3], $hAnim[$hSprite[21]][4])
 		$hSprite[21] += 1
 		$hSprite[41] = Timerinit()
 	Else
@@ -36,7 +36,7 @@ Func _GEng_SpriteAnimate(ByRef $hSprite, ByRef $hAnim, $iStopFrame = Default)
 			If $hSprite[21] > $hAnim[0][0] Then $hSprite[21] = 1
 			; ---
 			$img = __GEng_Anim_BuildImageFromFrame($hAnim, $hSprite[21])
-			_GEng_SpriteSetImage($hSprite, $img, $hAnim[$hSprite[21]][1], $hAnim[$hSprite[21]][2], $hAnim[$hSprite[21]][3], $hAnim[$hSprite[21]][4])
+			_GEng_Sprite_ImageSet($hSprite, $img, $hAnim[$hSprite[21]][1], $hAnim[$hSprite[21]][2], $hAnim[$hSprite[21]][3], $hAnim[$hSprite[21]][4])
 			$hSprite[41] = Timerinit()
 		EndIf
 		; ---

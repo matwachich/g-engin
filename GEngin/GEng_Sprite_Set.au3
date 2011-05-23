@@ -11,23 +11,30 @@
 #Region ### Functions ###
 #cs
 - Main Functions
-	_GEng_SpriteSetPos(ByRef $hSprite, $x, $y)
-	_GEng_SpriteSetSize(ByRef $hSprite, $w = Default, $h = Default)
-	_GEng_SpriteSetOrigin(ByRef $hSprite, $x = Default, $y = Default)
-	_GEng_SpriteSetOriginEx(ByRef $hSprite, $eOrigin)
-	_GEng_SpriteSetSpeed(ByRef $hSprite, $x, $y)
-	_GEng_SpriteSetAccel(ByRef $hSprite, $x, $y)
-	_GEng_SpriteSetInnertie(ByRef $hSprite, $x, $y)
-	_GEng_SpriteSetAngle(ByRef $hSprite, $iAngle)
-	_GEng_SpriteSetAngleOrigin(ByRef $hSprite, $iAngle)
-	_GEng_SpriteSetAngleSpeed(ByRef $hSprite, $iAngle, $iMax = 0)
-	_GEng_SpriteSetAngleAccel(ByRef $hSprite, $iAngle, $iMax = 0)
-	_GEng_spriteSetAngleInnertie(ByRef $hSprite, $iAngle)
+	_GEng_Sprite_PosSet(ByRef $hSprite, $x, $y)
+	_GEng_Sprite_SizeSet(ByRef $hSprite, $w = Default, $h = Default)
+	_GEng_Sprite_OriginSet(ByRef $hSprite, $x = Default, $y = Default)
+	_GEng_Sprite_OriginSetEx(ByRef $hSprite, $eOrigin)
+	_GEng_Sprite_AngleOriginSet(ByRef $hSprite, $iAngle)
+	; ---
+	_GEng_Sprite_SpeedSet(ByRef $hSprite, $x = Default, $y = Default, $max = Default)
+	_GEng_Sprite_SpeedAdd(ByRef $hSprite, $x = 0, $y = 0)
+	_GEng_Sprite_AccelSet(ByRef $hSprite, $x, $y)
+	_GEng_Sprite_AccelAdd(ByRef $hSprite, $x = 0, $y = 0)
+	_GEng_Sprite_InnertieSet(ByRef $hSprite, $x, $y)
+	; ---
+	_GEng_Sprite_AngleSet(ByRef $hSprite, $iAngle)
+	_GEng_Sprite_AngleAdd(ByRef $hSprite, $iAngle)
+	_GEng_Sprite_AngleSpeedSet(ByRef $hSprite, $iAngle = Default, $iMax = Default)
+	_GEng_Sprite_AngleSpeedAdd(ByRef $hSprite, $iAngle)
+	_GEng_Sprite_AngleAccelSet(ByRef $hSprite, $iAngle)
+	_GEng_Sprite_AngleAccelAdd(ByRef $hSprite, $iAngle)
+	_GEng_sprite_AngleInnertieSet(ByRef $hSprite, $iAngle)
 #ce
 #EndRegion ###
 
 
-Func _GEng_SpriteSetPos(ByRef $hSprite, $x, $y)
+Func _GEng_Sprite_PosSet(ByRef $hSprite, $x, $y)
 	If Not __GEng_Sprite_IsSprite($hSprite) Then Return SetError(1, 0, 0)
 	; ---
 	; J'enregistre la position que JE donne
@@ -38,7 +45,7 @@ Func _GEng_SpriteSetPos(ByRef $hSprite, $x, $y)
 EndFunc
 
 ; Apres setSize, origin est faussé
-Func _GEng_SpriteSetSize(ByRef $hSprite, $w = Default, $h = Default) ; If Default => No Change, <= 0 => Image Size
+Func _GEng_Sprite_SizeSet(ByRef $hSprite, $w = Default, $h = Default) ; If Default => No Change, <= 0 => Image Size
 	If Not __GEng_Sprite_IsSprite($hSprite) Then Return SetError(1, 0, 0)
 	; ---
 	If $w <> Default Then
@@ -60,7 +67,7 @@ Func _GEng_SpriteSetSize(ByRef $hSprite, $w = Default, $h = Default) ; If Defaul
 	Return 1
 EndFunc
 
-Func _GEng_SpriteSetOrigin(ByRef $hSprite, $x = Default, $y = Default) ; If Default => No change
+Func _GEng_Sprite_OriginSet(ByRef $hSprite, $x = Default, $y = Default) ; If Default => No change
 	If Not __GEng_Sprite_IsSprite($hSprite) Then Return SetError(1, 0, 0)
 	; ---
 	If $x <> Default Then _
@@ -71,21 +78,21 @@ Func _GEng_SpriteSetOrigin(ByRef $hSprite, $x = Default, $y = Default) ; If Defa
 	Return 1
 EndFunc
 
-Func _GEng_SpriteSetOriginEx(ByRef $hSprite, $eOrigin)
+Func _GEng_Sprite_OriginSetEx(ByRef $hSprite, $eOrigin)
 	If Not __GEng_Sprite_IsSprite($hSprite) Then Return SetError(1, 0, 0)
 	; ---
 	Local $ret = 1, $err = 0
 	Switch $eOrigin
 		Case $GEng_Origin_Mid
-			_GEng_SpriteSetOrigin($hSprite, $hSprite[9] / 2, $hSprite[10] / 2)
+			_GEng_Sprite_OriginSet($hSprite, $hSprite[9] / 2, $hSprite[10] / 2)
 		Case $GEng_Origin_TL
-			_GEng_SpriteSetOrigin($hSprite, 0, 0)
+			_GEng_Sprite_OriginSet($hSprite, 0, 0)
 		Case $GEng_Origin_TR
-			_GEng_SpriteSetOrigin($hSprite, $hSprite[9], 0)
+			_GEng_Sprite_OriginSet($hSprite, $hSprite[9], 0)
 		Case $GEng_Origin_BL
-			_GEng_SpriteSetOrigin($hSprite, 0, $hSprite[10])
+			_GEng_Sprite_OriginSet($hSprite, 0, $hSprite[10])
 		Case $GEng_Origin_BR
-			_GEng_SpriteSetOrigin($hSprite, $hSprite[9], $hSprite[10])
+			_GEng_Sprite_OriginSet($hSprite, $hSprite[9], $hSprite[10])
 		Case Else
 			$ret = 0
 			$err = 1
@@ -94,7 +101,19 @@ Func _GEng_SpriteSetOriginEx(ByRef $hSprite, $eOrigin)
 	Return SetError($err, 0, $ret)
 EndFunc
 
-Func _GEng_SpriteSetSpeed(ByRef $hSprite, $x = Default, $y = Default, $max = Default)
+Func _GEng_Sprite_AngleOriginSet(ByRef $hSprite, $iAngle) ; en degres
+	If Not __GEng_Sprite_IsSprite($hSprite) Then Return SetError(1, 0, 0)
+	; ---
+	$iAngle = __GEng_GeometryReduceAngle($iAngle)
+	; ---
+	$hSprite[39] = $iAngle
+	$hSprite[40] = __GEng_GeometryDeg2Rad($iAngle) ; rad
+	Return 1
+EndFunc
+
+; ##############################################################
+
+Func _GEng_Sprite_SpeedSet(ByRef $hSprite, $x = Default, $y = Default, $max = Default)
 	If Not __GEng_Sprite_IsSprite($hSprite) Then Return SetError(1, 0, 0)
 	; ---
 	If $x <> Default Then $hSprite[13] = $x
@@ -105,7 +124,7 @@ Func _GEng_SpriteSetSpeed(ByRef $hSprite, $x = Default, $y = Default, $max = Def
 	Return 1
 EndFunc
 
-Func _GEng_SpriteAddSpeed(ByRef $hSprite, $x = 0, $y = 0)
+Func _GEng_Sprite_SpeedAdd(ByRef $hSprite, $x = 0, $y = 0)
 	If Not __GEng_Sprite_IsSprite($hSprite) Then Return SetError(1, 0, 0)
 	; ---
 	$hSprite[13] += $x
@@ -114,16 +133,7 @@ Func _GEng_SpriteAddSpeed(ByRef $hSprite, $x = 0, $y = 0)
 	Return 1
 EndFunc
 
-Func _GEng_SpriteSubSpeed(ByRef $hSprite, $x = 0, $y = 0)
-	If Not __GEng_Sprite_IsSprite($hSprite) Then Return SetError(1, 0, 0)
-	; ---
-	$hSprite[13] -= $x
-	$hSprite[14] -= $y
-	; ---
-	Return 1
-EndFunc
-
-Func _GEng_SpriteSetAccel(ByRef $hSprite, $x, $y)
+Func _GEng_Sprite_AccelSet(ByRef $hSprite, $x, $y)
 	If Not __GEng_Sprite_IsSprite($hSprite) Then Return SetError(1, 0, 0)
 	; ---
 	$hSprite[15] = $x
@@ -132,7 +142,7 @@ Func _GEng_SpriteSetAccel(ByRef $hSprite, $x, $y)
 	Return 1
 EndFunc
 
-Func _GEng_SpriteAddAccel(ByRef $hSprite, $x = 0, $y = 0)
+Func _GEng_Sprite_AccelAdd(ByRef $hSprite, $x = 0, $y = 0)
 	If Not __GEng_Sprite_IsSprite($hSprite) Then Return SetError(1, 0, 0)
 	; ---
 	$hSprite[15] += $x
@@ -141,16 +151,7 @@ Func _GEng_SpriteAddAccel(ByRef $hSprite, $x = 0, $y = 0)
 	Return 1
 EndFunc
 
-Func _GEng_SpriteSubAccel(ByRef $hSprite, $x = 0, $y = 0)
-	If Not __GEng_Sprite_IsSprite($hSprite) Then Return SetError(1, 0, 0)
-	; ---
-	$hSprite[15] -= $x
-	$hSprite[16] -= $y
-	; ---
-	Return 1
-EndFunc
-
-Func _GEng_SpriteSetInnertie(ByRef $hSprite, $x, $y)
+Func _GEng_Sprite_InnertieSet(ByRef $hSprite, $x, $y)
 	If Not __GEng_Sprite_IsSprite($hSprite) Then Return SetError(1, 0, 0)
 	; ---
 	$hSprite[31] = $x
@@ -158,7 +159,9 @@ Func _GEng_SpriteSetInnertie(ByRef $hSprite, $x, $y)
 	Return 1
 EndFunc
 
-Func _GEng_SpriteSetAngle(ByRef $hSprite, $iAngle) ; en degres
+; ##############################################################
+
+Func _GEng_Sprite_AngleSet(ByRef $hSprite, $iAngle) ; en degres
 	If Not __GEng_Sprite_IsSprite($hSprite) Then Return SetError(1, 0, 0)
 	; ---
 	;$iAngle += $hSprite[39]
@@ -169,33 +172,48 @@ Func _GEng_SpriteSetAngle(ByRef $hSprite, $iAngle) ; en degres
 	Return 1
 EndFunc
 
-Func _GEng_SpriteSetAngleOrigin(ByRef $hSprite, $iAngle) ; en degres
+Func _GEng_Sprite_AngleAdd(ByRef $hSprite, $iAngle)
 	If Not __GEng_Sprite_IsSprite($hSprite) Then Return SetError(1, 0, 0)
 	; ---
-	$iAngle = __GEng_GeometryReduceAngle($iAngle)
+	Local $currAngle = $hSprite[17]
+	Local $newAngle = __GEng_GeometryReduceAngle($currAngle + $iAngle)
 	; ---
-	$hSprite[39] = $iAngle
-	$hSprite[40] = __GEng_GeometryDeg2Rad($iAngle) ; rad
+	$hSprite[17] = $newAngle ; deg
+	$hSprite[18] = __GEng_GeometryDeg2Rad($newAngle) ; rad
+	; ---
 	Return 1
 EndFunc
 
-Func _GEng_SpriteSetAngleSpeed(ByRef $hSprite, $iAngle, $iMax = Default)
+Func _GEng_Sprite_AngleSpeedSet(ByRef $hSprite, $iAngle = Default, $iMax = Default)
 	If Not __GEng_Sprite_IsSprite($hSprite) Then Return SetError(1, 0, 0)
 	; ---
-	$hSprite[19] = $iAngle
+	If $iAngle <> Default Then $hSprite[19] = $iAngle
 	If $iMax <> Default Then $hSprite[34] = $iMax
 	Return 1
 EndFunc
 
-Func _GEng_SpriteSetAngleAccel(ByRef $hSprite, $iAngle);, $iMax = Default)
+Func _GEng_Sprite_AngleSpeedAdd(ByRef $hSprite, $iAngle)
 	If Not __GEng_Sprite_IsSprite($hSprite) Then Return SetError(1, 0, 0)
 	; ---
-	$hSprite[35] = $iAngle
-	;If $iMax <> Default Then $hSprite[36] = $iMax
+	$hSprite[19] += $iAngle
 	Return 1
 EndFunc
 
-Func _GEng_spriteSetAngleInnertie(ByRef $hSprite, $iAngle)
+Func _GEng_Sprite_AngleAccelSet(ByRef $hSprite, $iAngle)
+	If Not __GEng_Sprite_IsSprite($hSprite) Then Return SetError(1, 0, 0)
+	; ---
+	$hSprite[35] = $iAngle
+	Return 1
+EndFunc
+
+Func _GEng_Sprite_AngleAccelAdd(ByRef $hSprite, $iAngle)
+	If Not __GEng_Sprite_IsSprite($hSprite) Then Return SetError(1, 0, 0)
+	; ---
+	$hSprite[35] += $iAngle
+	Return 1
+EndFunc
+
+Func _GEng_sprite_AngleInnertieSet(ByRef $hSprite, $iAngle)
 	If Not __GEng_Sprite_IsSprite($hSprite) Then Return SetError(1, 0, 0)
 	; ---
 	$hSprite[37] = $iAngle

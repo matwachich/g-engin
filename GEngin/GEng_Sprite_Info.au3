@@ -11,145 +11,135 @@
 #Region ### Functions ###
 #cs
 - Main Functions
-	_GEng_SpriteGetPos(ByRef $hSprite)
-	_GEng_SpriteGetSize(ByRef $hSprite)
-	_GEng_SpriteGetOrigin(ByRef $hSprite)
+	_GEng_Sprite_PosGet(ByRef $hSprite, ByRef $x, ByRef $y)
+	_GEng_Sprite_SizeGet(ByRef $hSprite, ByRef $x, ByRef $y)
+	_GEng_Sprite_OriginGet(ByRef $hSprite, ByRef $x, ByRef $y)
 	; ---
-	_GEng_SpriteGetSpeed(ByRef $hSprite)
-	_GEng_SpriteGetAccel(ByRef $hSprite)
-	_GEng_SpriteGetInnertie(ByRef $hSprite)
-	_GEng_SpriteGetMaxSpeed(ByRef $hSprite)
-	_GEng_SpriteGetMaxAccel(ByRef $hSprite)
+	_GEng_Sprite_SpeedGet(ByRef $hSprite, ByRef $x, ByRef $y)
+	_GEng_Sprite_MaxSpeedGet(ByRef $hSprite, $val)
+	_GEng_Sprite_AccelGet(ByRef $hSprite, ByRef $x, ByRef $y)
+	_GEng_Sprite_InnertieGet(ByRef $hSprite, ByRef $x, ByRef $y)
 	; ---
-	_GEng_SpriteGetAngle(ByRef $hSprite)
-	_GEng_SpriteGetAngleSpeed(ByRef $hSprite)
-	_GEng_SpriteGetAngleAccel(ByRef $hSprite)
-	_GEng_SpriteGetAngleSpeedMax(ByRef $hSprite)
-	_GEng_SpriteGetAngleAccelMax(ByRef $hSprite)
-	_GEng_SpriteGetAngleInnertie(ByRef $hSprite)
+	_GEng_Sprite_AngleGet(ByRef $hSprite, ByRef $val, $iType = 1)
+	_GEng_Sprite_AngleOriginGet(ByRef $hSprite, ByRef $val, $iType = 1)
+	; ---
+	_GEng_Sprite_AngleSpeedGet(ByRef $hSprite, ByRef $val)
+	_GEng_Sprite_AngleMaxSpeedGet(ByRef $hSprite, ByRef $val)
+	_GEng_Sprite_AngleAccelGet(ByRef $hSprite, ByRef $val)
+	_GEng_Sprite_AngleInnertieGet(ByRef $hSprite, ByRef $val)
 #ce
 #EndRegion ###
 
 
-Func _GEng_SpriteGetPos(ByRef $hSprite)
+Func _GEng_Sprite_PosGet(ByRef $hSprite, ByRef $x, ByRef $y)
 	If Not __GEng_Sprite_IsSprite($hSprite) Then Return SetError(1, 0, 0)
 	; ---
-	Local $ret[2]
-	$ret[0] = $hSprite[7]
-	$ret[1] = $hSprite[8]
-	Return $ret
+	$x = $hSprite[7]
+	$y = $hSprite[8]
+	Return 1
 EndFunc
 
-Func _GEng_SpriteGetSize(ByRef $hSprite)
+Func _GEng_Sprite_SizeGet(ByRef $hSprite, ByRef $x, ByRef $y)
 	If Not __GEng_Sprite_IsSprite($hSprite) Then Return SetError(1, 0, 0)
 	; ---
-	Local $ret[2]
-	$ret[0] = $hSprite[9]
-	$ret[1] = $hSprite[10]
-	Return $ret
+	$x = $hSprite[9]
+	$y = $hSprite[10]
+	Return 1
 EndFunc
 
-Func _GEng_SpriteGetOrigin(ByRef $hSprite)
+Func _GEng_Sprite_OriginGet(ByRef $hSprite, ByRef $x, ByRef $y)
 	If Not __GEng_Sprite_IsSprite($hSprite) Then Return SetError(1, 0, 0)
 	; ---
-	Local $ret[2]
-	$ret[0] = $hSprite[11]
-	$ret[1] = $hSprite[12]
-	Return $ret
+	$x = $hSprite[11]
+	$y = $hSprite[12]
+	Return 1
 EndFunc
 
 ; ##############################################################
 
-Func _GEng_SpriteGetSpeed(ByRef $hSprite)
+Func _GEng_Sprite_SpeedGet(ByRef $hSprite, ByRef $x, ByRef $y)
 	If Not __GEng_Sprite_IsSprite($hSprite) Then Return SetError(1, 0, 0)
 	; ---
-	Local $ret[2]
-	$ret[0] = $hSprite[13]
-	$ret[1] = $hSprite[14]
-	Return $ret
+	$x = $hSprite[13]
+	$y = $hSprite[14]
+	Return 1
 EndFunc
 
-Func _GEng_SpriteGetAccel(ByRef $hSprite)
+Func _GEng_Sprite_MaxSpeedGet(ByRef $hSprite, $val)
 	If Not __GEng_Sprite_IsSprite($hSprite) Then Return SetError(1, 0, 0)
 	; ---
-	Local $ret[2]
-	$ret[0] = $hSprite[15]
-	$ret[1] = $hSprite[16]
-	Return $ret
+	$val = $hSprite[27]
+	Return 1
 EndFunc
 
-Func _GEng_SpriteGetInnertie(ByRef $hSprite)
+Func _GEng_Sprite_AccelGet(ByRef $hSprite, ByRef $x, ByRef $y)
 	If Not __GEng_Sprite_IsSprite($hSprite) Then Return SetError(1, 0, 0)
 	; ---
-	Local $ret[2]
-	$ret[0] = $hSprite[31]
-	$ret[1] = $hSprite[32]
-	Return $ret
+	$x = $hSprite[15]
+	$y = $hSprite[16]
+	Return 1
 EndFunc
 
-Func _GEng_SpriteGetMaxSpeed(ByRef $hSprite)
+Func _GEng_Sprite_InnertieGet(ByRef $hSprite, ByRef $x, ByRef $y)
 	If Not __GEng_Sprite_IsSprite($hSprite) Then Return SetError(1, 0, 0)
 	; ---
-	Local $ret[2]
-	$ret[0] = $hSprite[27]
-	$ret[1] = $hSprite[28]
-	Return $ret
-EndFunc
-
-Func _GEng_SpriteGetMaxAccel(ByRef $hSprite)
-	If Not __GEng_Sprite_IsSprite($hSprite) Then Return SetError(1, 0, 0)
-	; ---
-	Local $ret[2]
-	$ret[0] = $hSprite[29]
-	$ret[1] = $hSprite[30]
-	Return $ret
+	$x = $hSprite[31]
+	$y = $hSprite[32]
+	Return 1
 EndFunc
 
 ; ##############################################################
 
-Func _GEng_SpriteGetAngle(ByRef $hSprite, $iType = 1) ; 1- Degres, 2- Radians
+Func _GEng_Sprite_AngleGet(ByRef $hSprite, ByRef $val, $iType = 1) ; 1- Degres, 2- Radians
 	If Not __GEng_Sprite_IsSprite($hSprite) Then Return SetError(1, 0, 0)
 	; ---
 	Switch $iType
 		Case 1
-			Return $hSprite[17] + $hSprite[39]
+			$val = $hSprite[17] + $hSprite[39]
 		Case 2
-			Return $hSprite[18] + $hSprite[40]
+			$val = $hSprite[18] + $hSprite[40]
 	EndSwitch
+	; ---
+	Return 1
 EndFunc
 
-Func _GEng_SpriteGetAngleOrigin(ByRef $hSprite)
+Func _GEng_Sprite_AngleOriginGet(ByRef $hSprite, ByRef $val, $iType = 1) ; 1- Degres, 2- Radians
 	If Not __GEng_Sprite_IsSprite($hSprite) Then Return SetError(1, 0, 0)
 	; ---
-	Return $hSprite[39]
+	Switch $iType
+		Case 1
+			$val = $hSprite[39]
+		Case 2
+			$val = $hSprite[40]
+	EndSwitch
+	; ---
+	Return 1
 EndFunc
 
-Func _GEng_SpriteGetAngleSpeed(ByRef $hSprite)
+Func _GEng_Sprite_AngleSpeedGet(ByRef $hSprite, ByRef $val)
 	If Not __GEng_Sprite_IsSprite($hSprite) Then Return SetError(1, 0, 0)
 	; ---
-	Return $hSprite[19]
+	$val = $hSprite[19]
+	Return 1
 EndFunc
 
-Func _GEng_SpriteGetAngleAccel(ByRef $hSprite)
+Func _GEng_Sprite_AngleMaxSpeedGet(ByRef $hSprite, ByRef $val)
 	If Not __GEng_Sprite_IsSprite($hSprite) Then Return SetError(1, 0, 0)
 	; ---
-	Return $hSprite[35]
+	$var = $hSprite[34]
+	Return 1
 EndFunc
 
-Func _GEng_SpriteGetAngleSpeedMax(ByRef $hSprite)
+Func _GEng_Sprite_AngleAccelGet(ByRef $hSprite, ByRef $val)
 	If Not __GEng_Sprite_IsSprite($hSprite) Then Return SetError(1, 0, 0)
 	; ---
-	Return $hSprite[34]
+	$val = $hSprite[35]
+	Return 1
 EndFunc
 
-Func _GEng_SpriteGetAngleAccelMax(ByRef $hSprite)
+Func _GEng_Sprite_AngleInnertieGet(ByRef $hSprite, ByRef $val)
 	If Not __GEng_Sprite_IsSprite($hSprite) Then Return SetError(1, 0, 0)
 	; ---
-	Return $hSprite[36]
-EndFunc
-
-Func _GEng_SpriteGetAngleInnertie(ByRef $hSprite)
-	If Not __GEng_Sprite_IsSprite($hSprite) Then Return SetError(1, 0, 0)
-	; ---
-	Return $hSprite[37]
+	$val = $hSprite[37]
+	Return 1
 EndFunc

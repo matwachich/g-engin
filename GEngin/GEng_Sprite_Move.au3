@@ -44,7 +44,7 @@ Func _GEng_Sprite_Move(ByRef $hSprite)
 	; --- Vitesse
 	Local $currAngle = $hSprite[17]
 	If $rotVit <> 0 Then
-		_GEng_SpriteSetAngle($hSprite, $currAngle + ($rotVit * $ms))
+		_GEng_Sprite_AngleSet($hSprite, $currAngle + ($rotVit * $ms))
 	EndIf
 	; --- Accélération
 	If $rotAccel <> 0 Then
