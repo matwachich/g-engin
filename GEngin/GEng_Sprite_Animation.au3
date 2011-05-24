@@ -11,8 +11,8 @@
 Func _GEng_SpriteAnimRewind(ByRef $hSprite, $Frame = 1)
 	If Not __GEng_Sprite_IsSprite($hSprite) Then Return SetError(1, 0, 0)
 	; ---
-	$hSprite[21] = $Frame ; current frame (start)
-	$hSprite[41] = -1 ; timer
+	$hSprite[$_gSpr_AnimFrame] = $Frame ; current frame (start)
+	$hSprite[$_gSpr_AnimTimer] = -1 ; timer
 	; ---
 	Return 1
 EndFunc
@@ -25,24 +25,32 @@ Func _GEng_SpriteAnimate(ByRef $hSprite, ByRef $hAnim, $iStopFrame = Default)
 	If Not __GEng_Anim_IsAnim($hAnim) Then Return SetError(1, 0, 0)
 	; ---
 	Local $img
-	If $hSprite[41] = -1 Then
-		$img = __GEng_Anim_BuildImageFromFrame($hAnim, $hSprite[21])
-		_GEng_Sprite_ImageSet($hSprite, $img, $hAnim[$hSprite[21]][1], $hAnim[$hSprite[21]][2], $hAnim[$hSprite[21]][3], $hAnim[$hSprite[21]][4])
-		$hSprite[21] += 1
-		$hSprite[41] = Timerinit()
+	If $hSprite[$_gSpr_AnimTimer] = -1 Then
+		$img = __GEng_Anim_BuildImageFromFrame($hAnim, $hSprite[$_gSpr_AnimFrame])
+		_GEng_Sprite_ImageSet($hSprite, $img, _
+								$hAnim[$hSprite[$_gSpr_AnimFrame]][1], _
+								$hAnim[$hSprite[$_gSpr_AnimFrame]][2], _
+								$hAnim[$hSprite[$_gSpr_AnimFrame]][3], _
+								$hAnim[$hSprite[$_gSpr_AnimFrame]][4])
+		$hSprite[$_gSpr_AnimFrame] += 1
+		$hSprite[$_gSpr_AnimTimer] = Timerinit()
 	Else
-		If TimerDiff($hSprite[41]) >= $hAnim[$hSprite[21]][5] Then
-			$hSprite[21] += 1
-			If $hSprite[21] > $hAnim[0][0] Then $hSprite[21] = 1
+		If TimerDiff($hSprite[$_gSpr_AnimTimer]) >= $hAnim[$hSprite[$_gSpr_AnimFrame]][5] Then
+			$hSprite[$_gSpr_AnimFrame] += 1
+			If $hSprite[$_gSpr_AnimFrame] > $hAnim[0][0] Then $hSprite[$_gSpr_AnimFrame] = 1
 			; ---
-			$img = __GEng_Anim_BuildImageFromFrame($hAnim, $hSprite[21])
-			_GEng_Sprite_ImageSet($hSprite, $img, $hAnim[$hSprite[21]][1], $hAnim[$hSprite[21]][2], $hAnim[$hSprite[21]][3], $hAnim[$hSprite[21]][4])
-			$hSprite[41] = Timerinit()
+			$img = __GEng_Anim_BuildImageFromFrame($hAnim, $hSprite[$_gSpr_AnimFrame])
+			_GEng_Sprite_ImageSet($hSprite, $img, _
+									$hAnim[$hSprite[$_gSpr_AnimFrame]][1], _
+									$hAnim[$hSprite[$_gSpr_AnimFrame]][2], _
+									$hAnim[$hSprite[$_gSpr_AnimFrame]][3], _
+									$hAnim[$hSprite[$_gSpr_AnimFrame]][4])
+			$hSprite[$_gSpr_AnimTimer] = Timerinit()
 		EndIf
 		; ---
 		; StopFrame test
 		If $iStopFrame <> Default Then
-			If $hSprite[21] = $iStopFrame Then Return -1
+			If $hSprite[$_gSpr_AnimFrame] = $iStopFrame Then Return -1
 		EndIf
 	EndIf
 	; ---

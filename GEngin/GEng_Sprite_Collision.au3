@@ -15,24 +15,24 @@ Global Enum $GEng_ScrBorder_Top, $GEng_ScrBorder_Bot, $GEng_ScrBorder_Left, $GEn
 Func _GEng_Sprite_CollisionSet(ByRef $hSprite, $iType, $x = Default, $y = Default, $w = Default, $h = Default)
 	If Not __GEng_Sprite_IsSprite($hSprite) Then Return SetError(1, 0, 0)
 	; ---
-	$hSprite[38] = $iType ; Collision Type
+	$hSprite[$_gSpr_CollType] = $iType ; Collision Type
 	; ---
 	; Point
 	If $iType = 0 Then
 		If $x = Default Then
-			$hSprite[23] = $hSprite[11]
+			$hSprite[$_gSpr_CollX] = $hSprite[$_gSpr_OriX]
 		Else
-			$hSprite[23] = $x
+			$hSprite[$_gSpr_CollX] = $x
 		EndIf
 		; ---
 		If $y = Default Then
-			$hSprite[24] = $hSprite[12]
+			$hSprite[$_gSpr_CollY] = $hSprite[$_gSpr_OriY]
 		Else
-			$hSprite[24] = $y
+			$hSprite[$_gSpr_CollY] = $y
 		EndIf
 		; ---
-		$hSprite[25] = 1
-		$hSprite[26] = 1
+		$hSprite[$_gSpr_CollW] = 1
+		$hSprite[$_gSpr_CollH] = 1
 		; ---
 		Return 1
 	EndIf
@@ -40,15 +40,15 @@ Func _GEng_Sprite_CollisionSet(ByRef $hSprite, $iType, $x = Default, $y = Defaul
 	; Carré
 	If $iType = 1 Then
 		If $x <> Default And $y <> Default And $w <> Default And $h <> Default Then
-			$hSprite[23] = $x
-			$hSprite[24] = $y
-			$hSprite[25] = $w
-			$hSprite[26] = $h
+			$hSprite[$_gSpr_CollX] = $x
+			$hSprite[$_gSpr_CollY] = $y
+			$hSprite[$_gSpr_CollW] = $w
+			$hSprite[$_gSpr_CollH] = $h
 		Else
-			$hSprite[23] = 0
-			$hSprite[24] = 0
-			$hSprite[25] = $hSprite[9]
-			$hSprite[26] = $hSprite[10]
+			$hSprite[$_gSpr_CollX] = 0
+			$hSprite[$_gSpr_CollY] = 0
+			$hSprite[$_gSpr_CollW] = $hSprite[9]
+			$hSprite[$_gSpr_CollH] = $hSprite[10]
 		EndIf
 		; ---
 		Return 1
@@ -57,15 +57,15 @@ Func _GEng_Sprite_CollisionSet(ByRef $hSprite, $iType, $x = Default, $y = Defaul
 	; Cercle
 	If $iType = 2 Then
 		If $x <> Default And $y <> Default And $w <> Default Then
-			$hSprite[23] = $x ; centre X
-			$hSprite[24] = $y ; centre Y
-			$hSprite[25] = $w ; 1/2 R
-			$hSprite[26] = 0
+			$hSprite[$_gSpr_CollX] = $x ; centre X
+			$hSprite[$_gSpr_CollY] = $y ; centre Y
+			$hSprite[$_gSpr_CollW] = $w ; 1/2 R
+			$hSprite[$_gSpr_CollH] = 0
 		Else
-			$hSprite[23] = $hSprite[11] ; originX
-			$hSprite[24] = $hSprite[12] ; originY
-			$hSprite[25] = ($hSprite[9] + $hSprite[10]) / 4  ; sprite size (1/2 moyenne)
-			$hSprite[26] = 0
+			$hSprite[$_gSpr_CollX] = $hSprite[$_gSpr_OriX] ; originX
+			$hSprite[$_gSpr_CollY] = $hSprite[$_gSpr_OriY] ; originY
+			$hSprite[$_gSpr_CollW] = ($hSprite[$_gSpr_Width] + $hSprite[$_gSpr_Height]) / 4  ; sprite size (1/2 moyenne)
+			$hSprite[$_gSpr_CollH] = 0
 		EndIf
 		; ---
 		Return 1
@@ -92,24 +92,24 @@ Func _GEng_Sprite_Collision($hSprite1, $hSprite2)
 	Local $x1, $y1, $w1, $h1, $type1
 	Local $x2, $y2, $w2, $h2, $type2
 	
-	Switch $hSprite1[38]
+	Switch $hSprite1[$_gSpr_CollType]
 		Case 0 ; point
-			$x1 = $hSprite1[7] - $hSprite1[11] + $hSprite1[23]
-			$y1 = $hSprite1[8] - $hSprite1[12] + $hSprite1[24]
+			$x1 = $hSprite1[$_gSpr_PosX] - $hSprite1[$_gSpr_OriX] + $hSprite1[$_gSpr_CollX]
+			$y1 = $hSprite1[$_gSpr_PosY] - $hSprite1[$_gSpr_OriY] + $hSprite1[$_gSpr_CollY]
 			$w1 = 1
 			$h1 = 1
 		Case 1 ; rect
-			$x1 = $hSprite1[7] - $hSprite1[11] + $hSprite1[23]
-			$y1 = $hSprite1[8] - $hSprite1[12] + $hSprite1[24]
-			$w1 = $hSprite1[25]
-			$h1 = $hSprite1[26]
+			$x1 = $hSprite1[$_gSpr_PosX] - $hSprite1[$_gSpr_OriX] + $hSprite1[$_gSpr_CollX]
+			$y1 = $hSprite1[$_gSpr_PosY] - $hSprite1[$_gSpr_OriY] + $hSprite1[$_gSpr_CollY]
+			$w1 = $hSprite1[$_gSpr_CollW]
+			$h1 = $hSprite1[$_gSpr_CollH]
 		Case 2 ; cercle
-			$x1 = $hSprite1[7] - $hSprite1[11] + $hSprite1[23]
-			$y1 = $hSprite1[8] - $hSprite1[12] + $hSprite1[24]
-			$w1 = $hSprite1[25]
+			$x1 = $hSprite1[$_gSpr_PosX] - $hSprite1[$_gSpr_OriX] + $hSprite1[$_gSpr_CollX]
+			$y1 = $hSprite1[$_gSpr_PosY] - $hSprite1[$_gSpr_OriY] + $hSprite1[$_gSpr_CollY]
+			$w1 = $hSprite1[$_gSpr_CollW]
 			$h1 = 0
 	EndSwitch
-	$type1 = $hSprite1[38]
+	$type1 = $hSprite1[$_gSpr_CollType]
 	
 	; ---
 	Switch $hSprite2
@@ -140,24 +140,24 @@ Func _GEng_Sprite_Collision($hSprite1, $hSprite2)
 		Case Else
 			If Not __GEng_Sprite_IsSprite($hSprite2) Then Return SetError(1, 0, 0)
 			; ---
-			Switch $hSprite2[38]
+			Switch $hSprite2[$_gSpr_CollType]
 				Case 0 ; point
-					$x2 = $hSprite2[7] - $hSprite2[11] + $hSprite2[23]
-					$y2 = $hSprite2[8] - $hSprite2[12] + $hSprite2[24]
-					$w2 = 1
-					$h2 = 1
+					$x1 = $hSprite2[$_gSpr_PosX] - $hSprite2[$_gSpr_OriX] + $hSprite2[$_gSpr_CollX]
+					$y1 = $hSprite2[$_gSpr_PosY] - $hSprite2[$_gSpr_OriY] + $hSprite2[$_gSpr_CollY]
+					$w1 = 1
+					$h1 = 1
 				Case 1 ; rect
-					$x2 = $hSprite2[7] - $hSprite2[11] + $hSprite2[23]
-					$y2 = $hSprite2[8] - $hSprite2[12] + $hSprite2[24]
-					$w2 = $hSprite2[25]
-					$h2 = $hSprite2[26]
+					$x1 = $hSprite2[$_gSpr_PosX] - $hSprite2[$_gSpr_OriX] + $hSprite2[$_gSpr_CollX]
+					$y1 = $hSprite2[$_gSpr_PosY] - $hSprite2[$_gSpr_OriY] + $hSprite2[$_gSpr_CollY]
+					$w1 = $hSprite2[$_gSpr_CollW]
+					$h1 = $hSprite2[$_gSpr_CollH]
 				Case 2 ; cercle
-					$x2 = $hSprite2[7] - $hSprite2[11] + $hSprite2[23]
-					$y2 = $hSprite2[8] - $hSprite2[12] + $hSprite2[24]
-					$w2 = $hSprite2[25]
-					$h2 = 0
+					$x1 = $hSprite2[$_gSpr_PosX] - $hSprite2[$_gSpr_OriX] + $hSprite2[$_gSpr_CollX]
+					$y1 = $hSprite2[$_gSpr_PosY] - $hSprite2[$_gSpr_OriY] + $hSprite2[$_gSpr_CollY]
+					$w1 = $hSprite2[$_gSpr_CollW]
+					$h1 = 0
 			EndSwitch
-			$type2 = $hSprite2[38]
+			$type1 = $hSprite2[$_gSpr_CollType]
 	EndSwitch
 	; ---
 	

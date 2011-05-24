@@ -34,24 +34,24 @@
 Func _GEng_Sprite_PosGet(ByRef $hSprite, ByRef $x, ByRef $y)
 	If Not __GEng_Sprite_IsSprite($hSprite) Then Return SetError(1, 0, 0)
 	; ---
-	$x = $hSprite[7]
-	$y = $hSprite[8]
+	$x = $hSprite[$_gSpr_PosX]
+	$y = $hSprite[$_gSpr_PosY]
 	Return 1
 EndFunc
 
 Func _GEng_Sprite_SizeGet(ByRef $hSprite, ByRef $x, ByRef $y)
 	If Not __GEng_Sprite_IsSprite($hSprite) Then Return SetError(1, 0, 0)
 	; ---
-	$x = $hSprite[9]
-	$y = $hSprite[10]
+	$x = $hSprite[$_gSpr_Width]
+	$y = $hSprite[$_gSpr_Height]
 	Return 1
 EndFunc
 
 Func _GEng_Sprite_OriginGet(ByRef $hSprite, ByRef $x, ByRef $y)
 	If Not __GEng_Sprite_IsSprite($hSprite) Then Return SetError(1, 0, 0)
 	; ---
-	$x = $hSprite[11]
-	$y = $hSprite[12]
+	$x = $hSprite[$_gSpr_OriX]
+	$y = $hSprite[$_gSpr_OriY]
 	Return 1
 EndFunc
 
@@ -60,31 +60,31 @@ EndFunc
 Func _GEng_Sprite_SpeedGet(ByRef $hSprite, ByRef $x, ByRef $y)
 	If Not __GEng_Sprite_IsSprite($hSprite) Then Return SetError(1, 0, 0)
 	; ---
-	$x = $hSprite[13]
-	$y = $hSprite[14]
+	$x = $hSprite[$_gSpr_SpeedX]
+	$y = $hSprite[$_gSpr_SpeedY]
 	Return 1
 EndFunc
 
 Func _GEng_Sprite_MaxSpeedGet(ByRef $hSprite, $val)
 	If Not __GEng_Sprite_IsSprite($hSprite) Then Return SetError(1, 0, 0)
 	; ---
-	$val = $hSprite[27]
+	$val = $hSprite[$_gSpr_SpeedMax]
 	Return 1
 EndFunc
 
 Func _GEng_Sprite_AccelGet(ByRef $hSprite, ByRef $x, ByRef $y)
 	If Not __GEng_Sprite_IsSprite($hSprite) Then Return SetError(1, 0, 0)
 	; ---
-	$x = $hSprite[15]
-	$y = $hSprite[16]
+	$x = $hSprite[$_gSpr_AccelX]
+	$y = $hSprite[$_gSpr_AccelY]
 	Return 1
 EndFunc
 
 Func _GEng_Sprite_InnertieGet(ByRef $hSprite, ByRef $x, ByRef $y)
 	If Not __GEng_Sprite_IsSprite($hSprite) Then Return SetError(1, 0, 0)
 	; ---
-	$x = $hSprite[31]
-	$y = $hSprite[32]
+	$x = $hSprite[$_gSpr_InnertieX]
+	$y = $hSprite[$_gSpr_InnertieY]
 	Return 1
 EndFunc
 
@@ -95,9 +95,9 @@ Func _GEng_Sprite_AngleGet(ByRef $hSprite, ByRef $val, $iType = 1) ; 1- Degres, 
 	; ---
 	Switch $iType
 		Case 1
-			$val = $hSprite[17] + $hSprite[39]
+			$val = $hSprite[$_gSpr_AngleDeg] + $hSprite[$_gSpr_AngleOriDeg]
 		Case 2
-			$val = $hSprite[18] + $hSprite[40]
+			$val = $hSprite[$_gSpr_AngleRad] + $hSprite[$_gSpr_AngleOriRad]
 	EndSwitch
 	; ---
 	Return 1
@@ -108,9 +108,9 @@ Func _GEng_Sprite_AngleOriginGet(ByRef $hSprite, ByRef $val, $iType = 1) ; 1- De
 	; ---
 	Switch $iType
 		Case 1
-			$val = $hSprite[39]
+			$val = $hSprite[$_gSpr_AngleOriDeg]
 		Case 2
-			$val = $hSprite[40]
+			$val = $hSprite[$_gSpr_AngleOriRad]
 	EndSwitch
 	; ---
 	Return 1
@@ -119,27 +119,27 @@ EndFunc
 Func _GEng_Sprite_AngleSpeedGet(ByRef $hSprite, ByRef $val)
 	If Not __GEng_Sprite_IsSprite($hSprite) Then Return SetError(1, 0, 0)
 	; ---
-	$val = $hSprite[19]
+	$val = $hSprite[$_gSpr_AngleSpeed]
 	Return 1
 EndFunc
 
 Func _GEng_Sprite_AngleMaxSpeedGet(ByRef $hSprite, ByRef $val)
 	If Not __GEng_Sprite_IsSprite($hSprite) Then Return SetError(1, 0, 0)
 	; ---
-	$var = $hSprite[34]
+	$var = $hSprite[$_gSpr_AngleSpeedMax]
 	Return 1
 EndFunc
 
 Func _GEng_Sprite_AngleAccelGet(ByRef $hSprite, ByRef $val)
 	If Not __GEng_Sprite_IsSprite($hSprite) Then Return SetError(1, 0, 0)
 	; ---
-	$val = $hSprite[35]
+	$val = $hSprite[$_gSpr_AngleAccel]
 	Return 1
 EndFunc
 
 Func _GEng_Sprite_AngleInnertieGet(ByRef $hSprite, ByRef $val)
 	If Not __GEng_Sprite_IsSprite($hSprite) Then Return SetError(1, 0, 0)
 	; ---
-	$val = $hSprite[37]
+	$val = $hSprite[$_gSpr_AngleInnertie]
 	Return 1
 EndFunc

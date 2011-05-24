@@ -18,99 +18,99 @@
 Func _GEng_Sprite_Move(ByRef $hSprite)
 	If Not __GEng_Sprite_IsSprite($hSprite) Then Return SetError(1, 0, 0)
 	; ---
-	If Not $hSprite[33] Then
-		$hSprite[33] = TimerInit()
+	If Not $hSprite[$_gSpr_MoveTimer] Then
+		$hSprite[$_gSpr_MoveTimer] = TimerInit()
 		Return 0
 	EndIf
-	Local $ms = TimerDiff($hSprite[33]) / 1000
+	Local $ms = TimerDiff($hSprite[$_gSpr_MoveTimer]) / 1000
 	
 	; ##############################################################
 	
 	; ### Rotation Max ###
-	If $hSprite[34] <> 0 Then
-		If Abs($hSprite[19]) > Abs($hSprite[34]) Then
-			If $hSprite[19] >= 0 Then
-				$hSprite[19] = Abs($hSprite[34])
+	If $hSprite[$_gSpr_AngleSpeedMax] <> 0 Then
+		If Abs($hSprite[$_gSpr_AngleSpeed]) > Abs($hSprite[$_gSpr_AngleSpeedMax]) Then
+			If $hSprite[$_gSpr_AngleSpeed] >= 0 Then
+				$hSprite[$_gSpr_AngleSpeed] = Abs($hSprite[$_gSpr_AngleSpeedMax])
 			Else
-				$hSprite[19] = -1 * Abs($hSprite[34])
+				$hSprite[$_gSpr_AngleSpeed] = -1 * Abs($hSprite[$_gSpr_AngleSpeedMax])
 			EndIf
 		EndIf
 	EndIf
 	; ### Application de la rotation ###
-	Local $rotVit = $hSprite[19]
-		Local $rotVitMax = $hSprite[34]
-	Local $rotAccel = $hSprite[35]
-	Local $rotInner = $hSprite[37]
+	Local $rotVit = $hSprite[$_gSpr_AngleSpeed]
+		Local $rotVitMax = $hSprite[$_gSpr_AngleSpeedMax]
+	Local $rotAccel = $hSprite[$_gSpr_AngleAccel]
+	Local $rotInner = $hSprite[$_gSpr_AngleInnertie]
 	; --- Vitesse
-	Local $currAngle = $hSprite[17]
+	Local $currAngle = $hSprite[$_gSpr_AngleDeg]
 	If $rotVit <> 0 Then
 		_GEng_Sprite_AngleSet($hSprite, $currAngle + ($rotVit * $ms))
 	EndIf
 	; --- Accélération
 	If $rotAccel <> 0 Then
-		$hSprite[19] += $rotAccel * $ms
+		$hSprite[$_gSpr_AngleSpeed] += $rotAccel * $ms
 	EndIf
 	; --- Innertie
 	Local $tmp
-	If $rotInner <> 0 And $hSprite[19] <> 0 Then
-		$tmp = $hSprite[19]
-		If $hSprite[19] > 0 Then
-			$hSprite[19] -= Abs($rotInner) * $ms
-		ElseIf $hSprite[19] < 0 Then
-			$hSprite[19] += Abs($rotInner) * $ms
+	If $rotInner <> 0 And $hSprite[$_gSpr_AngleSpeed] <> 0 Then
+		$tmp = $hSprite[$_gSpr_AngleSpeed]
+		If $hSprite[$_gSpr_AngleSpeed] > 0 Then
+			$hSprite[$_gSpr_AngleSpeed] -= Abs($rotInner) * $ms
+		ElseIf $hSprite[$_gSpr_AngleSpeed] < 0 Then
+			$hSprite[$_gSpr_AngleSpeed] += Abs($rotInner) * $ms
 		EndIf
-		If $hSprite[19] / $tmp < 0 Then $hSprite[19] = 0
+		If $hSprite[$_gSpr_AngleSpeed] / $tmp < 0 Then $hSprite[$_gSpr_AngleSpeed] = 0
 	EndIf
 	
 	; ##############################################################
 	
-	Local $posX = $hSprite[7], $posY = $hSprite[8] ; Position actuelle
-	Local $accelX = $hSprite[15], $accelY = $hSprite[16] ; Accélération
+	Local $posX = $hSprite[$_gSpr_PosX], $posY = $hSprite[$_gSpr_PosY] ; Position actuelle
+	Local $accelX = $hSprite[$_gSpr_AccelX], $accelY = $hSprite[$_gSpr_AccelY] ; Accélération
 	Local $accelGrand = __GEng_VectorGrandeur($accelX, $accelY)
 	;If $accelGrand Then ConsoleWrite("> Accélération: " & $accelX & "	" & $accelY & "	(" & $accelGrand & ")" & @CRLF)
 	; ---
 	
 	; Applique l'accélération
-	$hSprite[13] += $accelX * $ms
-	$hSprite[14] += $accelY * $ms
-	Local $vitGrand = __GEng_VectorGrandeur($hSprite[13], $hSprite[14])
-	Local $vitAngle = _GEng_VectorToAngle($hSprite[13], $hSprite[14])
+	$hSprite[$_gSpr_SpeedX] += $accelX * $ms
+	$hSprite[$_gSpr_SpeedY] += $accelY * $ms
+	Local $vitGrand = __GEng_VectorGrandeur($hSprite[$_gSpr_SpeedX], $hSprite[$_gSpr_SpeedY])
+	Local $vitAngle = _GEng_VectorToAngle($hSprite[$_gSpr_SpeedX], $hSprite[$_gSpr_SpeedY])
 	
 	; Vitesse Maximum
-	If $hSprite[27] <> 0 And $vitGrand > $hSprite[27] Then
-		$tmp = _GEng_AngleToVector($vitAngle, $hSprite[27])
-		$hSprite[13] = $tmp[0]
-		$hSprite[14] = $tmp[1]
+	If $hSprite[$_gSpr_SpeedMax] <> 0 And $vitGrand > $hSprite[$_gSpr_SpeedMax] Then
+		$tmp = _GEng_AngleToVector($vitAngle, $hSprite[$_gSpr_SpeedMax])
+		$hSprite[$_gSpr_SpeedX] = $tmp[0]
+		$hSprite[$_gSpr_SpeedY] = $tmp[1]
 	EndIf
 	
 	; Position
-	$hSprite[7] += $hSprite[13] * $ms
-	$hSprite[8] += $hSprite[14] * $ms
+	$hSprite[$_gSpr_PosX] += $hSprite[$_gSpr_SpeedX] * $ms
+	$hSprite[$_gSpr_PosY] += $hSprite[$_gSpr_SpeedY] * $ms
 
-	Local $innerX = $hSprite[31], $innerY = $hSprite[32]
-	If $innerX <> 0 And $hSprite[13] <> 0 And Not $accelX Then ; Innertie X
-		$tmp = $hSprite[13]
-		If $hSprite[13] > 0 Then
-			$hSprite[13] -= Abs($innerX) * $ms
-		ElseIf $hSprite[13] < 0 Then
-			$hSprite[13] += Abs($innerX) * $ms
+	Local $innerX = $hSprite[$_gSpr_InnertieX], $innerY = $hSprite[$_gSpr_InnertieY]
+	If $innerX <> 0 And $hSprite[$_gSpr_SpeedX] <> 0 And Not $accelX Then ; Innertie X
+		$tmp = $hSprite[$_gSpr_SpeedX]
+		If $hSprite[$_gSpr_SpeedX] > 0 Then
+			$hSprite[$_gSpr_SpeedX] -= Abs($innerX) * $ms
+		ElseIf $hSprite[$_gSpr_SpeedX] < 0 Then
+			$hSprite[$_gSpr_SpeedX] += Abs($innerX) * $ms
 		EndIf
-		If $hSprite[13] / $tmp < 0 Then $hSprite[13] = 0
+		If $hSprite[$_gSpr_SpeedX] / $tmp < 0 Then $hSprite[$_gSpr_SpeedX] = 0
 	EndIf
-	If $innerY <> 0 And $hSprite[14] <> 0 And Not $accelY Then ; Innertie Y
-		$tmp = $hSprite[14]
-		If $hSprite[14] > 0 Then
-			$hSprite[14] -= Abs($innerY) * $ms
-		ElseIf $hSprite[14] < 0 Then
-			$hSprite[14] += Abs($innerY) * $ms
+	If $innerY <> 0 And $hSprite[$_gSpr_SpeedY] <> 0 And Not $accelY Then ; Innertie Y
+		$tmp = $hSprite[$_gSpr_SpeedY]
+		If $hSprite[$_gSpr_SpeedY] > 0 Then
+			$hSprite[$_gSpr_SpeedY] -= Abs($innerY) * $ms
+		ElseIf $hSprite[$_gSpr_SpeedY] < 0 Then
+			$hSprite[$_gSpr_SpeedY] += Abs($innerY) * $ms
 		EndIf
-		If $hSprite[14] / $tmp < 0 Then $hSprite[14] = 0
+		If $hSprite[$_gSpr_SpeedY] / $tmp < 0 Then $hSprite[$_gSpr_SpeedY] = 0
 	EndIf
 	
 	; ##############################################################
 	
 	; Réinitialisation du timer
-	$hSprite[33] = TimerInit()
+	$hSprite[$_gSpr_MoveTimer] = TimerInit()
 	; ---
 	Return 1
 EndFunc

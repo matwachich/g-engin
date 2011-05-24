@@ -38,7 +38,6 @@ Global $_dbg_pen1, $_dbg_pen2, $_dbg_pen3
 #include "GEngin\GEng_Sprite_Set.au3"
 #include "GEngin\GEng_Animation.au3"
 #include "GEngin\GEng_Vector.au3"
-#include "GEngin\GEng_RotVector.au3"
 #include "GEngin\GEng_Draw.au3"
 #include "GEngin\GEng_Geometry.au3"
 

@@ -26,8 +26,20 @@
 
 Global $__GEng_Sprites[1] = [0]
 
-Global Const $__GEng_SpritesArrayUB = 42
+Global Const $__GEng_SpritesArrayUB = 36
 Global Enum $GEng_Origin_Mid, $GEng_Origin_TL, $GEng_Origin_TR, $GEng_Origin_BL, $GEng_Origin_BR
+
+Global Enum _
+	$_gSpr_hBuffer, $_gSpr_iImg, $_gSpr_ImgX, $_gSpr_ImgY, $_gSpr_ImgW, $_gSpr_ImgH, _
+	$_gSpr_PosX, $_gSpr_PosY, $_gSpr_Width, $_gSpr_Height, $_gSpr_OriX, $_gSpr_OriY, _
+	$_gSpr_SpeedX, $_gSpr_SpeedY, $_gSpr_AccelX, $_gSpr_AccelY, $_gSpr_SpeedMax, _
+	$_gSpr_InnertieX, $_gSpr_InnertieY, _
+	$_gSpr_AngleDeg, $_gSpr_AngleRad, _
+	$_gSpr_AngleSpeed, $_gSpr_AngleAccel, $_gSpr_AngleSpeedMax, $_gSpr_AngleInnertie, _
+	$_gSpr_AngleOriDeg, $_gSpr_AngleOriRad, _
+	$_gSpr_AnimFrame, $_gSpr_AnimDelayMulti, _
+	$_gSpr_CollX, $_gSpr_CollY, $_gSpr_CollW, $_gSpr_CollH, $_gSpr_CollType, _
+	$_gSpr_MoveTimer, $_gSpr_AnimTimer
 
 Func _GEng_Sprite_Create($sName, $hImage = Default)
 	Local $hSprite[$__GEng_SpritesArrayUB]
@@ -46,36 +58,36 @@ Func _GEng_Sprite_ImageSet(ByRef $hSprite, ByRef $hImage, $x = Default, $y = Def
 	If Not __GEng_Sprite_IsSprite($hSprite) Then Return SetError(1, 0, 0)
 	If Not __GEng_Image_IsImage($hImage) Then Return SetError(1, 0, 0)
 	; ---
-	$hSprite[0] = $hImage[0] ; Image Index
+	$hSprite[$_gSpr_iImg] = $hImage[0] ; Image Index
 	; ---
 	If $x <> Default And $y <> Default And $w <> Default And $h <> Default Then
-		$hSprite[1] = $x
-		$hSprite[2] = $y
-		$hSprite[3] = $w
-		$hSprite[4] = $h
+		$hSprite[$_gSpr_ImgX] = $x
+		$hSprite[$_gSpr_ImgY] = $y
+		$hSprite[$_gSpr_ImgW] = $w
+		$hSprite[$_gSpr_ImgH] = $h
 	Else
-		$hSprite[1] = 0
-		$hSprite[2] = 0
-		$hSprite[3] = $hImage[1]
-		$hSprite[4] = $hImage[2]
+		$hSprite[$_gSpr_ImgX] = 0
+		$hSprite[$_gSpr_ImgY] = 0
+		$hSprite[$_gSpr_ImgW] = $hImage[1]
+		$hSprite[$_gSpr_ImgH] = $hImage[2]
 	EndIf
 	; Déjà fait dans _GEng_SpriteSetSize()
 	;$hSprite[9] = $hSprite[3]
 	;$hSprite[10] = $hSprite[4]
 	; ---
-	If $hSprite[9] = 0 And $hSprite[10] = 0 Then _ ; Si il n'y avait aucune image dans le sprite
+	If $hSprite[$_gSpr_Width] = 0 And $hSprite[$_gSpr_Height] = 0 Then _ ; Si il n'y avait aucune image dans le sprite
 		_GEng_Sprite_SizeSet($hSprite, -1, -1) ; on initialiser la taille (Size) aux dimensions de l'image
 	; ---
 	Return 1
 EndFunc
 
-Func _GEng_Sprite_ImageSetRect(ByRef $hSprite, $x, $y, $w, $h, $InitSize = 1)
+Func _GEng_Sprite_ImageSetRect(ByRef $hSprite, $x, $y, $w, $h, $InitSize = 0)
 	If Not __GEng_Sprite_IsSprite($hSprite) Then Return SetError(1, 0, 0)
 	; ---
-	$hSprite[1] = $x
-	$hSprite[2] = $y
-	$hSprite[3] = $w
-	$hSprite[4] = $h
+	$hSprite[$_gSpr_ImgX] = $x
+	$hSprite[$_gSpr_ImgY] = $y
+	$hSprite[$_gSpr_ImgW] = $w
+	$hSprite[$_gSpr_ImgH] = $h
 	; ---
 	If $InitSize Then _
 	_GEng_Sprite_SizeSet($hSprite, -1, -1) ; Pour initialiser la taille (Size) aux dimensions de l'image
@@ -89,18 +101,18 @@ Func _GEng_Sprite_Draw(ByRef $hSprite, $iCalculateMovements = 1)
 	; ---
 	If $iCalculateMovements Then _GEng_Sprite_Move($hSprite)
 	; ---
-	Local $hBuffer = $hSprite[6]
-	Local $imgIndex = $hSprite[0]
+	Local $hBuffer = $hSprite[$_gSpr_hBuffer]
+	Local $imgIndex = $hSprite[$_gSpr_iImg]
 	; ---
-	Local $rotDeg = $hSprite[17]
-	Local $rotRad = $hSprite[18]
+	Local $rotDeg = $hSprite[$_gSpr_AngleDeg]
+	Local $rotRad = $hSprite[$_gSpr_AngleRad]
 	; ---
-	Local $posX = $hSprite[7], $posY = $hSprite[8]
-	Local $oriX = $hSprite[11], $oriY = $hSprite[12]
-	Local $sizeW = $hSprite[9], $sizeH = $hSprite[10]
+	Local $posX = $hSprite[$_gSpr_PosX], $posY = $hSprite[$_gSpr_PosY]
+	Local $oriX = $hSprite[$_gSpr_OriX], $oriY = $hSprite[$_gSpr_OriY]
+	Local $sizeW = $hSprite[$_gSpr_Width], $sizeH = $hSprite[$_gSpr_Height]
 	; ---
-	Local $sheetX = $hSprite[1], $sheetY = $hSprite[2]
-	Local $sheetW = $hSprite[3], $sheetH = $hSprite[4]
+	Local $sheetX = $hSprite[$_gSpr_ImgX], $sheetY = $hSprite[$_gSpr_ImgY]
+	Local $sheetW = $hSprite[$_gSpr_ImgW], $sheetH = $hSprite[$_gSpr_ImgH]
 	; ---
 	Local $ret
 	If $rotDeg = 0 Then ; Si pas de rotation => Dessine sur le buffer principal
@@ -174,7 +186,7 @@ EndFunc
 Func __GEng_Sprite_ContainsImage($hSprite)
 	If Not __GEng_Sprite_IsSprite($hSprite) Then Return SetError(1, 0, 0)
 	; ---
-	If $hSprite[0] = 0 Then Return SetError(1, 0, 0)
+	If $hSprite[$_gSpr_iImg] = 0 Then Return SetError(1, 0, 0)
 	; ---
 	Return 1
 EndFunc
@@ -191,61 +203,7 @@ Func __GEng_Sprite_InitArray(ByRef $a, $sName = Default)
 	For $i = 0 To $__GEng_SpritesArrayUB - 1
 		$a[$i] = 0
 	Next
-	;$a[0] = Image Index
-	;$a[1] = Img X
-	;$a[2] = Img Y
-	;$a[3] = Img W
-	;$a[4] = Img H
-	;-------------
-	;- $a[5] = Name
-	;$a[6] = hBuffer
-	;-------------
-	;$a[7] = PosX
-	;$a[8] = PosY
-	;$a[9] = Width
-	;$a[10] = Height
-	;$a[11] = OriginX
-	;$a[12] = OriginY
-	;-------------
-	;$a[13] = VitX
-	;$a[14] = VitY
-	;$a[15] = AccelX
-	;$a[16] = AccelY
-	;-------------
-	;$a[17] = AngleDeg
-	;$a[18] = AngleRad
-	;$a[19] = VitRot
-	;-------------
-	;$a[20] = hAnimation
-	;$a[21] = CurrFrame
-	;$a[22] = AnimDelay
-	;-------------
-	;$a[23] = CollisionRectX
-	;$a[24] = CollisionRectY
-	;$a[25] = CollisionRectW
-	;$a[26] = CollisionRectH
-	;------------- doivent être calculés en valeurs absolues
-	;$a[27] = VitX_Max
-	;- $a[28] = VitY_Max
-	;$a[29] = AccelX_Max
-	;- $a[30] = AccelY_Max
-	;-------------
-	;$a[31] = InnertieX ; Valeur soustraite à la vitesse chaque seconde
-	;- $a[32] = InnertieY ; Idem
-	;-------------
-	;$a[33] = MoveTimer
-	;-------------
-	;$a[34] = VitRotMax
-	;$a[35] = AccelRot
-	;- $a[36] = AccelRotMax
-	;$a[37] = InnerRot
-	;-------------
-	;$a[38] = Collision Type (1 - Carré, 2 - Ellipse)
-	;-------------
-	;$a[39] = AngleOrigin Deg
-	;$a[40] = AngleOrigin Rad
-	;; ---
-	If $sName <> Default Then $a[5] = $sName
-	$a[22] = 1 ; AnimDelay Multiplier
-	$a[6] = __GEng_GetBuffer()
+	; ---
+	$a[$_gSpr_AnimDelayMulti] = 1 ; AnimDelay Multiplier
+	$a[$_gSpr_hBuffer] = __GEng_GetBuffer()
 EndFunc
