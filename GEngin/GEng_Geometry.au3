@@ -11,12 +11,16 @@
 #Region ### Functions ###
 #cs
 - Main Functions
+	_GEng_PointToPoint_Dist($x0, $y0, $x, $y)
+	_GEng_PointToPoint_Angle($x0, $y0, $x, $y)
+	_GEng_PointToPoint_Vector($x0, $y0, $x, $y, $iGrandeur = Default)
 	_GEng_SpriteToPoint_Dist(ByRef $hSprite, $x, $y)
 	_GEng_SpriteToPoint_Angle(ByRef $hSprite, $x, $y)
 	_GEng_SpriteToPoint_AngleDiff(ByRef $hSprite, $x, $y)
 	_GEng_SpriteToPoint_Vector(ByRef $hSprite, $x, $y, $iGrandeur = Default)
 	_GEng_SpriteToSprite_Dist(ByRef $hSprite, ByRef $hSprite2)
 	_GEng_SpriteToSprite_Angle(ByRef $hSprite, ByRef $hSprite2)
+	_GEng_SpriteToSprite_AngleDiff(ByRef $hSprite, ByRef $hSprite2)
 	_GEng_SpriteToSprite_Vector(ByRef $hSprite, ByRef $hSprite2, $iGrandeur = Default)
 	_GEng_AngleToVector($iAngle, $iGrandeur = 1)
 	_GEng_VectorToAngle($difX, $difY)
@@ -25,6 +29,7 @@
 	__GEng_GeometryReduceAngle($iAngle)
 #ce
 #EndRegion ###
+
 
 Func _GEng_PointToPoint_Dist($x0, $y0, $x, $y)
 	$x = $x - $x0
@@ -131,10 +136,13 @@ Func _GEng_SpriteToPoint_AngleDiff(ByRef $hSprite, $x, $y) ; 0.2 ms
 	Return $result
 EndFunc
 
-Func _GEng_SpriteToPoint_Vector(ByRef $hSprite, $x, $y, $iGrandeur = 1)
+Func _GEng_SpriteToPoint_Vector(ByRef $hSprite, $x, $y, $iGrandeur = Default)
 	If Not __GEng_Sprite_IsSprite($hSprite) Then Return SetError(1, 0, 0)
 	; ---
 	Local $angle = _GEng_SpriteToPoint_Angle($hSprite, $x, $y)
+	; ---
+	If $iGrandeur = Default Then $iGrandeur = _GEng_SpriteToPoint_Dist($hSprite, $x, $y)
+	; ---
 	Return _GEng_AngleToVector($angle, $iGrandeur)
 EndFunc
 
@@ -167,7 +175,7 @@ Func _GEng_SpriteToSprite_AngleDiff(ByRef $hSprite, ByRef $hSprite2)
 	Return _GEng_SpriteToPoint_AngleDiff($hSprite, $x2, $y2)
 EndFunc
 
-Func _GEng_SpriteToSprite_Vector(ByRef $hSprite, ByRef $hSprite2, $iGrandeur = 1)
+Func _GEng_SpriteToSprite_Vector(ByRef $hSprite, ByRef $hSprite2, $iGrandeur = Default)
 	If Not __GEng_Sprite_IsSprite($hSprite) Then Return SetError(1, 0, 0)
 	If Not __GEng_Sprite_IsSprite($hSprite2) Then Return SetError(1, 0, 0)
 	; ---

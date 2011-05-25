@@ -8,6 +8,18 @@
 
 #ce ----------------------------------------------------------------------------
 
+#Region ### Functions ###
+#cs
+- Main Functions
+	_GEng_Start($sTitle, $iW, $iH, $iX = -1, $iY = -1, $iStyle = -1, $iExtStyle = -1)
+	_GEng_Shutdown()
+	_GEng_SetDebug($mode)
+	__GEng_GetBuffer()
+	__GEng_IsStarted()
+#ce
+#EndRegion ###
+
+
 Func _GEng_Start($sTitle, $iW, $iH, $iX = -1, $iY = -1, $iStyle = -1, $iExtStyle = -1)
 	$__GEng_hGui = GuiCreate($sTitle, $iW, $iH, $iX, $iY, $iStyle, $iExtStyle)
 	If @error Then Return SetError(1, 0, 0)

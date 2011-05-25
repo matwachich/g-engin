@@ -11,18 +11,16 @@
 #Region ### Functions ###
 #cs
 - Main Functions
-	_GEng_Sprite_PosSet(ByRef $hSprite, $x, $y)
+	_GEng_Sprite_PosSet(ByRef $hSprite, $x = Default, $y = Default)
 	_GEng_Sprite_SizeSet(ByRef $hSprite, $w = Default, $h = Default)
 	_GEng_Sprite_OriginSet(ByRef $hSprite, $x = Default, $y = Default)
 	_GEng_Sprite_OriginSetEx(ByRef $hSprite, $eOrigin)
 	_GEng_Sprite_AngleOriginSet(ByRef $hSprite, $iAngle)
-	; ---
 	_GEng_Sprite_SpeedSet(ByRef $hSprite, $x = Default, $y = Default, $max = Default)
 	_GEng_Sprite_SpeedAdd(ByRef $hSprite, $x = 0, $y = 0)
 	_GEng_Sprite_AccelSet(ByRef $hSprite, $x, $y)
 	_GEng_Sprite_AccelAdd(ByRef $hSprite, $x = 0, $y = 0)
 	_GEng_Sprite_InnertieSet(ByRef $hSprite, $x, $y)
-	; ---
 	_GEng_Sprite_AngleSet(ByRef $hSprite, $iAngle)
 	_GEng_Sprite_AngleAdd(ByRef $hSprite, $iAngle)
 	_GEng_Sprite_AngleSpeedSet(ByRef $hSprite, $iAngle = Default, $iMax = Default)
@@ -34,12 +32,12 @@
 #EndRegion ###
 
 
-Func _GEng_Sprite_PosSet(ByRef $hSprite, $x, $y)
+Func _GEng_Sprite_PosSet(ByRef $hSprite, $x = Default, $y = Default)
 	If Not __GEng_Sprite_IsSprite($hSprite) Then Return SetError(1, 0, 0)
 	; ---
 	; J'enregistre la position que JE donne
-	$hSprite[$_gSpr_PosX] = $x; - $hSprite[11]
-	$hSprite[$_gSpr_PosY] = $y; - $hSprite[12]
+	If $x <> Default Then $hSprite[$_gSpr_PosX] = $x; - $hSprite[11]
+	If $y <> Default Then $hSprite[$_gSpr_PosY] = $y; - $hSprite[12]
 	; ---
 	Return 1
 EndFunc

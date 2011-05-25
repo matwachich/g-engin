@@ -7,40 +7,47 @@
 
 
 #ce ----------------------------------------------------------------------------
-#include <Array.au3>
+
+#Region ### Functions ###
+#cs
+- Main Functions
+	_GEng_ImageLoad($sPath, $width = Default, $height = Default, $x = 0, $y = 0, $w = Default, $h = Default)
+	__GEng_Image_IsImage($hImage)
+	__GEng_Image_hImg($hImage)
+	__GEng_Image_DisposeAll()
+#ce
+#EndRegion ###
+
 
 Global $__GEng_Images[1] = [0]
 
-Func _GEng_ImageLoad($sPath, $x = Default, $y = Default, $w = Default, $h = Default)
+Func _GEng_ImageLoad($sPath, $width = Default, $height = Default, $x = 0, $y = 0, $w = Default, $h = Default)
 	Local $gContext, $newBmp, $gNewContext, $imgW, $imgH
 	Local $hImg = _GDIPlus_ImageLoadFromFile($sPath)
 	If $hImg = -1 Then Return SetError(1, 0, 0)
 	; ---
-	If $x <> Default And $y <> Default And $w <> Default And $h <> Default Then ; Prendre une partie de l'image
-		$gContext = _GDIPlus_ImageGetGraphicsContext($hImg)
-		$newBmp = _GDIPlus_BitmapCreateFromGraphics($w, $h, $gContext)
-		$gNewContext = _GDIPlus_ImageGetGraphicsContext($newBmp)
-		_GDIPlus_GraphicsDrawImageRectRect($gNewContext, $hImg, $x, $y, $w, $h, 0, 0, $w, $h)
-		; ---
-		_GDIPlus_GraphicsDispose($gNewContext)
-		_GDIPlus_GraphicsDispose($gContext)
-		_GDIPlus_ImageDispose($hImg)
-		; ---
-		_ArrayAdd($__GEng_Images, $newBmp)
-		$imgW = _GDIPlus_ImageGetWidth($newBmp)
-		$imgH = _GDIPlus_ImageGetHeight($newBmp)
-	Else
-		_ArrayAdd($__GEng_Images, $hImg)
-		$imgW = _GDIPlus_ImageGetWidth($hImg)
-		$imgH = _GDIPlus_ImageGetHeight($hImg)
-	EndIf
+	If $width = Default Then $width = _GDIPlus_ImageGetWidth($hImg)
+	If $height = Default Then $height = _GDIPlus_ImageGetHeight($hImg)
 	; ---
+	If $w = Default Then $w = $width
+	If $h = Default Then $h = $height
+	; ---
+	$gContext = _GDIPlus_ImageGetGraphicsContext($hImg)
+	$newBmp = _GDIPlus_BitmapCreateFromGraphics($width, $height, $gContext)
+	$gNewContext = _GDIPlus_ImageGetGraphicsContext($newBmp)
+	_GDIPlus_GraphicsDrawImageRectRect($gNewContext, $hImg, $x, $y, $w, $h, 0, 0, $width, $height)
+	; ---
+	_GDIPlus_GraphicsDispose($gNewContext)
+	_GDIPlus_GraphicsDispose($gContext)
+	_GDIPlus_ImageDispose($hImg)
+	; ---
+	_ArrayAdd($__GEng_Images, $newBmp)
 	$__GEng_Images[0] += 1
 	; ---
 	Local $ret[3]
 	$ret[0] = $__GEng_Images[0]
-	$ret[1] = $imgW
-	$ret[2] = $imgH
+	$ret[1] = $width
+	$ret[2] = $height
 	; ---
 	Return $ret
 EndFunc

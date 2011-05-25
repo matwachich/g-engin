@@ -8,13 +8,31 @@
 
 #ce ----------------------------------------------------------------------------
 
-Func _GEng_AnimCreate()
+#Region ### Functions ###
+#cs
+- Main Functions
+	_GEng_Anim_Create()
+	_GEng_Anim_FrameCount(ByRef $hAnim)
+	_GEng_Anim_FrameAdd(ByRef $hAnim, ByRef $hImage, $iFramDuration, $x = 0, $y = 0, $w = Default, $h = Default)
+	_GEng_Anim_FrameMod(ByRef $hAnim, $iFrameNumber, ByRef $hImage, $iFramDuration = Default, $x = 0, $y = 0, $w = Default, $h = Default)
+	__GEng_Anim_IsAnim(ByRef $hAnim)
+#ce
+#EndRegion ###
+
+
+Func _GEng_Anim_Create()
 	Local $a[1][6] ; Index Img, x, y, w, h, fram duration
 	$a[0][0] = 0
 	Return $a
 EndFunc
 
-Func _GEng_AnimFrameAdd(ByRef $hAnim, ByRef $hImage, $iFramDuration, $x = 0, $y = 0, $w = Default, $h = Default)
+Func _GEng_Anim_FrameCount(ByRef $hAnim)
+	If Not __GEng_Anim_IsAnim($hAnim) Then Return SetError(1, 0, 0)
+	; ---
+	Return $hAnim[0][0]
+EndFunc
+
+Func _GEng_Anim_FrameAdd(ByRef $hAnim, ByRef $hImage, $iFramDuration, $x = 0, $y = 0, $w = Default, $h = Default)
 	If Not __GEng_Anim_IsAnim($hAnim) Then Return SetError(1, 0, 0)
 	If Not __GEng_Image_IsImage($hImage) Then Return SetError(1, 0, 0)
 	; ---
@@ -39,7 +57,7 @@ Func _GEng_AnimFrameAdd(ByRef $hAnim, ByRef $hImage, $iFramDuration, $x = 0, $y 
 	Return 1
 EndFunc
 
-Func _GEng_AnimFrameMod(ByRef $hAnim, $iFrameNumber, ByRef $hImage, $iFramDuration = Default, $x = 0, $y = 0, $w = Default, $h = Default)
+Func _GEng_Anim_FrameMod(ByRef $hAnim, $iFrameNumber, ByRef $hImage, $iFramDuration = Default, $x = 0, $y = 0, $w = Default, $h = Default)
 	If Not __GEng_Anim_IsAnim($hAnim) Then Return SetError(1, 0, 0)
 	If $hImage <> Default Then
 		If Not __GEng_Image_IsImage($hImage) Then Return SetError(1, 0, 0)
@@ -74,5 +92,6 @@ EndFunc
 ; ==============================================================
 Func __GEng_Anim_IsAnim(ByRef $hAnim)
 	If UBound($hAnim, 2) <> 6 Then Return SetError(1, 0, 0)
+	; ---
 	Return 1
 EndFunc

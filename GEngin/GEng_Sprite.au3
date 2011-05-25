@@ -11,20 +11,17 @@
 #Region ### Functions ###
 #cs
 - Main Functions
-	_GEng_SpriteCreate($sName, $hImage = Default)
-	_GEng_SpriteSetImage(ByRef $hSprite, ByRef $hImage, $x = Default, $y = Default, $w = Default, $h = Default)
-	_GEng_SpriteSetImageRect(ByRef $hSprite, $x, $y, $w, $h, $InitSize = 1)
-	_GEng_SpriteSetAnimation(ByRef $hSprite, $hAnimation)
-	_GEng_SpriteSetCollision(ByRef $hSprite, $iType, $x = Default, $y = Default, $w = Default, $h = Default)
-	_GEng_SpriteDraw(ByRef $hSprite, $iCalculateMovements = 1)
-	_GEng_SpriteDel(ByRef $hSprite)
+	_GEng_Sprite_Create($hImage = Default)
+	_GEng_Sprite_ImageSet(ByRef $hSprite, ByRef $hImage, $x = Default, $y = Default, $w = Default, $h = Default)
+	_GEng_Sprite_ImageSetRect(ByRef $hSprite, $x, $y, $w, $h, $InitSize = 0)
+	_GEng_Sprite_Draw(ByRef $hSprite, $iCalculateMovements = 1)
+	_GEng_Sprite_Del(ByRef $hSprite)
 	__GEng_Sprite_IsSprite($hSprite)
 	__GEng_Sprite_ContainsImage($hSprite)
-	__GEng_Sprite_InitArray(ByRef $a, $sName = Default)
+	__GEng_Sprite_InitArray(ByRef $a)
 #ce
 #EndRegion ###
 
-Global $__GEng_Sprites[1] = [0]
 
 Global Const $__GEng_SpritesArrayUB = 36
 Global Enum $GEng_Origin_Mid, $GEng_Origin_TL, $GEng_Origin_TR, $GEng_Origin_BL, $GEng_Origin_BR
@@ -41,15 +38,12 @@ Global Enum _
 	$_gSpr_CollX, $_gSpr_CollY, $_gSpr_CollW, $_gSpr_CollH, $_gSpr_CollType, _
 	$_gSpr_MoveTimer, $_gSpr_AnimTimer
 
-Func _GEng_Sprite_Create($sName, $hImage = Default)
+Func _GEng_Sprite_Create($hImage = Default)
 	Local $hSprite[$__GEng_SpritesArrayUB]
-	__GEng_Sprite_InitArray($hSprite, $sName)
+	__GEng_Sprite_InitArray($hSprite)
 	; ---
 	If $hImage <> Default Then _GEng_Sprite_ImageSet($hSprite, $hImage)
-	_GEng_SpriteAnimRewind($hSprite)
-	; ---
-	_ArrayAdd($__GEng_Sprites, $sName)
-	$__GEng_Sprites[0] += 1
+	_GEng_Sprite_AnimRewind($hSprite)
 	; ---
 	Return $hSprite
 EndFunc
@@ -160,14 +154,6 @@ EndFunc
 Func _GEng_Sprite_Del(ByRef $hSprite)
 	If Not __GEng_Sprite_IsSprite($hSprite) Then Return SetError(1, 0, 0)
 	; ---
-	If $hSprite[5] <> "" Then
-		Local $i = __GEng_SpriteArraySearch($hSprite[5])
-		If $i Then
-			_ArrayDelete($__GEng_Sprites, $i)
-			$__GEng_Sprites[0] -= 1
-		EndIf
-	EndIf
-	; ---
 	$hSprite = 0
 	; ---
 	Return 1
@@ -178,7 +164,7 @@ EndFunc
 ; ==============================================================
 Func __GEng_Sprite_IsSprite($hSprite)
 	If Not IsArray($hSprite) Then Return SetError(1, 0, 0)
-	If UBound($hSprite) <> $__GEng_SpritesArrayUB Then Return SetError(1, 0, 0)
+	If UBound($hSprite) < $__GEng_SpritesArrayUB Then Return SetError(1, 0, 0)
 	; ---
 	Return 1
 EndFunc
@@ -191,15 +177,7 @@ Func __GEng_Sprite_ContainsImage($hSprite)
 	Return 1
 EndFunc
 
-Func __GEng_SpriteArraySearch($sName)
-	For $i = $__GEng_Sprites[0] To 1 Step -1
-		If $__GEng_Sprites[$i] = $sName Then Return $i
-	Next
-	; ---
-	Return 0
-EndFunc
-
-Func __GEng_Sprite_InitArray(ByRef $a, $sName = Default)
+Func __GEng_Sprite_InitArray(ByRef $a)
 	For $i = 0 To $__GEng_SpritesArrayUB - 1
 		$a[$i] = 0
 	Next

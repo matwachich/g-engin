@@ -8,7 +8,19 @@
 
 #ce ----------------------------------------------------------------------------
 
-Func _GEng_SpriteAnimRewind(ByRef $hSprite, $Frame = 1)
+#Region ### Functions ###
+#cs
+- Main Functions
+	_GEng_Sprite_AnimRewind(ByRef $hSprite, $Frame = 1)
+	_GEng_Sprite_Animate(ByRef $hSprite, ByRef $hAnim, $iStopFrame = Default)
+	_GEng_Sprite_AnimDelayMultiplierGet(ByRef $hSprite)
+	_GEng_Sprite_AnimDelayMultiplierSet(ByRef $hSprite, $iVal)
+	__GEng_Anim_BuildImageFromFrame(ByRef $hAnim, $iFrame)
+#ce
+#EndRegion ###
+
+
+Func _GEng_Sprite_AnimRewind(ByRef $hSprite, $Frame = 1)
 	If Not __GEng_Sprite_IsSprite($hSprite) Then Return SetError(1, 0, 0)
 	; ---
 	$hSprite[$_gSpr_AnimFrame] = $Frame ; current frame (start)
@@ -20,9 +32,10 @@ EndFunc
 ; Quand StopFrame est atteinte, la fonction retourne -1
 ; Si l'animation commence par la frame 1 et que vous mettez comme StopFrame 1,
 ; 	la fonction ne s'arrétera qu'après avoir fait un tour, et pas des le début
-Func _GEng_SpriteAnimate(ByRef $hSprite, ByRef $hAnim, $iStopFrame = Default)
+Func _GEng_Sprite_Animate(ByRef $hSprite, ByRef $hAnim, $iStopFrame = Default)
 	If Not __GEng_Sprite_IsSprite($hSprite) Then Return SetError(1, 0, 0)
 	If Not __GEng_Anim_IsAnim($hAnim) Then Return SetError(1, 0, 0)
+	If _GEng_Anim_FrameCount($hAnim) = 0 Then Return SetError(1, 0, 0)
 	; ---
 	Local $img
 	If $hSprite[$_gSpr_AnimTimer] = -1 Then
@@ -55,6 +68,23 @@ Func _GEng_SpriteAnimate(ByRef $hSprite, ByRef $hAnim, $iStopFrame = Default)
 	EndIf
 	; ---
 	Return 1
+EndFunc
+
+Func _GEng_Sprite_AnimDelayMultiplierGet(ByRef $hSprite)
+	If Not __GEng_Sprite_IsSprite($hSprite) Then Return SetError(1, 0, 0)
+	; ---
+	Return $hSprite[$_gSpr_AnimDelayMulti]
+EndFunc
+
+Func _GEng_Sprite_AnimDelayMultiplierSet(ByRef $hSprite, $iVal)
+	If Not __GEng_Sprite_IsSprite($hSprite) Then Return SetError(1, 0, 0)
+	; ---
+	If $iVal > 0 Then
+		$hSprite[$_gSpr_AnimDelayMulti] = $iVal
+		Return 1
+	Else
+		Return SetError(1, 0, 0)
+	EndIf
 EndFunc
 
 ; ==============================================================

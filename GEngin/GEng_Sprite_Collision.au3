@@ -8,6 +8,21 @@
 
 #ce ----------------------------------------------------------------------------
 
+#Region ### Functions ###
+#cs
+- Main Functions
+	_GEng_Sprite_CollisionSet(ByRef $hSprite, $iType, $x = Default, $y = Default, $w = Default, $h = Default)
+	_GEng_Sprite_Collision($hSprite1, $hSprite2)
+	__GEng_CircleVsCircle($c1X, $c1Y, $c1R, $c2X, $c2Y, $c2R)
+	__GEng_Dbg_DrawCircleCircle($iDebugPen, $c1X, $c1Y, $c1R, $c2X, $c2Y, $c2R)
+	__GEng_CircleVsRect($cX, $cY, $cR, $rX, $rY, $rW, $rH)
+	__GEng_Dbg_DrawRectCercle($iDebugPen, $cX, $cY, $cR, $rX, $rY, $rW, $rH)
+	__GEng_RectVsRect($x1, $y1, $w1, $h1, $x2, $y2, $w2, $h2)
+	__GEng_Dbg_DrawRectRect($iDebugPen, $x1, $y1, $w1, $h1, $x2, $y2, $w2, $h2)
+#ce
+#EndRegion ###
+
+
 ; pour les tests de collision avec les bord de la fenètre
 Global Enum $GEng_ScrBorder_Top, $GEng_ScrBorder_Bot, $GEng_ScrBorder_Left, $GEng_ScrBorder_Right
 
@@ -142,22 +157,22 @@ Func _GEng_Sprite_Collision($hSprite1, $hSprite2)
 			; ---
 			Switch $hSprite2[$_gSpr_CollType]
 				Case 0 ; point
-					$x1 = $hSprite2[$_gSpr_PosX] - $hSprite2[$_gSpr_OriX] + $hSprite2[$_gSpr_CollX]
-					$y1 = $hSprite2[$_gSpr_PosY] - $hSprite2[$_gSpr_OriY] + $hSprite2[$_gSpr_CollY]
-					$w1 = 1
-					$h1 = 1
+					$x2 = $hSprite2[$_gSpr_PosX] - $hSprite2[$_gSpr_OriX] + $hSprite2[$_gSpr_CollX]
+					$y2 = $hSprite2[$_gSpr_PosY] - $hSprite2[$_gSpr_OriY] + $hSprite2[$_gSpr_CollY]
+					$w2 = 1
+					$h2 = 1
 				Case 1 ; rect
-					$x1 = $hSprite2[$_gSpr_PosX] - $hSprite2[$_gSpr_OriX] + $hSprite2[$_gSpr_CollX]
-					$y1 = $hSprite2[$_gSpr_PosY] - $hSprite2[$_gSpr_OriY] + $hSprite2[$_gSpr_CollY]
-					$w1 = $hSprite2[$_gSpr_CollW]
-					$h1 = $hSprite2[$_gSpr_CollH]
+					$x2 = $hSprite2[$_gSpr_PosX] - $hSprite2[$_gSpr_OriX] + $hSprite2[$_gSpr_CollX]
+					$y2 = $hSprite2[$_gSpr_PosY] - $hSprite2[$_gSpr_OriY] + $hSprite2[$_gSpr_CollY]
+					$w2 = $hSprite2[$_gSpr_CollW]
+					$h2 = $hSprite2[$_gSpr_CollH]
 				Case 2 ; cercle
-					$x1 = $hSprite2[$_gSpr_PosX] - $hSprite2[$_gSpr_OriX] + $hSprite2[$_gSpr_CollX]
-					$y1 = $hSprite2[$_gSpr_PosY] - $hSprite2[$_gSpr_OriY] + $hSprite2[$_gSpr_CollY]
-					$w1 = $hSprite2[$_gSpr_CollW]
-					$h1 = 0
+					$x2 = $hSprite2[$_gSpr_PosX] - $hSprite2[$_gSpr_OriX] + $hSprite2[$_gSpr_CollX]
+					$y2 = $hSprite2[$_gSpr_PosY] - $hSprite2[$_gSpr_OriY] + $hSprite2[$_gSpr_CollY]
+					$w2 = $hSprite2[$_gSpr_CollW]
+					$h2 = 0
 			EndSwitch
-			$type1 = $hSprite2[$_gSpr_CollType]
+			$type2 = $hSprite2[$_gSpr_CollType]
 	EndSwitch
 	; ---
 	
@@ -188,6 +203,7 @@ EndFunc
 ; ### Internals
 ; ==============================================================
 Func __GEng_CircleVsCircle($c1X, $c1Y, $c1R, $c2X, $c2Y, $c2R)
+	ConsoleWrite("Cercle - Cercle" & @CRLF)
 	Local $cDist = Sqrt(($c2X - $c1X)^2 + ($c2Y - $c1Y)^2)
 	; ---
 	If $cDist <= $c1R + $c2R Then
@@ -198,7 +214,7 @@ Func __GEng_CircleVsCircle($c1X, $c1Y, $c1R, $c2X, $c2Y, $c2R)
 	Return 0
 EndFunc
 
-Func __GEng_Dbg_DrawCircleCircle($iType, $c1X, $c1Y, $c1R, $c2X, $c2Y, $c2R)
+Func __GEng_Dbg_DrawCircleCircle($iDebugPen, $c1X, $c1Y, $c1R, $c2X, $c2Y, $c2R)
 	If $__GEng_Debug Then
 		$c1X -= $c1R
 		$c1Y -= $c1R
@@ -208,8 +224,8 @@ Func __GEng_Dbg_DrawCircleCircle($iType, $c1X, $c1Y, $c1R, $c2X, $c2Y, $c2R)
 		$c2Y -= $c2R
 		$c2R *= 2
 		; ---
-		_GDIPlus_GraphicsDrawEllipse($__GEng_hGraphic, $c1X, $c1Y, $c1R, $c1R, Eval("_dbg_pen" & $iType))
-		_GDIPlus_GraphicsDrawEllipse($__GEng_hGraphic, $c2X, $c2Y, $c2R, $c2R, Eval("_dbg_pen" & $iType))
+		_GDIPlus_GraphicsDrawEllipse($__GEng_hGraphic, $c1X, $c1Y, $c1R, $c1R, Eval("_dbg_pen" & $iDebugPen))
+		_GDIPlus_GraphicsDrawEllipse($__GEng_hGraphic, $c2X, $c2Y, $c2R, $c2R, Eval("_dbg_pen" & $iDebugPen))
 		; ---
 		Sleep(50)
 	EndIf
@@ -217,6 +233,7 @@ EndFunc
 
 ; Thanks: http://stackoverflow.com/questions/401847/circle-rectangle-collision-detection-intersection/3491126#3491126
 Func __GEng_CircleVsRect($cX, $cY, $cR, $rX, $rY, $rW, $rH)
+	ConsoleWrite("Cercle - Rect" & @CRLF)
 	Local $rcX, $rcY
 	$rcX = $rX + ($rW / 2)
 	$rcY = $rY + ($rH / 2)
@@ -246,20 +263,21 @@ Func __GEng_CircleVsRect($cX, $cY, $cR, $rX, $rY, $rW, $rH)
 	EndIf
 EndFunc
 
-Func __GEng_Dbg_DrawRectCercle($iType, $cX, $cY, $cR, $rX, $rY, $rW, $rH)
+Func __GEng_Dbg_DrawRectCercle($iDebugPen, $cX, $cY, $cR, $rX, $rY, $rW, $rH)
 	If $__GEng_Debug Then
 		$cX -= $cR
 		$cY -= $cR
 		$cR *= 2
 		; ---
-		_GDIPlus_GraphicsDrawEllipse($__GEng_hGraphic, $cX, $cY, $cR, $cR, Eval("_dbg_pen" & $iType))
-		_GDIPlus_GraphicsDrawRect($__GEng_hGraphic, $rX, $rY, $rW, $rH, Eval("_dbg_pen" & $iType))
+		_GDIPlus_GraphicsDrawEllipse($__GEng_hGraphic, $cX, $cY, $cR, $cR, Eval("_dbg_pen" & $iDebugPen))
+		_GDIPlus_GraphicsDrawRect($__GEng_hGraphic, $rX, $rY, $rW, $rH, Eval("_dbg_pen" & $iDebugPen))
 		; ---
 		Sleep(50)
 	EndIf
 EndFunc
 
 Func __GEng_RectVsRect($x1, $y1, $w1, $h1, $x2, $y2, $w2, $h2)
+	ConsoleWrite("Rect - Rect" & @CRLF)
 	Local $center1X, $center1Y, $center2X, $center2Y
 	$center1X = $x1 + ($w1 / 2)
 	$center1Y = $y1 + ($h1 / 2)
@@ -284,94 +302,18 @@ Func __GEng_RectVsRect($x1, $y1, $w1, $h1, $x2, $y2, $w2, $h2)
 	Return 0
 EndFunc
 
-Func __GEng_Dbg_DrawRectRect($iType, $x1, $y1, $w1, $h1, $x2, $y2, $w2, $h2)
+Func __GEng_Dbg_DrawRectRect($iDebugPen, $x1, $y1, $w1, $h1, $x2, $y2, $w2, $h2)
 	If $__GEng_Debug Then
-		_GDIPlus_GraphicsDrawRect($__GEng_hGraphic, $x1, $y1, $w1, $h1, Eval("_dbg_pen" & $iType))
-		_GDIPlus_GraphicsDrawRect($__GEng_hGraphic, $x2, $y2, $w2, $h2, Eval("_dbg_pen" & $iType))
+		_GDIPlus_GraphicsDrawRect($__GEng_hGraphic, $x1, $y1, $w1, $h1, Eval("_dbg_pen" & $iDebugPen))
+		_GDIPlus_GraphicsDrawRect($__GEng_hGraphic, $x2, $y2, $w2, $h2, Eval("_dbg_pen" & $iDebugPen))
 		Sleep(50)
 	EndIf
 EndFunc
 
-#cs
-	If ($pos1[0] + $size1[0]) > $pos2[0] And ($pos1[0] + $size1[0]) < ($pos2[0] + $size2[0]) And _
-	   ($pos1[1] + $size1[1]) > $pos2[1] And ($pos1[1] + $size1[1]) < ($pos2[1] + $size2[1]) Then
-		; ---
-		$collision = 1
-	EndIf
-	; --- Test du point supérieur gauche de spr1 OK
-	If $pos1[0] > $pos2[0] And $pos1[0] < ($pos2[0] + $size2[0]) And _
-	   $pos1[1] > $pos2[1] And $pos1[1] < ($pos2[1] + $size2[1]) Then
-		; ---
-		$collision = 1
-	EndIf
-	; --- Test du point inférieur gauche de spr1 OK
-	If $pos1[0] > $pos2[0] And $pos1[0] < ($pos2[0] + $size2[0]) And _
-	   ($pos1[1] + $size1[1]) > $pos2[1] And ($pos1[1] + $size1[1]) < ($pos2[1] + $size2[1]) Then
-		; ---
-		$collision = 1
-	EndIf
-	; --- Test du point supérieur droit de spr 1
-	If ($pos1[0] + $size1[0]) > $pos2[0] And ($pos1[0] + $size1[0]) < ($pos2[0] + $size2[0]) And _
-	    $pos1[1] > $pos2[1] And $pos1[1] < ($pos2[1] + $size2[1]) Then
-		; ---
-		$collision = 1
-	EndIf
-	
-	; SI: les 2 sont carés ou points
-	; --- Test du point inférieur droit de spr1 OK
-	If ($x1 + $w1) > $x2 And ($x1 + $w1) < ($x2 + $w2) And _
-	   ($y1 + $h1) > $y2 And ($y1 + $h1) < ($y2 + $h2) Then
-		; ---
-		__GEng_Dbg_DrawRectRect($x1, $y1, $w1, $h1, $x2, $y2, $w2, $h2)
-		Return 1
-	EndIf
-	; --- Test du point supérieur gauche de spr1 OK
-	If $x1 > $w2 And $x1 < ($x2 + $w2) And _
-	   $y1 > $h2 And $y1 < ($y2 + $h2) Then
-		; ---
-		__GEng_Dbg_DrawRectRect($x1, $y1, $w1, $h1, $x2, $y2, $w2, $h2)
-		Return 1
-	EndIf
-	; --- Test du point inférieur gauche de spr1 OK
-	If 	$x1 > $x2 And $x1 < ($x2 + $w2) And _
-	   ($y1 + $h1) > $y2 And ($y1 + $h1) < ($y2 + $h2) Then
-		; ---
-		__GEng_Dbg_DrawRectRect($x1, $y1, $w1, $h1, $x2, $y2, $w2, $h2)
-		Return 1
-	EndIf
-	; --- Test du point supérieur droit de spr 1
-	If ($x1 + $w1) > $x2 And ($x1 + $w1) < ($x2 + $w2) And _
-	    $y1 > $y2 And $y1 < ($y2 + $h2) Then
-		; ---
-		__GEng_Dbg_DrawRectRect($x1, $y1, $w1, $h1, $x2, $y2, $w2, $h2)
-		Return 1
-	EndIf
-	; ---
-	Return 0
-#ce
 
-; http://stackoverflow.com/questions/401847/circle-rectangle-collision-detection-intersection/3491126#3491126
 #cs
-	Local $rcX, $rcY
-	$rcX = $rX + ($rW / 2)
-	$rcY = $rY + ($rH / 2)
-	; ---
-	Local $w = $rW / 2, $h = $rH / 2
-	Local $dx = Abs($cX - $rcX)
-	Local $dy = Abs($cY - $rcY)
-	; ---
-	If ($dx > ($cR + $w)) Or ($dy > ($cR + $h)) Then Return 0
-	; ---
-	Local $cDistX, $cDistY
-	$cDistX = Abs($cX - $rX - $w)
-	$cDistY = Abs($cY - $rY - $h)
-	; ---
-	If ($cDistX <= $w) Or ($cDistY <= $h) Then Return 1
-	; ---
-	Local $cornerDistSq = (($cDistX - $w)^2) + (($cDistY - $h)^2)
-	; ---
-	Return ($cornerDistSq <= ($cR^2))
-	
+http://stackoverflow.com/questions/401847/circle-rectangle-collision-detection-intersection/3491126#3491126
+
  var rectangleCenter = new PointF((rectangle.X +  rectangle.Width / 2),
                                          (rectangle.Y + rectangle.Height / 2));
 
@@ -406,18 +348,4 @@ EndFunc
 
         return (cornerDistanceSq <= (Math.Pow(radius, 2)));
     }
-#ce
-
-; http://stackoverflow.com/questions/401847/circle-rectangle-collision-detection-intersection/402010#402010
-#cs
-	Local $cDistX = Abs($cX - $rX - ($rW / 2))
-	Local $cDistY = Abs($cY - $rY - ($rH / 2))
-	
-	If $cDistX > (($rW / 2) + $cR) Or $cDistY > (($rH / 2) + $cR) Then Return 0
-	
-	If $cDistX <= ($rW / 2) Or $cDistY <= ($rH / 2) Then Return 1
-	
-	Local $cornerDist_sq = (($cDistX - ($rW / 2))^2) + (($cDistY - ($rH / 2))^2)
-	
-	Return ($cornerDist_sq <= ($cR^2))
 #ce
