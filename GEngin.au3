@@ -22,10 +22,13 @@ Global $__GEng_FrameTimer = 0
 ; ---
 Global Const $__GEng_PI = 4 * ATan(1)
 
+
 ; ##############################################################
 
 Global $__GEng_Debug = 0
-Global $_dbg_pen1, $_dbg_pen2, $_dbg_pen3
+Global $_Arrow, _
+	$_dbg_Arrow0 = 0, $_dbg_Arrow1, $_dbg_Arrow2, $_dbg_Arrow3, $_dbg_Arrow4, _
+	$_dbg_pen0 = 0, $_dbg_pen1, $_dbg_pen2, $_dbg_pen3, $_dbg_pen4
 
 ; ##############################################################
 
