@@ -203,7 +203,6 @@ EndFunc
 ; ### Internals
 ; ==============================================================
 Func __GEng_CircleVsCircle($c1X, $c1Y, $c1R, $c2X, $c2Y, $c2R)
-	ConsoleWrite("Cercle - Cercle" & @CRLF)
 	Local $cDist = Sqrt(($c2X - $c1X)^2 + ($c2Y - $c1Y)^2)
 	; ---
 	If $cDist <= $c1R + $c2R Then
@@ -216,16 +215,8 @@ EndFunc
 
 Func __GEng_Dbg_DrawCircleCircle($iDebugPen, $c1X, $c1Y, $c1R, $c2X, $c2Y, $c2R)
 	If $__GEng_Debug Then
-		$c1X -= $c1R
-		$c1Y -= $c1R
-		$c1R *= 2
-		; ---
-		$c2X -= $c2R
-		$c2Y -= $c2R
-		$c2R *= 2
-		; ---
-		_GDIPlus_GraphicsDrawEllipse($__GEng_hGraphic, $c1X, $c1Y, $c1R, $c1R, Eval("_dbg_pen" & $iDebugPen))
-		_GDIPlus_GraphicsDrawEllipse($__GEng_hGraphic, $c2X, $c2Y, $c2R, $c2R, Eval("_dbg_pen" & $iDebugPen))
+		_GEng_Debug_DrawCircle($iDebugPen, $c1X, $c1Y, $c1R)
+		_GEng_Debug_DrawCircle($iDebugPen, $c2X, $c2Y, $c2R)
 		; ---
 		Sleep(50)
 	EndIf
@@ -233,7 +224,6 @@ EndFunc
 
 ; Thanks: http://stackoverflow.com/questions/401847/circle-rectangle-collision-detection-intersection/3491126#3491126
 Func __GEng_CircleVsRect($cX, $cY, $cR, $rX, $rY, $rW, $rH)
-	ConsoleWrite("Cercle - Rect" & @CRLF)
 	Local $rcX, $rcY
 	$rcX = $rX + ($rW / 2)
 	$rcY = $rY + ($rH / 2)
@@ -265,19 +255,14 @@ EndFunc
 
 Func __GEng_Dbg_DrawRectCercle($iDebugPen, $cX, $cY, $cR, $rX, $rY, $rW, $rH)
 	If $__GEng_Debug Then
-		$cX -= $cR
-		$cY -= $cR
-		$cR *= 2
-		; ---
-		_GDIPlus_GraphicsDrawEllipse($__GEng_hGraphic, $cX, $cY, $cR, $cR, Eval("_dbg_pen" & $iDebugPen))
-		_GDIPlus_GraphicsDrawRect($__GEng_hGraphic, $rX, $rY, $rW, $rH, Eval("_dbg_pen" & $iDebugPen))
+		_GEng_Debug_DrawCircle($iDebugPen, $cX, $cY, $cR)
+		_GEng_Debug_DrawRect($iDebugPen, $rX, $rY, $rW, $rH)
 		; ---
 		Sleep(50)
 	EndIf
 EndFunc
 
 Func __GEng_RectVsRect($x1, $y1, $w1, $h1, $x2, $y2, $w2, $h2)
-	ConsoleWrite("Rect - Rect" & @CRLF)
 	Local $center1X, $center1Y, $center2X, $center2Y
 	$center1X = $x1 + ($w1 / 2)
 	$center1Y = $y1 + ($h1 / 2)
@@ -304,8 +289,8 @@ EndFunc
 
 Func __GEng_Dbg_DrawRectRect($iDebugPen, $x1, $y1, $w1, $h1, $x2, $y2, $w2, $h2)
 	If $__GEng_Debug Then
-		_GDIPlus_GraphicsDrawRect($__GEng_hGraphic, $x1, $y1, $w1, $h1, Eval("_dbg_pen" & $iDebugPen))
-		_GDIPlus_GraphicsDrawRect($__GEng_hGraphic, $x2, $y2, $w2, $h2, Eval("_dbg_pen" & $iDebugPen))
+		_GEng_Debug_DrawRect($iDebugPen, $x1, $y1, $w1, $h1)
+		_GEng_Debug_DrawRect($iDebugPen, $x2, $y2, $w2, $h2)
 		Sleep(50)
 	EndIf
 EndFunc

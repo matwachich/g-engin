@@ -84,9 +84,13 @@ Func _GEng_Sprite_Move(ByRef $hSprite)
 	EndIf
 	
 	; Position
-	$hSprite[$_gSpr_PosX] += $hSprite[$_gSpr_SpeedX] * $ms
-	$hSprite[$_gSpr_PosY] += $hSprite[$_gSpr_SpeedY] * $ms
-
+	If $hSprite[$_gSpr_SpeedX] <> 0 Then
+		$hSprite[$_gSpr_PosX] += $hSprite[$_gSpr_SpeedX] * $ms
+	EndIf
+	If $hSprite[$_gSpr_SpeedY] <> 0 Then
+		$hSprite[$_gSpr_PosY] += $hSprite[$_gSpr_SpeedY] * $ms
+	EndIf
+	
 	Local $innerX = $hSprite[$_gSpr_InnertieX], $innerY = $hSprite[$_gSpr_InnertieY]
 	If $innerX <> 0 And $hSprite[$_gSpr_SpeedX] <> 0 And Not $accelX Then ; Innertie X
 		$tmp = $hSprite[$_gSpr_SpeedX]

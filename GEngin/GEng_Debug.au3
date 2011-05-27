@@ -11,12 +11,68 @@
 #Region ### Functions ###
 #cs
 - Main Functions
+	_GEng_Debug_DrawVect($iDbgPen, $x0, $y0, $x1, $y1)
+	_GEng_Debug_DrawVectAngle($iDbgPen, $x0, $y0, $iAngle, $iGrandeur)
+	_GEng_Debug_DrawLine($iDbgPen, $x0, $y0, $x1, $y1)
+	_GEng_Debug_DrawLineAngle($iDbgPen, $x0, $y0, $iAngle, $iGrandeur)
+	_GEng_Debug_DrawRect($iDbgPen, $x, $y, $w, $h)
+	_GEng_Debug_DrawCircle($iDbgPen, $x, $y, $r)
 	_Dbg_DisplaySpr(ByRef $spr)
 	_Bench_Start($label = "")
 	_Bench_End($t, $label = "")
 #ce
 #EndRegion ###
 
+
+Func _GEng_Debug_DrawVect($iDbgPen, $x0, $y0, $x1, $y1, $hBuffer = Default)
+	If $hBuffer = Default Then
+		Return _GDIPlus_GraphicsDrawLine($__GEng_hBuffer, $x0, $y0, $x1, $y1, Eval("_dbg_Arrow" & $iDbgPen))
+	Else
+		Return _GDIPlus_GraphicsDrawLine($hBuffer, $x0, $y0, $x1, $y1, Eval("_dbg_Arrow" & $iDbgPen))
+	EndIf
+EndFunc
+
+Func _GEng_Debug_DrawVectAngle($iDbgPen, $x0, $y0, $iAngle, $iGrandeur, $hBuffer = Default)
+	Local $tmp = _GEng_AngleToVector($iAngle, $iGrandeur)
+	If $hBuffer = Default Then
+		Return _GDIPlus_GraphicsDrawLine($__GEng_hBuffer, $x0, $y0, $tmp[0], $tmp[1], Eval("_dbg_Arrow" & $iDbgPen))
+	Else
+		Return _GDIPlus_GraphicsDrawLine($hBuffer, $x0, $y0, $tmp[0], $tmp[1], Eval("_dbg_Arrow" & $iDbgPen))
+	EndIf
+EndFunc
+
+Func _GEng_Debug_DrawLine($iDbgPen, $x0, $y0, $x1, $y1, $hBuffer = Default)
+	If $hBuffer = Default Then
+		Return _GDIPlus_GraphicsDrawLine($__GEng_hBuffer, $x0, $y0, $x1, $y1, Eval("_dbg_Pen" & $iDbgPen))
+	Else
+		Return _GDIPlus_GraphicsDrawLine($hBuffer, $x0, $y0, $x1, $y1, Eval("_dbg_Pen" & $iDbgPen))
+	EndIf
+EndFunc
+
+Func _GEng_Debug_DrawLineAngle($iDbgPen, $x0, $y0, $iAngle, $iGrandeur, $hBuffer = Default)
+	Local $tmp = _GEng_AngleToVector($iAngle, $iGrandeur)
+	If $hBuffer = Default Then
+		Return _GDIPlus_GraphicsDrawLine($__GEng_hBuffer, $x0, $y0, $tmp[0], $tmp[1], Eval("_dbg_Pen" & $iDbgPen))
+	Else
+		Return _GDIPlus_GraphicsDrawLine($hBuffer, $x0, $y0, $tmp[0], $tmp[1], Eval("_dbg_Pen" & $iDbgPen))
+	EndIf
+EndFunc
+
+Func _GEng_Debug_DrawRect($iDbgPen, $x, $y, $w, $h, $hBuffer = Default)
+	If $hBuffer = Default Then
+		Return _GDIPlus_GraphicsDrawRect($__GEng_hBuffer, $x, $y, $w, $h, Eval("_dbg_Pen" & $iDbgPen))
+	Else
+		Return _GDIPlus_GraphicsDrawRect($hBuffer, $x, $y, $w, $h, Eval("_dbg_Pen" & $iDbgPen))
+	EndIf
+EndFunc
+
+Func _GEng_Debug_DrawCircle($iDbgPen, $x, $y, $r, $hBuffer = Default)
+	If $hBuffer = Default Then
+		Return _GDIPlus_GraphicsDrawEllipse($__GEng_hBuffer, $x - $r, $y - $r, $r * 2, $r * 2, Eval("_dbg_Pen" & $iDbgPen))
+	Else
+		Return _GDIPlus_GraphicsDrawEllipse($hBuffer, $x - $r, $y - $r, $r * 2, $r * 2, Eval("_dbg_Pen" & $iDbgPen))
+	EndIf
+EndFunc
 
 Func _Dbg_DisplaySpr(ByRef $spr)
 	Local $a[36][2] = [ _
@@ -60,13 +116,11 @@ Func _Dbg_DisplaySpr(ByRef $spr)
 	_ArrayDisplay($a)
 EndFunc
 
-Func _Bench_Start($label = "")
-	Local $t = TimerInit()
-	If $label <> "" Then ConsoleWrite("- Start: " & $label & @CRLF)
-	Return $t
+Func _Bench_Start(ByRef $t)
+	$t = TimerInit()
+	;If $label <> "" Then ConsoleWrite("- Start: " & $label & @CRLF)
 EndFunc
 
-Func _Bench_End($t, $label = "")
-	Local $d = TimerDiff($t)
-	ConsoleWrite("- " & $label & " : " & $d & @CRLF)
+Func _Bench_End(ByRef $t, $label = "")
+	ConsoleWrite("- " & $label & " : " & TimerDiff($t) & @CRLF)
 EndFunc

@@ -116,9 +116,9 @@ Func _GEng_Sprite_Draw(ByRef $hSprite, $iCalculateMovements = 1)
 		$sizeW, $sizeH) ; taille à l'écran
 		
 		If $__GEng_Debug Then
-			_GDIPlus_GraphicsDrawRect($__GEng_hBuffer, $posX - $oriX, $posY - $oriY, $sizeW, $sizeH)
-			_GDIPlus_GraphicsDrawEllipse($__GEng_hBuffer, $posX - $oriX - 2, $posY - $oriY - 2, 4, 4, $_dbg_pen1)
-			_GDIPlus_GraphicsDrawEllipse($__GEng_hBuffer, $posX - 2, $posY - 2, 4, 4, $_dbg_pen3)
+			_GEng_Debug_DrawRect(0, $posX - $oriX, $posY - $oriY, $sizeW, $sizeH)
+			_GEng_Debug_DrawCircle(1, $posX, $posY, 2)
+			_GEng_Debug_DrawCircle(3, $posX - $oriX, $posY - $oriY, 2)
 		EndIf
 		
 	Else ; Si rotation => Calcule la rotation et position et dessine sur le buffer personnel du sprite
@@ -133,14 +133,12 @@ Func _GEng_Sprite_Draw(ByRef $hSprite, $iCalculateMovements = 1)
 		$sizeW, $sizeH)
 		
 		If $__GEng_Debug Then
-			_GDIPlus_GraphicsDrawLine($hBuffer, 0, 0, 0, 40, $_dbg_pen2)
-				_GDIPlus_GraphicsDrawString($hBuffer, "Y", -6, 45)
-			_GDIPlus_GraphicsDrawLine($hBuffer, 0, 0, 40, 0, $_dbg_pen2)
-				_GDIPlus_GraphicsDrawString($hBuffer, "X", 45, -6)
-			_GDIPlus_GraphicsDrawString($hBuffer, $rotDeg & " °", (-1 * $oriX), (-1 * $oriY) - 15)
-			_GDIPlus_GraphicsDrawRect($hBuffer, -1 * $oriX, -1 * $oriY, $sizeW, $sizeH)
-			_GDIPlus_GraphicsDrawEllipse($hBuffer, (-1 * $oriX) - 2, (-1 * $oriY) - 2, 4, 4, $_dbg_pen1)
-			_GDIPlus_GraphicsDrawEllipse($hBuffer, -2, -2, 4, 4, $_dbg_pen3)
+			_GEng_Debug_DrawRect(0, -1 * $oriX, -1 * $oriY, $sizeW, $sizeH, $hBuffer)
+			_GEng_Debug_DrawCircle(1, 0, 0, 2, $hBuffer)
+			_GEng_Debug_DrawCircle(3, -1 * $oriX, -1 * $oriY, 2, $hBuffer)
+			; ---
+			_GEng_Debug_DrawVect(2, 0, 0, 50, 0, $hBuffer)
+			_GEng_Debug_DrawVect(2, 0, 0, 0, 50, $hBuffer)
 		EndIf
 		
 		; ---

@@ -167,6 +167,7 @@ Func _GEng_Sprite_AngleSet(ByRef $hSprite, $iAngle) ; en degres
 	; ---
 	$hSprite[$_gSpr_AngleDeg] = $iAngle ; deg
 	$hSprite[$_gSpr_AngleRad] = __GEng_GeometryDeg2Rad($iAngle) ; rad
+	; ---
 	Return 1
 EndFunc
 
