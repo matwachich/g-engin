@@ -33,18 +33,22 @@ Func _GEng_Start($sTitle, $iW, $iH, $iX = -1, $iY = -1, $iStyle = -1, $iExtStyle
 	$__GEng_hBitmap = _GDIPlus_BitmapCreateFromGraphics($iW, $iH, $__GEng_hGraphic)
 	$__GEng_hBuffer = __GEng_GetBuffer()
 	; ---
+	$__GEng_ScreenDC = _WinAPI_GetDC($__GEng_hGui)
+	$__GEng_CompatibleDC = _WinAPI_CreateCompatibleDC($__GEng_ScreenDC)
+	; ---
 	GuiSetState(@SW_SHOW, $__GEng_hGui)
 	Return SetError(0, 0, 1)
-EndFunc
-
-Func _GEng_Embedd($hGui, $iX, $iY, $iW, $iH)
-	
 EndFunc
 
 Func _GEng_Shutdown()
 	__GEng_Image_DisposeAll()
 	; ---
 	_GEng_SetDebug(0)
+	; ---
+	_WinAPI_ReleaseDC($__GEng_hGui, $__GEng_ScreenDC)
+	_WinAPI_ReleaseDC($__GEng_hGui, $__GEng_CompatibleDC)
+	_WinAPI_DeleteDC($__GEng_ScreenDC)
+	_WinAPI_DeleteDC($__GEng_CompatibleDC)
 	; ---
 	_GDIPlus_GraphicsDispose($__GEng_hBuffer)
 	_GDIPlus_BitmapDispose($__GEng_hBitmap)

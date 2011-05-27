@@ -18,6 +18,8 @@ Global $__GEng_WinW = -1, $__GEng_WinH = -1
 Global $__GEng_hGraphic = -1
 Global $__GEng_hBitmap = -1
 Global $__GEng_hBuffer = -1
+Global $__GEng_ScreenDC = -1
+Global $__GEng_CompatibleDC = -1
 Global $__GEng_FrameTimer = 0
 ; ---
 Global Const $__GEng_PI = 4 * ATan(1)

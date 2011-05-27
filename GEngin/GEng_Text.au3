@@ -61,6 +61,7 @@ Func _GEng_Text_Create(ByRef $hFont, $sText = "", $iPosX = 0, $iPosY = 0, $iWidt
 		$sText, _
 		$sPosRect _
 		]
+	$sPosRect = 0
 	; ---
 	Return $ret
 EndFunc
@@ -80,7 +81,11 @@ EndFunc
 Func _GEng_Text_StringSet(ByRef $hTxtRect, $sText = Default)
 	If Not __GEng_Text_IsTextRect($hTxtRect) Then Return SetError(1, 0, 0)
 	; ---
-	If $sText <> Default Then $hTxtRect[1] = $sText
+	Local $hFont = $hTxtRect[0]
+	; ---
+	If $sText <> Default Then
+		$hTxtRect[1] = $sText
+	EndIf
 	; ---
 	Return 1
 EndFunc
@@ -107,10 +112,10 @@ Func _GEng_Text_PosGet(ByRef $hTxtRect, ByRef $iPosX, ByRef $iPosY, ByRef $iWidt
 	If Not __GEng_Text_IsTextRect($hTxtRect) Then Return SetError(1, 0, 0)
 	; ---
 	Local $Struct = $hTxtRect[2]
-	$iPosX = DllStructSetData($Struct, "X", $iPosX)
-	$iPosY = DllStructSetData($Struct, "Y", $iPosY)
-	$iWidth = DllStructSetData($Struct, "Width", $iWidth)
-	$iHeight = DllStructSetData($Struct, "Height", $iHeight)
+	$iPosX = DllStructSetData($Struct[0], "X", $iPosX)
+	$iPosY = DllStructSetData($Struct[0], "Y", $iPosY)
+	$iWidth = DllStructSetData($Struct[0], "Width", $iWidth)
+	$iHeight = DllStructSetData($Struct[0], "Height", $iHeight)
 	; ---
 	Return 1
 EndFunc
@@ -119,7 +124,7 @@ Func _GEng_Text_Draw(ByRef $hTxtRect)
 	If Not __GEng_Text_IsTextRect($hTxtRect) Then Return SetError(1, 0, 0)
 	; ---
 	Local $hFont = $hTxtRect[0]
-	Return _GDIPlus_GraphicsDrawStringEx($__GEng_hGraphic, $hTxtRect[1], $hFont[2], $hTxtRect[2], $hFont[1], $hFont[0])
+	Return _GDIPlus_GraphicsDrawStringEx($__GEng_hBuffer, $hTxtRect[1], $hFont[2], $hTxtRect[2], $hFont[1], $hFont[0])
 EndFunc
 
 Func _GEng_Text_Delet(ByRef $hTxtRect)

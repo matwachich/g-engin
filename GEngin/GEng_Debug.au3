@@ -23,6 +23,8 @@
 #ce
 #EndRegion ###
 
+Global $bench = 0
+
 
 Func _GEng_Debug_DrawVect($iDbgPen, $x0, $y0, $x1, $y1, $hBuffer = Default)
 	If $hBuffer = Default Then
@@ -122,5 +124,11 @@ Func _Bench_Start(ByRef $t)
 EndFunc
 
 Func _Bench_End(ByRef $t, $label = "")
-	ConsoleWrite("- " & $label & " : " & TimerDiff($t) & @CRLF)
+	If $bench = 0 Then
+		$bench = TimerDiff($t)
+	Else
+		$bench += TimerDiff($t)
+		$bench = $bench / 2
+	EndIf
+	ConsoleWrite("- " & $label & " : " & $bench & @CRLF)
 EndFunc
