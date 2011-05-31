@@ -18,9 +18,23 @@
 #ce
 #EndRegion ###
 
-
 Global $__GEng_Images[1] = [0]
 
+; # FUNCTION # ==============================================================================================
+; Name...........:	_GEng_ImageLoad
+; Description....:	Charge un fichier image pour être utiliser par GEngin
+; Parameters.....:	$sPath
+;					- Optionels
+;					$width, $height = Taille de l'image (non spécifié => Taille du fichier)
+;					- Optionels: prendre une partie de l'objet Image (idéal pour les SpriteSheets)
+;						Doivent TOUS être spécifiés pour être pris en concidération
+;					$x, $y = coordonnées du point supérieur gauche du rectangle à prendre
+;					$w, $h = largeur et hauteur du rectangle à prendre
+; Return values..:	Succes - Objet Image
+;					Echec - 0 et @error = 1
+; Author.........:	Matwachich
+; Remarks........:	
+; ===========================================================================================================
 Func _GEng_ImageLoad($sPath, $width = Default, $height = Default, $x = 0, $y = 0, $w = Default, $h = Default)
 	Local $gContext, $newBmp, $gNewContext, $imgW, $imgH
 	Local $hImg = _GDIPlus_ImageLoadFromFile($sPath)
@@ -51,6 +65,7 @@ Func _GEng_ImageLoad($sPath, $width = Default, $height = Default, $x = 0, $y = 0
 	; ---
 	Return $ret
 EndFunc
+
 
 ; ==============================================================
 ; ### Internals

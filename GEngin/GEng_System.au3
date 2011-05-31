@@ -20,7 +20,18 @@
 #EndRegion ###
 
 
+; # FUNCTION # ==============================================================================================
+; Name...........:	_GEng_Start
+; Description....:	Créer une fenètre d'affichage et lance GEngin
+; Parameters.....:	Idem GuiCreate()
+; Return values..:	Succes - 1
+;					Echec - 0 et @error = 1
+; Author.........:	Matwachich
+; Remarks........:	
+; ===========================================================================================================
 Func _GEng_Start($sTitle, $iW, $iH, $iX = -1, $iY = -1, $iStyle = -1, $iExtStyle = -1)
+	If __GEng_IsStarted() Then Return SetError(1, 0, 0)
+	; ---
 	$__GEng_hGui = GuiCreate($sTitle, $iW, $iH, $iX, $iY, $iStyle, $iExtStyle)
 	If @error Then Return SetError(1, 0, 0)
 	; ---
@@ -40,6 +51,14 @@ Func _GEng_Start($sTitle, $iW, $iH, $iX = -1, $iY = -1, $iStyle = -1, $iExtStyle
 	Return SetError(0, 0, 1)
 EndFunc
 
+; # FUNCTION # ==============================================================================================
+; Name...........:	_GEng_Shutdown
+; Description....:	Stop GEngin, supprime la fenètre d'affichage, et libère toutes les ressources
+; Parameters.....:	
+; Return values..:	
+; Author.........:	Matwachich
+; Remarks........:	
+; ===========================================================================================================
 Func _GEng_Shutdown()
 	__GEng_Image_DisposeAll()
 	; ---
@@ -56,6 +75,15 @@ Func _GEng_Shutdown()
 	GuiDelete($__GEng_hGui)
 EndFunc
 
+; # FUNCTION # ==============================================================================================
+; Name...........:	_GEng_SetDebug
+; Description....:	Active/Désactive/Récupère le status actuel du mode debug
+; Parameters.....:	$mode = 1 -> on, 0 -> off, Defaut -> récupère la valeur du mode debug
+; Return values..:	
+; Author.........:	Matwachich
+; Remarks........:	Le mode débug est surtout utile pour 'voir' les collisions
+;						Quand une collision a lieu, les hit-boxes des sprites en collision s'affichent en rouge
+; ===========================================================================================================
 Func _GEng_SetDebug($mode = Default)
 	If $mode = Default Then Return $__GEng_Debug
 	; ---

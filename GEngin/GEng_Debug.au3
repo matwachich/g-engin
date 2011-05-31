@@ -26,7 +26,7 @@
 Global $bench = 0
 
 
-Func _GEng_Debug_DrawVect($iDbgPen, $x0, $y0, $x1, $y1, $hBuffer = Default)
+Func _GEng_Debug_DrawVector($iDbgPen, $x0, $y0, $x1, $y1, $hBuffer = Default)
 	If $hBuffer = Default Then
 		Return _GDIPlus_GraphicsDrawLine($__GEng_hBuffer, $x0, $y0, $x1, $y1, Eval("_dbg_Arrow" & $iDbgPen))
 	Else

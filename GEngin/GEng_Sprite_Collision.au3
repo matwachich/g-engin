@@ -27,6 +27,27 @@
 Global Enum $GEng_ScrBorder_Top, $GEng_ScrBorder_Bot, $GEng_ScrBorder_Left, $GEng_ScrBorder_Right
 
 ; $iType: 0 - point, 1 - Carré, 2 - Ellipse
+; # FUNCTION # ==============================================================================================
+; Name...........:	_GEng_Sprite_CollisionSet
+; Description....:	Spécifie la forme et la taille de la hit-box d'un sprite
+; Parameters.....:	$hSprite = Objet Sprite
+;					$iType = Forme de la hit-box, dont dépend $x, $y, $w, $h
+;						0 - Point
+;							$x, $y = Coordonnées du point (par défaut: Point d'origine du sprite)
+;							$w, $h = pas pris en concidération
+;						1 - Rectangle
+;							$x, $y = Coordonnées du point supérieur gauche du rectangle (par défaut: 0, 0)
+;										(Par rapport au sprite, pas à l'écran)
+;							$w, $h = largeur et hauteur du rectangle (par défaut: Largeur et hauteur du sprite)
+;						2 - Cercle
+;							$x, $y = Coordonnées du centre du cercle (par défaut: Point d'origine du sprite)
+;							$w = Rayon du cercle (par défaut: (Largeur + Hauteur)/4)
+;							$h = pas pris en concidération
+; Return values..:	Succes - 1
+;					Echec - 0 et @error = 1
+; Author.........:	Matwachich
+; Remarks........:	
+; ===========================================================================================================
 Func _GEng_Sprite_CollisionSet(ByRef $hSprite, $iType, $x = Default, $y = Default, $w = Default, $h = Default)
 	If Not __GEng_Sprite_IsSprite($hSprite) Then Return SetError(1, 0, 0)
 	; ---
@@ -74,7 +95,7 @@ Func _GEng_Sprite_CollisionSet(ByRef $hSprite, $iType, $x = Default, $y = Defaul
 		If $x <> Default And $y <> Default And $w <> Default Then
 			$hSprite[$_gSpr_CollX] = $x ; centre X
 			$hSprite[$_gSpr_CollY] = $y ; centre Y
-			$hSprite[$_gSpr_CollW] = $w ; 1/2 R
+			$hSprite[$_gSpr_CollW] = $w ; Rayon
 			$hSprite[$_gSpr_CollH] = 0
 		Else
 			$hSprite[$_gSpr_CollX] = $hSprite[$_gSpr_OriX] ; originX
@@ -92,13 +113,12 @@ EndFunc
 
 ; # FUNCTION # ==============================================================================================
 ; Name...........:	_GEng_SpriteCollision
-; Description....:	Test si il y a collision entre les 2 sprites en paramètres
-; Parameters.....:	$hSprite1, $hSprite2 = Les sprites à tester
-; Return values..:	1 - Collision
-;					0 - Pas de collision
-;					Si @error = 1 - Un des 2 paramètres n'est pas un sprite valide
+; Description....:	Test si il y a collision entre 2 sprites
+; Parameters.....:	$hSprite1, $hSprite2 = Objets Sprite
+; Return values..:	Succes - 1
+;					Echec - 0 et @error = 1
 ; Author.........:	Matwachich
-; Remarks........:	Collision carré
+; Remarks........:	
 ; ===========================================================================================================
 Func _GEng_Sprite_Collision($hSprite1, $hSprite2)
 	If Not __GEng_Sprite_IsSprite($hSprite1) Then Return SetError(1, 0, 0)
@@ -263,17 +283,17 @@ Func __GEng_Dbg_DrawRectCercle($iDebugPen, $cX, $cY, $cR, $rX, $rY, $rW, $rH)
 EndFunc
 
 Func __GEng_RectVsRect($x1, $y1, $w1, $h1, $x2, $y2, $w2, $h2)
-	Local $center1X, $center1Y, $center2X, $center2Y
-	$center1X = $x1 + ($w1 / 2)
-	$center1Y = $y1 + ($h1 / 2)
-	$center2X = $x2 + ($w2 / 2)
-	$center2Y = $y2 + ($h2 / 2)
-	; ---
 	Local $halfW1, $halfH1, $halfW2, $halfH2
 	$halfW1 = $w1 / 2
 	$halfH1 = $h1 / 2
 	$halfW2 = $w2 / 2
 	$halfH2 = $h2 / 2
+	; ---
+	Local $center1X, $center1Y, $center2X, $center2Y
+	$center1X = $x1 + $halfW1
+	$center1Y = $y1 + $halfH1
+	$center2X = $x2 + $halfW2
+	$center2Y = $y2 + $halfH2
 	; ---
 	Local $distX, $distY
 	$distX = Abs($center1X - $center2X)

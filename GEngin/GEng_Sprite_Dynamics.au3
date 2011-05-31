@@ -15,6 +15,17 @@
 #ce
 #EndRegion ###
 
+
+; # FUNCTION # ==============================================================================================
+; Name...........:	_GEng_Sprite_Move
+; Description....:	Calcule et met à jout position et angle d'un sprite selon ses paramètres dynamiques
+; Parameters.....:	$hSprite = Objet Sprite
+; Return values..:	Succes - 1
+;					Echec - 0 et @error = 1
+; Author.........:	Matwachich
+; Remarks........:	Cette fonction est automatiquement appelé par _GEng_Sprite_Draw si le flag correspondant
+;						est bien mis à 1. Il est donc, inutile de l'appeler vous même
+; ===========================================================================================================
 Func _GEng_Sprite_Move(ByRef $hSprite)
 	If Not __GEng_Sprite_IsSprite($hSprite) Then Return SetError(1, 0, 0)
 	; ---
@@ -119,6 +130,9 @@ Func _GEng_Sprite_Move(ByRef $hSprite)
 	Return 1
 EndFunc
 
+; ==============================================================
+; ### Internals
+; ==============================================================
 Func __GEng_VectorGrandeur($x, $y)
 	Return Abs(Sqrt(($x^2) + ($y^2)))
 EndFunc

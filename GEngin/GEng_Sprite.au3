@@ -38,6 +38,16 @@ Global Enum _
 	$_gSpr_CollX, $_gSpr_CollY, $_gSpr_CollW, $_gSpr_CollH, $_gSpr_CollType, _
 	$_gSpr_MoveTimer, $_gSpr_AnimTimer
 
+
+; # FUNCTION # ==============================================================================================
+; Name...........:	_GEng_Sprite_Create
+; Description....:	Créer un Objet Sprite
+; Parameters.....:	$hImage = Objet Image à assigner au sprite (Optionel)
+;						Si Defaut, Objet Sprite vide
+; Return values..:	Objet Sprite
+; Author.........:	Matwachich
+; Remarks........:	
+; ===========================================================================================================
 Func _GEng_Sprite_Create($hImage = Default)
 	Local $hSprite[$__GEng_SpritesArrayUB]
 	__GEng_Sprite_InitArray($hSprite)
@@ -48,6 +58,22 @@ Func _GEng_Sprite_Create($hImage = Default)
 	Return $hSprite
 EndFunc
 
+; # FUNCTION # ==============================================================================================
+; Name...........:	_GEng_Sprite_ImageSet
+; Description....:	Assigne un objet Image à un Objet Sprite
+; Parameters.....:	$hSprite = Objet Sprite
+;					$hImage = Objet Image à assigner
+;					- Optionels: prendre une partie de l'objet Image (idéal pour les SpriteSheets)
+;						Doivent TOUS être spécifiés pour être pris en concidération
+;					$x, $y = coordonnées du point supérieur gauche du rectangle à prendre
+;					$w, $h = largeur et hauteur du rectangle à prendre
+; Return values..:	Succes - 1
+;					Echec - 0 et @error = 1
+; Author.........:	Matwachich
+; Remarks........:	Si il n'y avait aucune image associée au sprite lors de l'appel à cette fonction,
+;						alors la taille du sprite est initialisé à la taille de l'image assigné
+;						(appel à _GEng_Sprite_SizeSet)
+; ===========================================================================================================
 Func _GEng_Sprite_ImageSet(ByRef $hSprite, ByRef $hImage, $x = Default, $y = Default, $w = Default, $h = Default) ; If Default => 0,0,ImgW,ImgH
 	If Not __GEng_Sprite_IsSprite($hSprite) Then Return SetError(1, 0, 0)
 	If Not __GEng_Image_IsImage($hImage) Then Return SetError(1, 0, 0)
@@ -75,6 +101,20 @@ Func _GEng_Sprite_ImageSet(ByRef $hSprite, ByRef $hImage, $x = Default, $y = Def
 	Return 1
 EndFunc
 
+; # FUNCTION # ==============================================================================================
+; Name...........:	_GEng_Sprite_ImageSetRect
+; Description....:	Change le rectangle sélectioné de l'objet image actuellement assigné à l'objet sprite
+; Parameters.....:	$hSprite = Objet Sprite
+;					- Doivent TOUS être spécifiés pour être pris en concidération
+;					$x, $y = coordonnées du point supérieur gauche du rectangle à prendre
+;					$w, $h = largeur et hauteur du rectangle à prendre
+;					$InitSize = Si 1, la taille du sprite est initialisé à la taille du rectangle
+;						sélectioné de l'objet image
+; Return values..:	Succes - 1
+;					Echec - 0 et @error = 1
+; Author.........:	Matwachich
+; Remarks........:	
+; ===========================================================================================================
 Func _GEng_Sprite_ImageSetRect(ByRef $hSprite, $x, $y, $w, $h, $InitSize = 0)
 	If Not __GEng_Sprite_IsSprite($hSprite) Then Return SetError(1, 0, 0)
 	; ---
@@ -89,6 +129,17 @@ Func _GEng_Sprite_ImageSetRect(ByRef $hSprite, $x, $y, $w, $h, $InitSize = 0)
 	Return 1
 EndFunc
 
+; # FUNCTION # ==============================================================================================
+; Name...........:	_GEng_Sprite_Draw
+; Description....:	Déssine un sprite à l'écran selon ses attribut position
+; Parameters.....:	$hSprite = Objet Sprite
+;					$iCalculateMovements = Si 1, alors tous les mouvements du sprite sont calculé selon ses
+;						attribut vitesse, accélération, innertie. et Vitesse, accélération et innertie de rotation
+; Return values..:	Succes - 1
+;					Echec - 0 et @error = 1
+; Author.........:	Matwachich
+; Remarks........:	Un sprite fix (arrière plan, objet de décore immobile) devrai toujour avoir $iCalculateMovements = 0
+; ===========================================================================================================
 Func _GEng_Sprite_Draw(ByRef $hSprite, $iCalculateMovements = 1)
 	If Not __GEng_Sprite_IsSprite($hSprite) Then Return SetError(1, 0, 0)
 	If Not __GEng_Sprite_ContainsImage($hSprite) Then Return SetError(1, 0, 0)
@@ -137,8 +188,8 @@ Func _GEng_Sprite_Draw(ByRef $hSprite, $iCalculateMovements = 1)
 			_GEng_Debug_DrawCircle(1, 0, 0, 2, $hBuffer)
 			_GEng_Debug_DrawCircle(3, -1 * $oriX, -1 * $oriY, 2, $hBuffer)
 			; ---
-			_GEng_Debug_DrawVect(2, 0, 0, 50, 0, $hBuffer)
-			_GEng_Debug_DrawVect(2, 0, 0, 0, 50, $hBuffer)
+			_GEng_Debug_DrawVector(2, 0, 0, 50, 0, $hBuffer)
+			_GEng_Debug_DrawVector(2, 0, 0, 0, 50, $hBuffer)
 		EndIf
 		
 		; ---
@@ -149,6 +200,14 @@ Func _GEng_Sprite_Draw(ByRef $hSprite, $iCalculateMovements = 1)
 	Return $ret
 EndFunc
 
+; # FUNCTION # ==============================================================================================
+; Name...........:	_GEng_Sprite_Del
+; Description....:	Supprime un Objet Sprite
+; Parameters.....:	$hSprite = Objet Sprite
+; Return values..:	1
+; Author.........:	Matwachich
+; Remarks........:	
+; ===========================================================================================================
 Func _GEng_Sprite_Del(ByRef $hSprite)
 	If Not __GEng_Sprite_IsSprite($hSprite) Then Return SetError(1, 0, 0)
 	; ---

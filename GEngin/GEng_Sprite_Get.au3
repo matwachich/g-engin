@@ -28,6 +28,16 @@
 #EndRegion ###
 
 
+; # FUNCTION # ==============================================================================================
+; Name...........:	_GEng_Sprite_PosGet
+; Description....:	Récupère la position d'un Objet Sprite
+; Parameters.....:	$hSprite = Objet Sprite
+;					$x, $y = Variable qui vont contenir les données récupérées
+; Return values..:	Succes - 1
+;					Echec - 0 et @error = 1
+; Author.........:	Matwachich
+; Remarks........:	
+; ===========================================================================================================
 Func _GEng_Sprite_PosGet(ByRef $hSprite, ByRef $x, ByRef $y)
 	If Not __GEng_Sprite_IsSprite($hSprite) Then Return SetError(1, 0, 0)
 	; ---
@@ -36,6 +46,16 @@ Func _GEng_Sprite_PosGet(ByRef $hSprite, ByRef $x, ByRef $y)
 	Return 1
 EndFunc
 
+; # FUNCTION # ==============================================================================================
+; Name...........:	_GEng_Sprite_SizeGet
+; Description....:	Récupère la taille d'un Objet Sprite
+; Parameters.....:	$hSprite = Objet Sprite
+;					$x, $y = Variable qui vont contenir les données récupérées
+; Return values..:	Succes - 1
+;					Echec - 0 et @error = 1
+; Author.........:	Matwachich
+; Remarks........:	
+; ===========================================================================================================
 Func _GEng_Sprite_SizeGet(ByRef $hSprite, ByRef $x, ByRef $y)
 	If Not __GEng_Sprite_IsSprite($hSprite) Then Return SetError(1, 0, 0)
 	; ---
@@ -44,6 +64,16 @@ Func _GEng_Sprite_SizeGet(ByRef $hSprite, ByRef $x, ByRef $y)
 	Return 1
 EndFunc
 
+; # FUNCTION # ==============================================================================================
+; Name...........:	_GEng_Sprite_OriginGet
+; Description....:	Récupère la position du point d'origine d'un Objet Sprite
+; Parameters.....:	$hSprite = Objet Sprite
+;					$x, $y = Variable qui vont contenir les données récupérées
+; Return values..:	Succes - 1
+;					Echec - 0 et @error = 1
+; Author.........:	Matwachich
+; Remarks........:	
+; ===========================================================================================================
 Func _GEng_Sprite_OriginGet(ByRef $hSprite, ByRef $x, ByRef $y)
 	If Not __GEng_Sprite_IsSprite($hSprite) Then Return SetError(1, 0, 0)
 	; ---
@@ -54,6 +84,16 @@ EndFunc
 
 ; ##############################################################
 
+; # FUNCTION # ==============================================================================================
+; Name...........:	_GEng_Sprite_SpeedGet
+; Description....:	Récupère la vitesse d'un Objet Sprite
+; Parameters.....:	$hSprite = Objet Sprite
+;					$x, $y = Variable qui vont contenir les données récupérées
+; Return values..:	Succes - 1
+;					Echec - 0 et @error = 1
+; Author.........:	Matwachich
+; Remarks........:	
+; ===========================================================================================================
 Func _GEng_Sprite_SpeedGet(ByRef $hSprite, ByRef $x, ByRef $y)
 	If Not __GEng_Sprite_IsSprite($hSprite) Then Return SetError(1, 0, 0)
 	; ---
@@ -62,12 +102,31 @@ Func _GEng_Sprite_SpeedGet(ByRef $hSprite, ByRef $x, ByRef $y)
 	Return 1
 EndFunc
 
+; # FUNCTION # ==============================================================================================
+; Name...........:	_GEng_Sprite_MaxSpeedGet
+; Description....:	Récupère la vitesse maximum d'un Objet Sprite
+; Parameters.....:	$hSprite = Objet Sprite
+; Return values..:	Succes - valeur de la vitesse
+;					Echec - 0 et @error = 1
+; Author.........:	Matwachich
+; Remarks........:	
+; ===========================================================================================================
 Func _GEng_Sprite_MaxSpeedGet(ByRef $hSprite)
 	If Not __GEng_Sprite_IsSprite($hSprite) Then Return SetError(1, 0, 0)
 	; ---
 	Return $hSprite[$_gSpr_SpeedMax]
 EndFunc
 
+; # FUNCTION # ==============================================================================================
+; Name...........:	_GEng_Sprite_AccelGet
+; Description....:	Récupère l'accélération d'un Objet Sprite
+; Parameters.....:	$hSprite = Objet Sprite
+;					$x, $y = Variable qui vont contenir les données récupérées
+; Return values..:	Succes - 1
+;					Echec - 0 et @error = 1
+; Author.........:	Matwachich
+; Remarks........:	
+; ===========================================================================================================
 Func _GEng_Sprite_AccelGet(ByRef $hSprite, ByRef $x, ByRef $y)
 	If Not __GEng_Sprite_IsSprite($hSprite) Then Return SetError(1, 0, 0)
 	; ---
@@ -76,6 +135,16 @@ Func _GEng_Sprite_AccelGet(ByRef $hSprite, ByRef $x, ByRef $y)
 	Return 1
 EndFunc
 
+; # FUNCTION # ==============================================================================================
+; Name...........:	_GEng_Sprite_InnertieGet
+; Description....:	Récupère l'innertie d'un Objet Sprite
+; Parameters.....:	$hSprite = Objet Sprite
+;					$x, $y = Variable qui vont contenir les données récupérées
+; Return values..:	Succes - 1
+;					Echec - 0 et @error = 1
+; Author.........:	Matwachich
+; Remarks........:	
+; ===========================================================================================================
 Func _GEng_Sprite_InnertieGet(ByRef $hSprite, ByRef $x, ByRef $y)
 	If Not __GEng_Sprite_IsSprite($hSprite) Then Return SetError(1, 0, 0)
 	; ---
@@ -86,6 +155,15 @@ EndFunc
 
 ; ##############################################################
 
+; # FUNCTION # ==============================================================================================
+; Name...........:	_GEng_Sprite_AngleGet
+; Description....:	Récupère l'angle d'un Objet Sprite
+; Parameters.....:	$hSprite = Objet Sprite
+; Return values..:	Succes - valeur de l'angle (orientation)
+;					Echec - 0 et @error = 1
+; Author.........:	Matwachich
+; Remarks........:	
+; ===========================================================================================================
 Func _GEng_Sprite_AngleGet(ByRef $hSprite, $iType = 1) ; 1- Degres, 2- Radians
 	If Not __GEng_Sprite_IsSprite($hSprite) Then Return SetError(1, 0, 0)
 	; ---
@@ -97,6 +175,17 @@ Func _GEng_Sprite_AngleGet(ByRef $hSprite, $iType = 1) ; 1- Degres, 2- Radians
 	EndSwitch
 EndFunc
 
+; # FUNCTION # ==============================================================================================
+; Name...........:	_GEng_Sprite_AngleOriginGet
+; Description....:	Récupère l'angle origine d'un Objet Sprite
+; Parameters.....:	$hSprite = Objet Sprite
+;					$iType = 1 -> Degres, 2 -> Radians
+; Return values..:	Succes - valeur de la vitesse
+;					Echec - 0 et @error = 1
+; Author.........:	Matwachich
+; Remarks........:	L'angle origine est utile pour un Sprite dont l'image est orienté vers une autre direction
+;						que la droite
+; ===========================================================================================================
 Func _GEng_Sprite_AngleOriginGet(ByRef $hSprite, $iType = 1) ; 1- Degres, 2- Radians
 	If Not __GEng_Sprite_IsSprite($hSprite) Then Return SetError(1, 0, 0)
 	; ---
@@ -108,24 +197,60 @@ Func _GEng_Sprite_AngleOriginGet(ByRef $hSprite, $iType = 1) ; 1- Degres, 2- Rad
 	EndSwitch
 EndFunc
 
+; # FUNCTION # ==============================================================================================
+; Name...........:	_GEng_Sprite_AngleSpeedGet
+; Description....:	Récupère la vitesse de rotation d'un Objet Sprite
+; Parameters.....:	$hSprite = Objet Sprite
+; Return values..:	Succes - valeur de la vitesse de rotation (Deg/s)
+;					Echec - 0 et @error = 1
+; Author.........:	Matwachich
+; Remarks........:	
+; ===========================================================================================================
 Func _GEng_Sprite_AngleSpeedGet(ByRef $hSprite)
 	If Not __GEng_Sprite_IsSprite($hSprite) Then Return SetError(1, 0, 0)
 	; ---
 	Return $hSprite[$_gSpr_AngleSpeed]
 EndFunc
 
+; # FUNCTION # ==============================================================================================
+; Name...........:	_GEng_Sprite_AngleMaxSpeedGet
+; Description....:	Récupère la vitesse de rotation maximale d'un Objet Sprite
+; Parameters.....:	$hSprite = Objet Sprite
+; Return values..:	Succes - valeur de la vitesse de rotation maximale
+;					Echec - 0 et @error = 1
+; Author.........:	Matwachich
+; Remarks........:	
+; ===========================================================================================================
 Func _GEng_Sprite_AngleMaxSpeedGet(ByRef $hSprite)
 	If Not __GEng_Sprite_IsSprite($hSprite) Then Return SetError(1, 0, 0)
 	; ---
 	Return $hSprite[$_gSpr_AngleSpeedMax]
 EndFunc
 
+; # FUNCTION # ==============================================================================================
+; Name...........:	_GEng_Sprite_AngleAccelGet
+; Description....:	Récupère l'accélération de rotation d'un Objet Sprite
+; Parameters.....:	$hSprite = Objet Sprite
+; Return values..:	Succes - valeur de l'accélération
+;					Echec - 0 et @error = 1
+; Author.........:	Matwachich
+; Remarks........:	
+; ===========================================================================================================
 Func _GEng_Sprite_AngleAccelGet(ByRef $hSprite)
 	If Not __GEng_Sprite_IsSprite($hSprite) Then Return SetError(1, 0, 0)
 	; ---
 	Return $hSprite[$_gSpr_AngleAccel]
 EndFunc
 
+; # FUNCTION # ==============================================================================================
+; Name...........:	_GEng_Sprite_AngleInnertieGet
+; Description....:	Récupère l'innertie de rotation d'un Objet Sprite
+; Parameters.....:	$hSprite = Objet Sprite
+; Return values..:	Succes - valeur de l'innertie
+;					Echec - 0 et @error = 1
+; Author.........:	Matwachich
+; Remarks........:	
+; ===========================================================================================================
 Func _GEng_Sprite_AngleInnertieGet(ByRef $hSprite)
 	If Not __GEng_Sprite_IsSprite($hSprite) Then Return SetError(1, 0, 0)
 	; ---

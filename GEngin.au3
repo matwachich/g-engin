@@ -4,12 +4,68 @@
  Author:         Matwachich
 
  Script Function:
-
+	G-Engin:
+		G-Engin (GEng) est un UDF qui permet de gérer un affichage 2D
+		avec AutoIt simplement.
+		Il est basé sur GDI+.
+		
+	Version 2.0: (29/05/2011)
+	- Lance une fenètre de rendu
+	- Chargement de fichiers images (BMP, ICON, GIF, JPEG, Exif, PNG, TIFF, WMF, EMF)
+		avec gestion de la transparence (PNG, ICO ...)
+	- Création d'objets Sprites, qui sont le coeur du moteur:
+		+ Un objet sprite doit contenir une image, ou une portion d'image
+		+ Il possède différent attributs:
+			Position (x, y)
+			Taille (x, y)
+			Point d'origin (x, y)
+			Vitesse (x, y) et vitesse max (pixels/s)
+			Accelération (x, y) (pixels/s²)
+			Innertie (x, y) (pixels/s²)
+			Angle (Degres)
+			Vitesse de rotation (Deg/s)
+			Accélération de rotation (Deg/s²)
+			Innertie de rotation (Deg/s²)
+		+ Il possède une zone de collision, qui peut être soir un point, un cercle, 
+			ou un rectangle
+		+ Enfin, il peut être animé grâce à un objer Animation
+		+ PS: On peut attacher des variables à un sprite (voir GEng_Sprite_Append.au3)
+	- Fonctions de calcules géométriques
+		+ Distance, Angle, Vecteur entre: point-point, sprite-point, sprite-sprite
+		+ Convertion Vecteur->Angle, Angle->Vecteur (en spécifiant la grandeur du vecteur)
+	- Gestion des collisions entre sprites, et avec les bords de l'écran
+	- Affichage de texte (couleur, police, taille, format ...)
+	- Gestion rudimentaire des sons (bass.dll)
+	
+	Remarques:
+	- L'unité de distance est le pixel => vitesse = pixels/s, accélération = pixels/s²
+	- L'unité d'angle est le degré => vitesse de rotation = Deg/s, accélération de rotation = Deg/s²
+	- Le point 0, 0 est situé au coin supérieur gauche de l'écran
+	- En ce qui concerne les angles:
+		+ 0 correspond à la direction droite
+		+ un angle (+) signifie 'sens horaire', et inversement.
+		+ l'angle d'un sprite sera toujours stocké sous la forme d'une valeur entre 0 et 359
+			jamais un _GEng_Sprite_AngleGet ne retournera un nombre supérieur à 359 ou inférieur à 0
+			Par contre, vous pouvez spécifier n'IMPORTE quel valeur pour un angle et elle sera toujours
+			réduite à la valeur correspondante entre 0 et 359
+		+ Concernant la vitesse et accélération de rotation: une valeur (+) signifie 'sens horaire'
+			et inversement
+	- L'innertie: est définie dans cet UDF comme 'une accélération qui fait tendre la vitesse vers 0'
+		vous pouvez spécifier n'importe quelle valeur qu'elle soit + ou -, elle sera prise comme valeur
+		absolue
+	- Un objet Sprite tourne autour de sont point d'origine, et est positionné pas rapport à ce point
+	
+	To do:
+	- Effets sonors (bass_fx.dll)
+	- Permêtre la transmission de forces lors des collisions!
+	- Meilleur gestion des erreurs
 
 #ce ----------------------------------------------------------------------------
 
 #include <GDIPlus.au3>
 #include <Array.au3>
+#include <WinApi.au3>
+#include "GEngin\Bass\bass.au3"
 
 ; ##############################################################
 
@@ -47,5 +103,6 @@ Global $_Arrow, _
 #include "GEngin\GEng_Draw.au3"
 #include "GEngin\GEng_Geometry.au3"
 #include "GEngin\GEng_Text.au3"
+#include "GEngin\GEng_Sound.au3"
 ; ---
 #include "GEngin\GEng_Debug.au3"
