@@ -220,14 +220,14 @@ Func _GEng_Sprite_Draw(ByRef $hSprite, $iCalculateMovements = 1)
 EndFunc
 
 ; # FUNCTION # ==============================================================================================
-; Name...........:	_GEng_Sprite_Del
+; Name...........:	_GEng_Sprite_Delete
 ; Description....:	Supprime un Objet Sprite
 ; Parameters.....:	$hSprite = Objet Sprite
 ; Return values..:	1
 ; Author.........:	Matwachich
 ; Remarks........:	
 ; ===========================================================================================================
-Func _GEng_Sprite_Del(ByRef $hSprite)
+Func _GEng_Sprite_Delete(ByRef $hSprite)
 	If Not __GEng_Sprite_IsSprite($hSprite) Then Return SetError(1, 0, 0)
 	; ---
 	$hSprite = 0
