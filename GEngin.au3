@@ -9,7 +9,14 @@
 		avec AutoIt simplement.
 		Il est basé sur GDI+.
 		
-	Version 2.0: (29/05/2011)
+	Version 1.1: (03/06/2011)
+	- +: Volume, pan, pitch for hSound Object (_GEng_Sound_AttribSet, _GEng_Sound_AttribGet)
+	- +: Possibilité de modifier la couleur d'un objet Text sans devoir créer un nouvel objet Font (voir _GEng_Text_Create)
+	- !: Bug _GEng_ImageLoad (Issue 1)
+	- !: Bug _GEng_SpriteToPoint_AngleDiff (Issue 3)
+	- !: Bug _GEng_Sprite_AngleSet (Issue 4)
+
+	Version 1.0: (29/05/2011)
 	- Lance une fenètre de rendu
 	- Chargement de fichiers images (BMP, ICON, GIF, JPEG, Exif, PNG, TIFF, WMF, EMF)
 		avec gestion de la transparence (PNG, ICO ...)
