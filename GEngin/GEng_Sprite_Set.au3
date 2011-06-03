@@ -286,7 +286,7 @@ EndFunc
 Func _GEng_Sprite_AngleSet(ByRef $hSprite, $iAngle) ; en degres
 	If Not __GEng_Sprite_IsSprite($hSprite) Then Return SetError(1, 0, 0)
 	; ---
-	;$iAngle += $hSprite[39]
+	$iAngle -= $hSprite[$_gSpr_AngleOriDeg]
 	$iAngle = __GEng_GeometryReduceAngle($iAngle)
 	; ---
 	$hSprite[$_gSpr_AngleDeg] = $iAngle ; deg

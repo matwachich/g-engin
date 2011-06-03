@@ -34,10 +34,29 @@ Global Enum _
 	$_gSpr_AngleDeg, $_gSpr_AngleRad, _
 	$_gSpr_AngleSpeed, $_gSpr_AngleAccel, $_gSpr_AngleSpeedMax, $_gSpr_AngleInnertie, _
 	$_gSpr_AngleOriDeg, $_gSpr_AngleOriRad, _
-	$_gSpr_AnimFrame, $_gSpr_AnimDelayMulti, _
+	$_gSpr_AnimFrame, $_gSpr_AnimDelayMulti, _ ; ###
 	$_gSpr_CollX, $_gSpr_CollY, $_gSpr_CollW, $_gSpr_CollH, $_gSpr_CollType, _
 	$_gSpr_MoveTimer, $_gSpr_AnimTimer
 
+#cs
+Global Const $sSpriteStruct = _
+"int hBuffer;" & _
+"float iImgX; float iImgY; float iImgW; float iImgH;" & _
+"float iPosX; float iPosY; float iWidth; float iHeight; float iOriX; float iOriY" & _
+"float iSpeedX; float iSpeedY; float iAccelX; float iAccelY; float iSpeedMax;" & _
+"float iInnertieX; float iInnertieY;" & _
+"float iAngleDeg; float iAngleRad;" & _
+"float iAngleSpeed; float iAngleAccel; float iAngleSpeedMax;" & _
+"float iAngleInnertieDeg; float iAngleInnertieRad;" & _
+"" & _
+"" & _
+"" & _
+"" & _
+"" & _
+"" & _
+"" & _
+"" & _
+#ce
 
 ; # FUNCTION # ==============================================================================================
 ; Name...........:	_GEng_Sprite_Create

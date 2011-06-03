@@ -163,8 +163,7 @@ Func _GEng_SpriteToPoint_AngleDiff(ByRef $hSprite, $x, $y) ; 0.2 ms
 	If Not __GEng_Sprite_IsSprite($hSprite) Then Return SetError(1, 0, 0)
 	; ---
 	Local $angleDiff = _GEng_SpriteToPoint_Angle($hSprite, $x, $y)
-	Local $angleCurr
-	_GEng_Sprite_AngleGet($hSprite, $angleCurr)
+	Local $angleCurr = _GEng_Sprite_AngleGet($hSprite)
 	If $angleCurr = 0 Then $angleCurr = 360
 	; ---
 	Local $angleInverse = __GEng_GeometryReduceAngle($angleCurr + 180)

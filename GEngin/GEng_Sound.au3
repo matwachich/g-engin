@@ -8,6 +8,8 @@
 
 #ce ----------------------------------------------------------------------------
 
+#include "Bass\bass.au3"
+
 ; # FUNCTION # ==============================================================================================
 ; Name...........:	_GEng_Sound_Init
 ; Description....:	Initialisation des fonctionnalitées Audio
@@ -48,7 +50,7 @@ Func _GEng_Sound_Shutdown()
 EndFunc
 
 ; # FUNCTION # ==============================================================================================
-; Name...........:	_GEng_Sound_Volume
+; Name...........:	_GEng_Sound_GlobalVolume
 ; Description....:	Change/récupère la valeur du volume sonore global de l'application
 ; Parameters.....:	$iVolume = Niveau du volume (de 0 à 1)
 ;						Si Defaut - la fonction retourne le volume actuel
@@ -57,7 +59,7 @@ EndFunc
 ; Author.........:	Matwachich
 ; Remarks........:	Optionelle car appelé automatiquement à la fin du script
 ; ===========================================================================================================
-Func _GEng_Sound_Volume($iVolume = Default)
+Func _GEng_Sound_GlobalVolume($iVolume = Default)
 	Local $ret
 	If $iVolume = Default Then
 		$ret = _BASS_GetVolume()
@@ -93,8 +95,6 @@ Func _GEng_Sound_Load($sPath, $iLoop = 0)
 	Local $hSound = _BASS_StreamCreateFile(False, $sPath, 0, 0, $flag)
 	If @error Then Return SetError(@error, _value2constant(@error), 0)
 	; ---
-	_BASS_ChannelUpdate($hSound, 50)
-	; ---
 	Return $hSound
 EndFunc
 
@@ -109,11 +109,64 @@ EndFunc
 ; Author.........:	Matwachich
 ; Remarks........:	
 ; ===========================================================================================================
-Func _GEng_Sound_Play(ByRef $hSound, $iRestart = 1)
+Func _GEng_Sound_Play($hSound, $iRestart = 1)
 	Local $ret = _BASS_ChannelPlay($hSound, $iRestart)
 	If @error Then Return SetError(@error, _value2constant(@error), $ret)
 	; ---
 	Return $ret
+EndFunc
+
+; # FUNCTION # ==============================================================================================
+; Name...........:	_GEng_Sound_AttribSet
+; Description....:	
+; Parameters.....:	
+; Return values..:	
+; Author.........:	Matwachich
+; Remarks........:	
+; ===========================================================================================================
+Func _GEng_Sound_AttribSet($hSound, $iVolume = 1, $iPan = 0, $iPitch = 0)
+	Local $ret
+	; ---
+	$ret = _BASS_ChannelSetAttribute($hSound, $BASS_ATTRIB_VOL, $iVolume)
+	If @error Then Return SetError(@error, _value2constant(@error), $ret)
+	$ret = _BASS_ChannelSetAttribute($hSound, $BASS_ATTRIB_PAN, $iPan)
+	If @error Then Return SetError(@error, _value2constant(@error), $ret)
+	; ---
+	If $iPitch <> 0 Then
+		$freq = _BASS_ChannelGetInfo($hSound)
+		$iPitch = $iPitch * $freq[0]
+	EndIf
+	$ret = _BASS_ChannelSetAttribute($hSound, $BASS_ATTRIB_FREQ, $iPitch)
+	If @error Then Return SetError(@error, _value2constant(@error), $ret)
+	; ---
+	Return 1
+EndFunc
+
+; # FUNCTION # ==============================================================================================
+; Name...........:	_GEng_Sound_AttribGet
+; Description....:	
+; Parameters.....:	
+; Return values..:	
+; Author.........:	Matwachich
+; Remarks........:	
+; ===========================================================================================================
+Func _GEng_Sound_AttribGet($hSound, ByRef $iVolume, ByRef $iPan, ByRef $iPitch, ByRef $iDefaultSampleRate)
+	Local $ret, $ret2
+	; ---
+	$ret = _BASS_ChannelGetAttribute($hSound, $BASS_ATTRIB_VOL)
+	If @error Then Return SetError(@error, _value2constant(@error), $ret)
+	$iVolume = $ret
+	; ---
+	$ret = _BASS_ChannelGetAttribute($hSound, $BASS_ATTRIB_PAN)
+	If @error Then Return SetError(@error, _value2constant(@error), $ret)
+	$iPan = $ret
+	; ---
+	$ret = _BASS_ChannelGetAttribute($hSound, $BASS_ATTRIB_FREQ) ; actuelle
+	$ret2 = _BASS_ChannelGetInfo($hSound) ; defaut
+	$iPitch = $ret / $ret2[0]
+	$iDefaultSampleRate = $ret2[0]
+	; ---
+	Return 1
 EndFunc
 
 ; # FUNCTION # ==============================================================================================

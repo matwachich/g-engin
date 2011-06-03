@@ -11,16 +11,18 @@
 #Region ### Functions ###
 #cs
 - Main Functions
-	_GEng_Font_Create($sFontName = "Arial", $iFontColor = 0xFF000000, $iFontSize = 10, $iFontStyle = 0, $iFormat = Default)
+	_GEng_Font_Create($sFontName = "Arial", $iFontSize = 10, $iFontStyle = 0, $iFormat = 0)
 	_GEng_Font_Delete(ByRef $hFont)
-	_GEng_Text_Create(ByRef $hFont, $sText = "", $iPosX = 0, $iPosY = 0, $iWidth = 0, $iHeight = 0)
+	_GEng_Text_Create(ByRef $hFont, $sText = "", $iColor = 0xFFFFFFFF, $iPosX = 0, $iPosY = 0, $iWidth = 0, $iHeight = 0)
 	_GEng_Text_FontSet(ByRef $hTxtRect, $hFont = Default)
 	_GEng_Text_StringSet(ByRef $hTxtRect, $sText = Default)
 	_GEng_Text_StringGet(ByRef $hTxtRect)
 	_GEng_Text_PosSet(ByRef $hTxtRect, $iPosX = Default, $iPosY = Default, $iWidth = Default, $iHeight = Default)
 	_GEng_Text_PosGet(ByRef $hTxtRect, ByRef $iPosX, ByRef $iPosY, ByRef $iWidth, ByRef $iHeight)
+	_GEng_Text_SizeMeasure(ByRef $hFont, $sText, ByRef $w, ByRef $h)
+	_GEng_Text_ColorSet(ByRef $hTxtRect, $iColor)
 	_GEng_Text_Draw(ByRef $hTxtRect)
-	_GEng_Text_Delet(ByRef $hTxtRect)
+	_GEng_Text_Delete(ByRef $hTxtRect)
 	__GEng_Text_IsTextRect(ByRef $hTxtRect)
 	__GEng_Text_IsFont(ByRef $hFont)
 #ce
@@ -31,7 +33,6 @@
 ; Name...........:	_GEng_Font_Create
 ; Description....:	Créer un objet Font pour être utiliser par un Objet Text
 ; Parameters.....:	$sFontName = Nom de la police de caractères
-;					$iFontColor = Couleur de du text
 ;					$iFontSize = Taille du texte
 ;					$iFontStyle = Style du texte (voir _GDIPlus_FontCreate)
 ;					$iFormat = Voir _GDIPlus_StringFormatCreate
@@ -39,10 +40,9 @@
 ; Author.........:	Matwachich
 ; Remarks........:	
 ; ===========================================================================================================
-Func _GEng_Font_Create($sFontName = "Arial", $iFontColor = 0xFF000000, $iFontSize = 10, $iFontStyle = 0, $iFormat = 0)
+Func _GEng_Font_Create($sFontName = "Arial", $iFontSize = 10, $iFontStyle = 0, $iFormat = 0)
 	Local $hFamily = _GDIPlus_FontFamilyCreate($sFontName)
-	Local $ret[3] = [ _
-		_GDIPlus_BrushCreateSolid($iFontColor), _
+	Local $ret[2] = [ _
 		_GDIPlus_StringFormatCreate($iFormat), _
 		_GDIPlus_FontCreate($hFamily, $iFontSize, $iFontStyle) _
 		]
@@ -64,9 +64,8 @@ EndFunc
 Func _GEng_Font_Delete(ByRef $hFont)
 	If Not __GEng_Text_IsFont($hFont) Then Return SetError(1, 0, 0)
 	; ---
-	_GDIPlus_FontDispose($hFont[2])
-	_GDIPlus_StringFormatDispose($hFont[1])
-	_GDIPlus_BrushDispose($hFont[0])
+	_GDIPlus_FontDispose($hFont[1])
+	_GDIPlus_StringFormatDispose($hFont[0])
 	; ---
 	$hFont = 0
 	; ---
@@ -80,6 +79,7 @@ EndFunc
 ; Description....:	Créer un objet Text à afficher à l'écran
 ; Parameters.....:	$hFont = Objet Font à utiliser
 ;					$sText = Text à afficher
+;					$iColor = Couleur du texte (0xAARRVVBB) - Défaut = 0xFFFFFFFF (Blanc)
 ;					$iPosX, $iPosY = Position du texte
 ;					$iWidth, $iHeight = Largeur et hauteur du rectangle contenant le text (voir remarque)
 ; Return values..:	Succes - Objet Text
@@ -88,14 +88,17 @@ EndFunc
 ; Remarks........:	Il est préférable de laisser $iWidth et $iHeight à 0 (par défaut) pour que les dimensions
 ;						du rectangle soient calculées automatiquement et être sur que tout le texte sera affiché
 ; ===========================================================================================================
-Func _GEng_Text_Create(ByRef $hFont, $sText = "", $iPosX = 0, $iPosY = 0, $iWidth = 0, $iHeight = 0)
+Func _GEng_Text_Create(ByRef $hFont, $sText = "", $iColor = 0xFFFFFFFF, $iPosX = 0, $iPosY = 0, $iWidth = 0, $iHeight = 0)
 	If Not __GEng_Text_IsFont($hFont) Then Return SetError(1, 0, 0)
 	; ---
 	Local $sPosRect = _GDIPlus_RectFCreate($iPosX, $iPosY, $iWidth, $iHeight)
-	Local $ret[3] = [ _
+	Local $hColor = _GDIPlus_BrushCreateSolid($iColor)
+	; ---
+	Local $ret[4] = [ _
 		$hFont, _
 		$sText, _
-		$sPosRect _
+		$sPosRect, _
+		$hColor _
 		]
 	$sPosRect = 0
 	; ---
@@ -207,7 +210,7 @@ Func _GEng_Text_PosGet(ByRef $hTxtRect, ByRef $iPosX, ByRef $iPosY, ByRef $iWidt
 EndFunc
 
 ; # FUNCTION # ==============================================================================================
-; Name...........:	_GEng_Text_GetSize
+; Name...........:	_GEng_Text_SizeMeasure
 ; Description....:	Donne la taille (Largeur, Hauteur) d'un rectangle nécéssaire à l'affichage d'un texte
 ;						avec un Objet Font spécifique
 ; Parameters.....:	$hFont = Objet Font
@@ -218,11 +221,11 @@ EndFunc
 ; Author.........:	Matwachich
 ; Remarks........:	
 ; ===========================================================================================================
-Func _GEng_Text_SizeGet(ByRef $hFont, $sText, ByRef $w, ByRef $h)
+Func _GEng_Text_SizeMeasure(ByRef $hFont, $sText, ByRef $w, ByRef $h)
 	If Not __GEng_Text_IsFont($hFont) Then Return SetError(1, 0, 0)
 	; ---
 	Local $tLayout = _GDIPlus_RectFCreate(0, 0, 0, 0)
-	Local $ret = _GDIPlus_GraphicsMeasureString($__GEng_hGraphic, $sText, $hFont[2], $tLayout, $hFont[1])
+	Local $ret = _GDIPlus_GraphicsMeasureString($__GEng_hGraphic, $sText, $hFont[1], $tLayout, $hFont[0])
 	$tLayout = 0
 	If @error Then Return SetError(1, 0, 0)
 	; ---
@@ -231,6 +234,22 @@ Func _GEng_Text_SizeGet(ByRef $hFont, $sText, ByRef $w, ByRef $h)
 	; ---
 	$ret = 0
 	Return 1
+EndFunc
+
+; # FUNCTION # ==============================================================================================
+; Name...........:	_GEng_Text_ColorSet
+; Description....:	Modifie la couleur du texte d'un Objet Text
+; Parameters.....:	$hTxtRect = Objet Text
+;					$iColor = Nouvelle couleur (0xAARRVVBB)
+; Return values..:	Succes - 1
+;					Echec - 0 et @error = 1
+; Author.........:	Matwachich
+; Remarks........:	
+; ===========================================================================================================
+Func _GEng_Text_ColorSet(ByRef $hTxtRect, $iColor)
+	If Not __GEng_Text_IsTextRect($hTxtRect) Then Return SetError(1, 0, 0)
+	; ---
+	Return _GDIPlus_BrushSetSolidColor($hTxtRect[3], $iColor)
 EndFunc
 
 ; # FUNCTION # ==============================================================================================
@@ -246,7 +265,7 @@ Func _GEng_Text_Draw(ByRef $hTxtRect)
 	If Not __GEng_Text_IsTextRect($hTxtRect) Then Return SetError(1, 0, 0)
 	; ---
 	Local $hFont = $hTxtRect[0]
-	Return _GDIPlus_GraphicsDrawStringEx($__GEng_hBuffer, $hTxtRect[1], $hFont[2], $hTxtRect[2], $hFont[1], $hFont[0])
+	Return _GDIPlus_GraphicsDrawStringEx($__GEng_hBuffer, $hTxtRect[1], $hFont[1], $hTxtRect[2], $hFont[0], $hTxtRect[3])
 EndFunc
 
 ; # FUNCTION # ==============================================================================================
@@ -261,6 +280,8 @@ EndFunc
 Func _GEng_Text_Delete(ByRef $hTxtRect)
 	If Not __GEng_Text_IsTextRect($hTxtRect) Then Return SetError(1, 0, 0)
 	; ---
+	$hTxtRect[2] = 0
+	_GDIPlus_BrushDispose($hTxtRect[3])
 	$hTxtRect = 0
 	; ---
 	Return 1
@@ -269,13 +290,13 @@ EndFunc
 ; ##############################################################
 
 Func __GEng_Text_IsTextRect(ByRef $hTxtRect)
-	If UBound($hTxtRect) <> 3 Then Return SetError(1, 0, 0)
+	If UBound($hTxtRect) <> 4 Then Return SetError(1, 0, 0)
 	; ---
 	Return 1
 EndFunc
 
 Func __GEng_Text_IsFont(ByRef $hFont)
-	If UBound($hFont) <> 3 Then Return SetError(1, 0, 0)
+	If UBound($hFont) <> 2 Then Return SetError(1, 0, 0)
 	; ---
 	Return 1
 EndFunc

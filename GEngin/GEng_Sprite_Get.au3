@@ -167,12 +167,16 @@ EndFunc
 Func _GEng_Sprite_AngleGet(ByRef $hSprite, $iType = 1) ; 1- Degres, 2- Radians
 	If Not __GEng_Sprite_IsSprite($hSprite) Then Return SetError(1, 0, 0)
 	; ---
+	Local $ret
 	Switch $iType
 		Case 1
-			Return $hSprite[$_gSpr_AngleDeg] + $hSprite[$_gSpr_AngleOriDeg]
+			$ret = $hSprite[$_gSpr_AngleDeg] + $hSprite[$_gSpr_AngleOriDeg]
+			If $ret = 360 Then $ret = 0
 		Case 2
-			Return $hSprite[$_gSpr_AngleRad] + $hSprite[$_gSpr_AngleOriRad]
+			$ret =  $hSprite[$_gSpr_AngleRad] + $hSprite[$_gSpr_AngleOriRad]
 	EndSwitch
+	; ---
+	Return $ret
 EndFunc
 
 ; # FUNCTION # ==============================================================================================
