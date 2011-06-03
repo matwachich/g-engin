@@ -5,6 +5,7 @@ Legende:
 === v 1.1 ===
 - +: Volume, pan, pitch for hSound Object (_GEng_Sound_AttribSet, _GEng_Sound_AttribGet)
 - +: Possibilité de modifier la couleur d'un objet Text sans devoir créer un nouvel objet Font (voir _GEng_Text_Create)
+- +: Ajout de _GEng_Sprite_PointGet: Retourne la position d'un point dans un sprite
 - !: Bug _GEng_ImageLoad (Issue 1)
 - !: Bug _GEng_SpriteToPoint_AngleDiff (Issue 3)
 - !: Bug _GEng_Sprite_AngleSet (Issue 4)

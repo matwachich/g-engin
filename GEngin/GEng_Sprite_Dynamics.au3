@@ -49,7 +49,6 @@ Func _GEng_Sprite_Move(ByRef $hSprite)
 	EndIf
 	; ### Application de la rotation ###
 	Local $rotVit = $hSprite[$_gSpr_AngleSpeed]
-		Local $rotVitMax = $hSprite[$_gSpr_AngleSpeedMax]
 	Local $rotAccel = $hSprite[$_gSpr_AngleAccel]
 	Local $rotInner = $hSprite[$_gSpr_AngleInnertie]
 	; --- Vitesse

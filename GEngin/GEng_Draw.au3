@@ -59,7 +59,7 @@ EndFunc
 ; Remarks........:	A appeler au début de la boucle principale, avant les opérations de déssin
 ; ===========================================================================================================
 Func _GEng_FPS_Start()
-	$__GEng_FrameTimer = TimerInit()
+	$__GEng_FPSTimer = TimerInit()
 	Return 1
 EndFunc
 
@@ -71,7 +71,14 @@ EndFunc
 ; Author.........:	Matwachich
 ; Remarks........:	A appeler à la fin des opération de déssin, c'est à dire, juste après _GEng_ScrUpdate
 ; ===========================================================================================================
-Func _GEng_FPS_End()
-	Local $t = TimerDiff($__GEng_FrameTimer)
-	Return SetError(0, $t, 1000 / $t)	
+Func _GEng_FPS_End($iDelay = 1000)
+	Local $t
+	If TimerDiff($__GEng_FPSDisplayTimer) >= $iDelay Or $__GEng_FPSDisplayTimer = 0 Then
+		$t = TimerDiff($__GEng_FPSTimer)
+		$__GEng_FPSDisplayTimer = TimerInit()
+		Return SetError(0, $t, 1000 / $t)
+	Else
+		Return SetError(1, 0, -1)
+	EndIf
 EndFunc
+

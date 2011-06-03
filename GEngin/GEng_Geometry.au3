@@ -30,6 +30,40 @@
 #ce
 #EndRegion ###
 
+; # FUNCTION # ==============================================================================================
+; Name...........:	_GEng_Sprite_PointGet
+; Description....:	Retourne la position d'un point dans un sprite
+; Parameters.....:	$hSprite = Objet Sprite
+;					$iImgX, $iImgY = Position du point recherché dans le sprite
+;					$x, $y = Vont contenir la position de ce point par rapport à l'écran
+; Return values..:	Succes - 1
+;					Echec - 0 et @error = 1
+; Author.........:	Matwachich
+; Remarks........:	Cette fonction est idéal pour toujours avoir la position d'un point du sprite malgré
+;						sa rotation
+; ===========================================================================================================
+Func _GEng_Sprite_PointGet(ByRef $hSprite, $iImgX, $iImgY, ByRef $x, ByRef $y)
+	If Not __GEng_Sprite_IsSprite($hSprite) Then Return SetError(1, 0, 0)
+	; --- ; position par rapport à l'origine
+	$iImgX -= $hSprite[$_gSpr_OriX]
+	$iImgY -= $hSprite[$_gSpr_OriY]
+	; --- ; distance entre origine et point
+	Local $dist = Sqrt($iImgX^2 + $iImgY^2)
+	If $dist = 0 Then ; Car _GEng_PointToPoint_Angle bug si les 2 point on la même position
+		$x = $hSprite[$_gSpr_PosX]
+		$y = $hSprite[$_gSpr_PosY]
+		Return 1
+	EndIf
+	; --- ; Angle entre l'origine et le point
+	Local $angle = _GEng_PointToPoint_Angle(0, 0, $iImgX, $iImgY) + $hSprite[$_gSpr_AngleDeg]
+	; ---
+	Local $vect = _GEng_AngleToVector($angle, $dist)
+	$x = $vect[0] + $hSprite[$_gSpr_PosX]
+	$y = $vect[1] + $hSprite[$_gSpr_PosY]
+	; ---
+	Return 1
+EndFunc
+
 
 ; # FUNCTION # ==============================================================================================
 ; Name...........:	_GEng_PointToPoint_Dist
@@ -60,6 +94,8 @@ EndFunc
 ; Remarks........:	
 ; ===========================================================================================================
 Func _GEng_PointToPoint_Angle($x0, $y0, $x, $y)
+	If $x0 = $x And $y0 = $y Then Return 0
+	; ---
 	Local $difX = $x - $x0
 	Local $difY = $y - $y0
 	$tmp = Abs(ATan($difY / $difX))
@@ -304,7 +340,7 @@ EndFunc
 ; Remarks........:	
 ; ===========================================================================================================
 Func _GEng_AngleToVector($iAngle, $iGrandeur = 1) ; OK
-	$iAngle = __GEng_GeometryDeg2Rad($iAngle)
+	$iAngle = __GEng_GeometryDeg2Rad(__GEng_GeometryReduceAngle($iAngle))
 	; ---
 	Local $ret[2] = [ _
 		Cos($iAngle) * $iGrandeur, _

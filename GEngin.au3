@@ -12,6 +12,7 @@
 	Version 1.1: (03/06/2011)
 	- +: Volume, pan, pitch for hSound Object (_GEng_Sound_AttribSet, _GEng_Sound_AttribGet)
 	- +: Possibilité de modifier la couleur d'un objet Text sans devoir créer un nouvel objet Font (voir _GEng_Text_Create)
+	- *: Ajout du paramètre $iDelay à _GEng_FPS_End (ne retourne le FPS que toutes les $iDelay ms)
 	- !: Bug _GEng_ImageLoad (Issue 1)
 	- !: Bug _GEng_SpriteToPoint_AngleDiff (Issue 3)
 	- !: Bug _GEng_Sprite_AngleSet (Issue 4)
@@ -83,7 +84,8 @@ Global $__GEng_hBitmap = -1
 Global $__GEng_hBuffer = -1
 Global $__GEng_ScreenDC = -1
 Global $__GEng_CompatibleDC = -1
-Global $__GEng_FrameTimer = 0
+Global $__GEng_FPSTimer = 0
+Global $__GEng_FPSDisplayTimer = 0
 ; ---
 Global Const $__GEng_PI = 4 * ATan(1)
 
