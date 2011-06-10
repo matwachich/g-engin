@@ -15,16 +15,24 @@
 	_GEng_Sprite_ImageSet(ByRef $hSprite, ByRef $hImage, $x = Default, $y = Default, $w = Default, $h = Default)
 	_GEng_Sprite_ImageSetRect(ByRef $hSprite, $x, $y, $w, $h, $InitSize = 0)
 	_GEng_Sprite_Draw(ByRef $hSprite, $iCalculateMovements = 1)
-	_GEng_Sprite_Del(ByRef $hSprite)
+	_GEng_Sprite_Delete(ByRef $hSprite)
 	__GEng_Sprite_IsSprite($hSprite)
 	__GEng_Sprite_ContainsImage($hSprite)
 	__GEng_Sprite_InitArray(ByRef $a)
+	_GDIPlus_ColorMatrixTranslate(ByRef $tCM, $nOffsetRed, $nOffsetGreen, $nOffsetBlue, $nOffsetAlpha = 0, $iOrder = 0)
+	_GDIPlus_ColorMatrixCreateTranslate($nRed, $nGreen, $nBlue, $nAlpha = 0)
+	_GDIPlus_ColorMatrixMultiply(ByRef $tCM1, $tCM2, $iOrder = 0)
+	_GDIPlus_ImageAttributesSetColorMatrix($hImageAttributes, $iColorAdjustType = 0, $fEnable = False, $pClrMatrix = 0, $pGrayMatrix = 0, $iColorMatrixFlags = 0)
+	_GDIPlus_GraphicsDrawImageRectRectIA($hGraphics, $hImage, $nSrcX, $nSrcY, $nSrcWidth, $nSrcHeight, $nDstX, $nDstY, $nDstWidth, $nDstHeight, $hImageAttributes = 0, $iUnit = 2)
+	_GDIPlus_ColorMatrixCreate()
+	_GDIPlus_ColorMatrixCreateScale($nRed, $nGreen, $nBlue, $nAlpha = 1)
 #ce
 #EndRegion ###
 
 
-Global Const $__GEng_SpritesArrayUB = 36
+Global Const $__GEng_SpritesArrayUB = 41
 Global Enum $GEng_Origin_Mid, $GEng_Origin_TL, $GEng_Origin_TR, $GEng_Origin_BL, $GEng_Origin_BR
+Global Const $tagGDIPCOLORMATRIX = "float m[25];"
 
 Global Enum _
 	$_gSpr_hBuffer, $_gSpr_iImg, $_gSpr_ImgX, $_gSpr_ImgY, $_gSpr_ImgW, $_gSpr_ImgH, _
@@ -36,27 +44,10 @@ Global Enum _
 	$_gSpr_AngleOriDeg, $_gSpr_AngleOriRad, _
 	$_gSpr_AnimFrame, $_gSpr_AnimDelayMulti, _ ; ###
 	$_gSpr_CollX, $_gSpr_CollY, $_gSpr_CollW, $_gSpr_CollH, $_gSpr_CollType, _
-	$_gSpr_MoveTimer, $_gSpr_AnimTimer
+	$_gSpr_MoveTimer, $_gSpr_AnimTimer, _
+	$_gSpr_ColorMatrix, $_gSpr_ColorMatrixPtr, $_gSpr_hImgAttrib, $_gSpr_UseColorMatrix, _
+	$_gSpr_Masse
 
-#cs
-Global Const $sSpriteStruct = _
-"int hBuffer;" & _
-"float iImgX; float iImgY; float iImgW; float iImgH;" & _
-"float iPosX; float iPosY; float iWidth; float iHeight; float iOriX; float iOriY" & _
-"float iSpeedX; float iSpeedY; float iAccelX; float iAccelY; float iSpeedMax;" & _
-"float iInnertieX; float iInnertieY;" & _
-"float iAngleDeg; float iAngleRad;" & _
-"float iAngleSpeed; float iAngleAccel; float iAngleSpeedMax;" & _
-"float iAngleInnertieDeg; float iAngleInnertieRad;" & _
-"" & _
-"" & _
-"" & _
-"" & _
-"" & _
-"" & _
-"" & _
-"" & _
-#ce
 
 ; # FUNCTION # ==============================================================================================
 ; Name...........:	_GEng_Sprite_Create
@@ -180,15 +171,33 @@ Func _GEng_Sprite_Draw(ByRef $hSprite, $iCalculateMovements = 1)
 	; ---
 	Local $ret
 	If $rotDeg = 0 Then ; Si pas de rotation => Dessine sur le buffer principal
-		$ret = _GDIPlus_GraphicsDrawImageRectRect($__GEng_hBuffer, $__GEng_Images[$imgIndex], _
-		$sheetX, $sheetY, $sheetW, $sheetH, _ ; region de l'image d'origin
-		$posX - $oriX, $posY - $oriY, _ ; position à l'écran
-		$sizeW, $sizeH) ; taille à l'écran
+		If $hSprite[$_gSpr_UseColorMatrix] Then
+			$ret = _GDIPlus_GraphicsDrawImageRectRectIA($__GEng_hBuffer, $__GEng_Images[$imgIndex], _
+						$sheetX, $sheetY, $sheetW, $sheetH, _ ; region de l'image d'origin
+						$posX - $oriX, $posY - $oriY, _ ; position à l'écran
+						$sizeW, $sizeH, _ ; taille à l'écran
+						$hSprite[$_gSpr_hImgAttrib])
+		Else
+			$ret = _GDIPlus_GraphicsDrawImageRectRect($__GEng_hBuffer, $__GEng_Images[$imgIndex], _
+						$sheetX, $sheetY, $sheetW, $sheetH, _ ; region de l'image d'origin
+						$posX - $oriX, $posY - $oriY, _ ; position à l'écran
+						$sizeW, $sizeH) ; taille à l'écran
+		EndIf
 		
-		If $__GEng_Debug Then
-			_GEng_Debug_DrawRect(0, $posX - $oriX, $posY - $oriY, $sizeW, $sizeH)
-			_GEng_Debug_DrawCircle(1, $posX, $posY, 2)
-			_GEng_Debug_DrawCircle(3, $posX - $oriX, $posY - $oriY, 2)
+		If $__GEng_Debug <> 0 Then
+			If BitAnd($__GEng_Debug, $GEng_Debug_Sprites) Then
+				_GEng_Debug_DrawRect(0, $posX - $oriX, $posY - $oriY, $sizeW, $sizeH)
+				_GEng_Debug_DrawCircle(1, $posX, $posY, 2)
+				_GEng_Debug_DrawCircle(3, $posX - $oriX, $posY - $oriY, 2)
+			EndIf
+			If BitAnd($__GEng_Debug, $GEng_Debug_Vectors) Then
+				_GEng_Debug_DrawVector(2, $hSprite[$_gSpr_PosX], $hSprite[$_gSpr_PosY], _
+					$hSprite[$_gSpr_PosX] + $hSprite[$_gSpr_SpeedX], $hSprite[$_gSpr_PosY] + $hSprite[$_gSpr_SpeedY])
+				_GEng_Debug_DrawVector(3, $hSprite[$_gSpr_PosX], $hSprite[$_gSpr_PosY], _
+					$hSprite[$_gSpr_PosX] + $hSprite[$_gSpr_AccelX], $hSprite[$_gSpr_PosY] + $hSprite[$_gSpr_AccelY])
+				If $hSprite[$_gSpr_SpeedMax] <> 0 Then _
+					_GEng_Debug_DrawCircle(2, $hSprite[$_gSpr_PosX], $hSprite[$_gSpr_PosY], $hSprite[$_gSpr_SpeedMax])
+			EndIf
 		EndIf
 		
 	Else ; Si rotation => Calcule la rotation et position et dessine sur le buffer personnel du sprite
@@ -197,18 +206,36 @@ Func _GEng_Sprite_Draw(ByRef $hSprite, $iCalculateMovements = 1)
 		_GDIPlus_MatrixTranslate($matrix, $posX * Cos(-$rotRad) - $posY * Sin(-$rotRad), $posX * Sin(-$rotRad) + $posY * Cos(-$rotRad))
 		_GDIPlus_GraphicsSetTransform($hBuffer, $matrix)
 		; ---
-		$ret = _GDIPlus_GraphicsDrawImageRectRect($hBuffer, $__GEng_Images[$imgIndex], _
-		$sheetX, $sheetY, $sheetW, $sheetH, _
-		-1 * $oriX, -1 * $oriY, _
-		$sizeW, $sizeH)
+		If $hSprite[$_gSpr_UseColorMatrix] Then
+			$ret = _GDIPlus_GraphicsDrawImageRectRectIA($hBuffer, $__GEng_Images[$imgIndex], _
+						$sheetX, $sheetY, $sheetW, $sheetH, _
+						-1 * $oriX, -1 * $oriY, _
+						$sizeW, $sizeH, _
+						$hSprite[$_gSpr_hImgAttrib])
+		Else
+			$ret = _GDIPlus_GraphicsDrawImageRectRect($hBuffer, $__GEng_Images[$imgIndex], _
+						$sheetX, $sheetY, $sheetW, $sheetH, _
+						-1 * $oriX, -1 * $oriY, _
+						$sizeW, $sizeH)
+		EndIf
 		
-		If $__GEng_Debug Then
-			_GEng_Debug_DrawRect(0, -1 * $oriX, -1 * $oriY, $sizeW, $sizeH, $hBuffer)
-			_GEng_Debug_DrawCircle(1, 0, 0, 2, $hBuffer)
-			_GEng_Debug_DrawCircle(3, -1 * $oriX, -1 * $oriY, 2, $hBuffer)
-			; ---
-			_GEng_Debug_DrawVector(2, 0, 0, 50, 0, $hBuffer)
-			_GEng_Debug_DrawVector(2, 0, 0, 0, 50, $hBuffer)
+		If $__GEng_Debug <> 0 Then
+			If BitAnd($__GEng_Debug, $GEng_Debug_Sprites) Then
+				_GEng_Debug_DrawRect(0, $posX - $oriX, $posY - $oriY, $sizeW, $sizeH)
+				_GEng_Debug_DrawCircle(1, $posX, $posY, 2)
+				_GEng_Debug_DrawCircle(3, $posX - $oriX, $posY - $oriY, 2)
+				; ---
+				_GEng_Debug_DrawVector(1, 0, 0, 30, 0, $hBuffer)
+				_GEng_Debug_DrawVector(1, 0, 0, 0, 30, $hBuffer)
+			EndIf
+			If BitAnd($__GEng_Debug, $GEng_Debug_Vectors) Then
+				_GEng_Debug_DrawVector(2, $hSprite[$_gSpr_PosX], $hSprite[$_gSpr_PosY], _
+					$hSprite[$_gSpr_PosX] + $hSprite[$_gSpr_SpeedX], $hSprite[$_gSpr_PosY] + $hSprite[$_gSpr_SpeedY])
+				_GEng_Debug_DrawVector(3, $hSprite[$_gSpr_PosX], $hSprite[$_gSpr_PosY], _
+					$hSprite[$_gSpr_PosX] + $hSprite[$_gSpr_AccelX], $hSprite[$_gSpr_PosY] + $hSprite[$_gSpr_AccelY])
+				If $hSprite[$_gSpr_SpeedMax] <> 0 Then _
+					_GEng_Debug_DrawCircle(2, $hSprite[$_gSpr_PosX], $hSprite[$_gSpr_PosY], $hSprite[$_gSpr_SpeedMax])
+			EndIf
 		EndIf
 		
 		; ---
@@ -260,4 +287,82 @@ Func __GEng_Sprite_InitArray(ByRef $a)
 	; ---
 	$a[$_gSpr_AnimDelayMulti] = 1 ; AnimDelay Multiplier
 	$a[$_gSpr_hBuffer] = __GEng_GetBuffer()
+	$a[$_gSpr_hImgAttrib] = _GDIPlus_ImageAttributesCreate()
+	$a[$_gSpr_ColorMatrix] = _GDIPlus_ColorMatrixCreate()
+	$a[$_gSpr_ColorMatrixPtr] = DllStructGetPtr($a[$_gSpr_ColorMatrix])
+	_GDIPlus_ImageAttributesSetColorMatrix($a[$_gSpr_hImgAttrib], 0, True, $a[$_gSpr_ColorMatrixPtr])
 EndFunc
+
+; ##############################################################
+; thanks to the: Rotating Cube 2 with textures v0.85 Beta Build 2010-03-24 by UEZ 2010
+Func _GDIPlus_ColorMatrixTranslate(ByRef $tCM, $nOffsetRed, $nOffsetGreen, $nOffsetBlue, $nOffsetAlpha = 0, $iOrder = 0)
+	Local $tTranslateCM
+	$tTranslateCM = _GDIPlus_ColorMatrixCreateTranslate($nOffsetRed, $nOffsetGreen, $nOffsetBlue, $nOffsetAlpha)
+	_GDIPlus_ColorMatrixMultiply($tCM, $tTranslateCM, $iOrder)
+EndFunc   ;==>_GDIPlus_ColorMatrixTranslate
+
+Func _GDIPlus_ColorMatrixCreateTranslate($nRed, $nGreen, $nBlue, $nAlpha = 0)
+	Local $iI, $tCM, $aFactors[4] = [$nRed, $nGreen, $nBlue, $nAlpha]
+	$tCM = _GDIPlus_ColorMatrixCreate()
+	For $iI = 0 To 3
+		DllStructSetData($tCM, "m", $aFactors[$iI], 21 + $iI)
+	Next
+	Return $tCM
+EndFunc   ;==>_GDIPlus_ColorMatrixCreateTranslate
+
+Func _GDIPlus_ColorMatrixMultiply(ByRef $tCM1, $tCM2, $iOrder = 0)
+	Local $iX, $iY, $iI, $iOffset, $nT, $tA, $tB, $tTmpCM
+
+	If $iOrder Then
+		$tA = $tCM2
+		$tB = $tCM1
+	Else
+		$tA = $tCM1
+		$tB = $tCM2
+	EndIf
+	$tTmpCM = DllStructCreate($tagGDIPCOLORMATRIX)
+	For $iY = 0 To 4
+		For $iX = 0 To 3
+			$nT = 0
+			For $iI = 0 To 4
+				$nT += DllStructGetData($tB, "m", $iY * 5 + $iI + 1) * DllStructGetData($tA, "m", $iI * 5 + $iX + 1)
+			Next
+			DllStructSetData($tTmpCM, "m", $nT, $iY * 5 + $iX + 1)
+		Next
+	Next
+	For $iY = 0 To 4
+		For $iX = 0 To 3
+			$iOffset = $iY * 5 + $iX + 1
+			DllStructSetData($tCM1, "m", DllStructGetData($tTmpCM, "m", $iOffset), $iOffset)
+		Next
+	Next
+EndFunc   ;==>_GDIPlus_ColorMatrixMultiply
+
+Func _GDIPlus_ImageAttributesSetColorMatrix($hImageAttributes, $iColorAdjustType = 0, $fEnable = False, $pClrMatrix = 0, $pGrayMatrix = 0, $iColorMatrixFlags = 0)
+	Local $aResult = DllCall($ghGDIPDll, "uint", "GdipSetImageAttributesColorMatrix", "hwnd", $hImageAttributes, "int", $iColorAdjustType, "int", $fEnable, "ptr", $pClrMatrix, "ptr", $pGrayMatrix, "int", $iColorMatrixFlags)
+	If @error Then Return SetError(@error, @extended, False)
+	Return $aResult[0] = 0
+EndFunc   ;==>_GDIPlus_ImageAttributesSetColorMatrix
+
+Func _GDIPlus_GraphicsDrawImageRectRectIA($hGraphics, $hImage, $nSrcX, $nSrcY, $nSrcWidth, $nSrcHeight, $nDstX, $nDstY, $nDstWidth, $nDstHeight, $hImageAttributes = 0, $iUnit = 2)
+	Local $aResult = DllCall($ghGDIPDll, "int", "GdipDrawImageRectRect", "hwnd", $hGraphics, "hwnd", $hImage, "float", $nDstX, "float", _
+			$nDstY, "float", $nDstWidth, "float", $nDstHeight, "float", $nSrcX, "float", $nSrcY, "float", $nSrcWidth, "float", _
+			$nSrcHeight, "int", $iUnit, "hwnd", $hImageAttributes, "int", 0, "int", 0)
+	If @error Then Return SetError(@error, @extended, False)
+	Return $aResult[0] = 0
+EndFunc   ;==>_GDIPlus_GraphicsDrawImageRectRectIA
+
+Func _GDIPlus_ColorMatrixCreate()
+	Return _GDIPlus_ColorMatrixCreateScale(1, 1, 1, 1)
+EndFunc   ;==>_GDIPlus_ColorMatrixCreate
+
+Func _GDIPlus_ColorMatrixCreateScale($nRed, $nGreen, $nBlue, $nAlpha = 1)
+	Local $tCM
+	$tCM = DllStructCreate($tagGDIPCOLORMATRIX)
+	DllStructSetData($tCM, "m", $nRed, 1)
+	DllStructSetData($tCM, "m", $nGreen, 7)
+	DllStructSetData($tCM, "m", $nBlue, 13)
+	DllStructSetData($tCM, "m", $nAlpha, 19)
+	DllStructSetData($tCM, "m", 1, 25)
+	Return $tCM
+EndFunc   ;==>_GDIPlus_ColorMatrixCreateScale

@@ -45,40 +45,35 @@ Func _GEng_ScrUpdate()
 	;Return _GDIPlus_GraphicsDrawImage($__GEng_hGraphic, $__GEng_hBitmap, 0, 0)
 	; --- Fait gagner env. 2ms!
 	Local $gdibitmap = _GDIPlus_BitmapCreateHBITMAPFromBitmap($__GEng_hBitmap)
-	_WinAPI_SelectObject($__GEng_CompatibleDC, $gdibitmap)
+	_WinAPI_SelectObject($__GEng_hCompatibleDC, $gdibitmap)
 	_WinAPI_DeleteObject($gdibitmap)
-	Return _WinAPI_BitBlt($__GEng_ScreenDC, 0, 0, $__GEng_WinW, $__GEng_WinH, $__GEng_CompatibleDC, 0, 0, 0x00CC0020) ; 0x00CC0020 = $SRCCOPY
+	Return _WinAPI_BitBlt($__GEng_hDC, 0, 0, $__GEng_WinW, $__GEng_WinH, $__GEng_hCompatibleDC, 0, 0, 0x00CC0020) ; 0x00CC0020 = $SRCCOPY
 EndFunc
 
 ; # FUNCTION # ==============================================================================================
-; Name...........:	_GEng_FPS_Start
-; Description....:	Démare un timer pour le calcule de FPS
-; Parameters.....:	
-; Return values..:	1
-; Author.........:	Matwachich
-; Remarks........:	A appeler au début de la boucle principale, avant les opérations de déssin
-; ===========================================================================================================
-Func _GEng_FPS_Start()
-	$__GEng_FPSTimer = TimerInit()
-	Return 1
-EndFunc
-
-; # FUNCTION # ==============================================================================================
-; Name...........:	_GEng_FPS_End
+; Name...........:	_GEng_FPS_Get
 ; Description....:	
 ; Parameters.....:	
 ; Return values..:	la valeur du FPS - @extended = temps de génération de la frame passé (ms)
 ; Author.........:	Matwachich
-; Remarks........:	A appeler à la fin des opération de déssin, c'est à dire, juste après _GEng_ScrUpdate
+; Remarks........:	
 ; ===========================================================================================================
-Func _GEng_FPS_End($iDelay = 1000)
-	Local $t
+Func _GEng_FPS_Get($iDelay = 1000)
+	Local $t, $ret, $err, $ext
 	If TimerDiff($__GEng_FPSDisplayTimer) >= $iDelay Or $__GEng_FPSDisplayTimer = 0 Then
 		$t = TimerDiff($__GEng_FPSTimer)
 		$__GEng_FPSDisplayTimer = TimerInit()
-		Return SetError(0, $t, 1000 / $t)
+		; ---
+		$ret = 1000 / $t
+		$ext = $t
+		$err = 0
 	Else
-		Return SetError(1, 0, -1)
+		$ret = -1
+		$err = 1
+		$ext = 0
 	EndIf
+	; ---
+	$__GEng_FPSTimer = TimerInit()
+	Return SetError($err, $ext, $ret)
 EndFunc
 

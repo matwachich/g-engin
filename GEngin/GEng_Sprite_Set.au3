@@ -33,6 +33,25 @@
 
 
 ; # FUNCTION # ==============================================================================================
+; Name...........:	_GEng_Sprite_MasseSet
+; Description....:	Ajuste la masse d'un Sprite pour les calcules de collision dynamique
+; Parameters.....:	$hSprite = Objet Sprite
+;					$iMasse = Valeur de la masse
+; Return values..:	Succes - 1
+;					Echec - 0 et @error = 1
+; Author.........:	Matwachich
+; Remarks........:	Une masse de 0 (par défaut lorsqu'un sprite est crée) signifie que le sprite
+;						ne sera pas affecté par les collisions dynamiques
+; ===========================================================================================================
+Func _GEng_Sprite_MasseSet(ByRef $hSprite, $iMasse)
+	If Not __GEng_Sprite_IsSprite($hSprite) Then Return SetError(1, 0, 0)
+	; ---
+	$hSprite[$_gSpr_Masse] = $iMasse
+	; ---
+	Return 1
+EndFunc
+
+; # FUNCTION # ==============================================================================================
 ; Name...........:	_GEng_Sprite_PosSet
 ; Description....:	Modifie la position d'un Objet Sprite
 ; Parameters.....:	$hSprite = Objet Sprite
@@ -402,5 +421,55 @@ Func _GEng_sprite_AngleInnertieSet(ByRef $hSprite, $iAngle = Default)
 	If Not __GEng_Sprite_IsSprite($hSprite) Then Return SetError(1, 0, 0)
 	; ---
 	If $iAngle <> Default Then $hSprite[$_gSpr_AngleInnertie] = $iAngle
+	Return 1
+EndFunc
+
+; ##############################################################
+
+; # FUNCTION # ==============================================================================================
+; Name...........:	_GEng_Sprite_ColorMatrixAdd
+; Description....:	Modifie les composantes des couleurs de l'image d'un Objet Sprite
+; Parameters.....:	$hSprite = Objet Sprite
+;					$fRed = Pourcentage à ajouter/soustraire à la composante ROUGE
+;					$fGreen = Pourcentage à ajouter/soustraire à la composante VERTE
+;					$fBlue = Pourcentage à ajouter/soustraire à la composante BLEU
+;					$fAlpha = Pourcentage à ajouter/soustraire à la composante ALPHA (Transparence)
+; Return values..:	Succes - 1
+;					Echec - 0 et @error = 1
+; Author.........:	Matwachich
+; Remarks........:	Exemple: $fRed = 0.5 ajoute 50% à la composante rouge, 1.0 ajoute 100%, un nombre supérieur
+;						à 1.0 ajoute aussi 100%, un nombre négatif soustrait à la composante en question
+;					Cette fonction double le temps nécessaire au dessin du sprite (_GEng_Sprite_Draw)
+; ===========================================================================================================
+Func _GEng_Sprite_ColorMatrixTranslate(ByRef $hSprite, $fRed = 0, $fGreen = 0, $fBlue = 0, $fAlpha = 0)
+	If Not __GEng_Sprite_IsSprite($hSprite) Then Return SetError(1, 0, 0)
+	; ---
+	_GDIPlus_ColorMatrixTranslate($hSprite[$_gSpr_ColorMatrix], $fRed, $fGreen, $fBlue, $fAlpha)
+	_GDIPlus_ImageAttributesSetColorMatrix($hSprite[$_gSpr_hImgAttrib], 0, True, $hSprite[$_gSpr_ColorMatrixPtr])
+	; ---
+	$hSprite[$_gSpr_UseColorMatrix] = 1 ; Active l'utilisation de la ColorMatrix
+	; ---
+	Return 1
+EndFunc
+
+; # FUNCTION # ==============================================================================================
+; Name...........:	_GEng_Sprite_ColorMatrixSet
+; Description....:	Réinitialise la matrice couleur d'un objet Sprite
+; Parameters.....:	$hSprite = Objet Sprite
+; Return values..:	Succes - 1
+;					Echec - 0 et @error = 1
+; Author.........:	Matwachich
+; Remarks........:	Cette fonction annule le ralentissement causé par _GEng_Sprite_ColorMatrixTranslate
+; ===========================================================================================================
+Func _GEng_Sprite_ColorMatrixReset(ByRef $hSprite)
+	If Not __GEng_Sprite_IsSprite($hSprite) Then Return SetError(1, 0, 0)
+	; ---
+	$hSprite[$_gSpr_ColorMatrix] = 0
+	$hSprite[$_gSpr_ColorMatrix] = _GDIPlus_ColorMatrixCreate()
+	$hSprite[$_gSpr_ColorMatrixPtr] = DllStructGetPtr($hSprite[$_gSpr_ColorMatrix])
+	_GDIPlus_ImageAttributesSetColorMatrix($hSprite[$_gSpr_hImgAttrib], 0, True, $hSprite[$_gSpr_ColorMatrixPtr])
+	; ---
+	$hSprite[$_gSpr_UseColorMatrix] = 0 ; Libère des ressources
+	; ---
 	Return 1
 EndFunc

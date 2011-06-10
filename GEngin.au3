@@ -9,6 +9,17 @@
 		avec AutoIt simplement.
 		Il est basé sur GDI+.
 		
+	Version 1.2: (10/06/2011)
+	- +: Paramètre $iDynamique pour _GEng_Sprite_Collision et _GEng_Sprite_CollisionScrBorders qui permet d'activer le calcule
+			de collisions dynamiques (collision élastique), assez rudimentaire (lent, bugé...) mais exploitable
+	- +: _GEng_Sprite_MasseSet et _GEng_Sprite_MasseGet, masse d'un sprite pour les collisions dynamiques
+	- +: _GEng_Sprite_CollisionScrBorders
+	- +: _GEng_ImageLoadStream: charge la chaine de caractères représentant un fichier image (Résultat de: FileToBinaryString)
+	- +: _GEng_Sprite_ColorMatrixTranslate, _GEng_Sprite_ColorMatrixReset
+	- *: Calcules de collision simplifiés (le point n'est plus concidéré comme un rectanlge)
+	- *: Mode debug amélioré: possibilité de selectionner certaines fonctions seulement (voir _GEng_SetDebug)
+	- -: _GEng_FPS_Start et _GEng_FPS_End devient: _GEng_FPS_Get
+		
 	Version 1.1: (03/06/2011)
 	- +: Volume, pan, pitch for hSound Object (_GEng_Sound_AttribSet, _GEng_Sound_AttribGet)
 	- +: Possibilité de modifier la couleur d'un objet Text sans devoir créer un nouvel objet Font (voir _GEng_Text_Create)
@@ -81,11 +92,11 @@
 
 Global $__GEng_hGui = -1
 Global $__GEng_WinW = -1, $__GEng_WinH = -1
-Global $__GEng_hGraphic = -1
 Global $__GEng_hBitmap = -1
+Global $__GEng_hGraphic = -1
 Global $__GEng_hBuffer = -1
-Global $__GEng_ScreenDC = -1
-Global $__GEng_CompatibleDC = -1
+Global $__GEng_hDC = -1
+Global $__GEng_hCompatibleDC = -1
 Global $__GEng_FPSTimer = 0
 Global $__GEng_FPSDisplayTimer = 0
 ; ---
