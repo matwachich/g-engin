@@ -13,8 +13,7 @@
 - Main Functions
 	_GEng_ScrFlush($iBkColor = 0xFFFFFFFF)
 	_GEng_ScrUpdate()
-	_GEng_FPS_Start()
-	_GEng_FPS_End()
+	_GEng_FPS_Get($iDelay = 1000)
 #ce
 #EndRegion ###
 

@@ -101,22 +101,24 @@ Func _GEng_Sprite_Move(ByRef $hSprite)
 		$hSprite[$_gSpr_PosY] += $hSprite[$_gSpr_SpeedY] * $ms
 	EndIf
 	
-	Local $innerX = $hSprite[$_gSpr_InnertieX], $innerY = $hSprite[$_gSpr_InnertieY]
-	If $innerX <> 0 And $hSprite[$_gSpr_SpeedX] <> 0 And Not $accelX Then ; Innertie X
+	; --- 1.2.1
+	Local $vect = _GEng_AngleToVector(_GEng_VectorToAngle($hSprite[$_gSpr_SpeedX], $hSprite[$_gSpr_SpeedY]), $hSprite[$_gSpr_Innertie])
+	
+	If $vect[0] <> 0 And $hSprite[$_gSpr_SpeedX] <> 0 And Not $accelX Then ; Innertie X
 		$tmp = $hSprite[$_gSpr_SpeedX]
 		If $hSprite[$_gSpr_SpeedX] > 0 Then
-			$hSprite[$_gSpr_SpeedX] -= Abs($innerX) * $ms
+			$hSprite[$_gSpr_SpeedX] -= Abs($vect[0]) * $ms
 		ElseIf $hSprite[$_gSpr_SpeedX] < 0 Then
-			$hSprite[$_gSpr_SpeedX] += Abs($innerX) * $ms
+			$hSprite[$_gSpr_SpeedX] += Abs($vect[0]) * $ms
 		EndIf
 		If $hSprite[$_gSpr_SpeedX] / $tmp < 0 Then $hSprite[$_gSpr_SpeedX] = 0
 	EndIf
-	If $innerY <> 0 And $hSprite[$_gSpr_SpeedY] <> 0 And Not $accelY Then ; Innertie Y
+	If $vect[1] <> 0 And $hSprite[$_gSpr_SpeedY] <> 0 And Not $accelY Then ; Innertie Y
 		$tmp = $hSprite[$_gSpr_SpeedY]
 		If $hSprite[$_gSpr_SpeedY] > 0 Then
-			$hSprite[$_gSpr_SpeedY] -= Abs($innerY) * $ms
+			$hSprite[$_gSpr_SpeedY] -= Abs($vect[1]) * $ms
 		ElseIf $hSprite[$_gSpr_SpeedY] < 0 Then
-			$hSprite[$_gSpr_SpeedY] += Abs($innerY) * $ms
+			$hSprite[$_gSpr_SpeedY] += Abs($vect[1]) * $ms
 		EndIf
 		If $hSprite[$_gSpr_SpeedY] / $tmp < 0 Then $hSprite[$_gSpr_SpeedY] = 0
 	EndIf

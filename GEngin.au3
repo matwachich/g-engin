@@ -9,6 +9,10 @@
 		avec AutoIt simplement.
 		Il est basé sur GDI+.
 		
+	Version 1.2.1: (02/07/2011)
+	- *: Le calcule de l'innertie de mouvement est plus précis
+	- *: Il n'y plus qu'un seul paramètre Innertie (et pas 2)
+		
 	Version 1.2: (10/06/2011)
 	- +: Paramètre $iDynamique pour _GEng_Sprite_Collision et _GEng_Sprite_CollisionScrBorders qui permet d'activer le calcule
 			de collisions dynamiques (collision élastique), assez rudimentaire (lent, bugé...) mais exploitable

@@ -17,7 +17,7 @@
 	_GEng_Sprite_SpeedGet(ByRef $hSprite, ByRef $x, ByRef $y)
 	_GEng_Sprite_MaxSpeedGet(ByRef $hSprite)
 	_GEng_Sprite_AccelGet(ByRef $hSprite, ByRef $x, ByRef $y)
-	_GEng_Sprite_InnertieGet(ByRef $hSprite, ByRef $x, ByRef $y)
+	_GEng_Sprite_InnertieGet(ByRef $hSprite)
 	_GEng_Sprite_AngleGet(ByRef $hSprite, $iType = 1)
 	_GEng_Sprite_AngleOriginGet(ByRef $hSprite, $iType = 1)
 	_GEng_Sprite_AngleSpeedGet(ByRef $hSprite)
@@ -139,18 +139,15 @@ EndFunc
 ; Name...........:	_GEng_Sprite_InnertieGet
 ; Description....:	Récupère l'innertie d'un Objet Sprite
 ; Parameters.....:	$hSprite = Objet Sprite
-;					$x, $y = Variable qui vont contenir les données récupérées
-; Return values..:	Succes - 1
+; Return values..:	Succes - valeur de l'innertie
 ;					Echec - 0 et @error = 1
 ; Author.........:	Matwachich
 ; Remarks........:	
 ; ===========================================================================================================
-Func _GEng_Sprite_InnertieGet(ByRef $hSprite, ByRef $x, ByRef $y)
+Func _GEng_Sprite_InnertieGet(ByRef $hSprite)
 	If Not __GEng_Sprite_IsSprite($hSprite) Then Return SetError(1, 0, 0)
 	; ---
-	$x = $hSprite[$_gSpr_InnertieX]
-	$y = $hSprite[$_gSpr_InnertieY]
-	Return 1
+	Return $hSprite[$_gSpr_Innertie]
 EndFunc
 
 ; ##############################################################

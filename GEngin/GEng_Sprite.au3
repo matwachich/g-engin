@@ -30,7 +30,7 @@
 #EndRegion ###
 
 
-Global Const $__GEng_SpritesArrayUB = 41
+Global Const $__GEng_SpritesArrayUB = 40
 Global Enum $GEng_Origin_Mid, $GEng_Origin_TL, $GEng_Origin_TR, $GEng_Origin_BL, $GEng_Origin_BR
 Global Const $tagGDIPCOLORMATRIX = "float m[25];"
 
@@ -38,7 +38,7 @@ Global Enum _
 	$_gSpr_hBuffer, $_gSpr_iImg, $_gSpr_ImgX, $_gSpr_ImgY, $_gSpr_ImgW, $_gSpr_ImgH, _
 	$_gSpr_PosX, $_gSpr_PosY, $_gSpr_Width, $_gSpr_Height, $_gSpr_OriX, $_gSpr_OriY, _
 	$_gSpr_SpeedX, $_gSpr_SpeedY, $_gSpr_AccelX, $_gSpr_AccelY, $_gSpr_SpeedMax, _
-	$_gSpr_InnertieX, $_gSpr_InnertieY, _
+	$_gSpr_Innertie, _
 	$_gSpr_AngleDeg, $_gSpr_AngleRad, _
 	$_gSpr_AngleSpeed, $_gSpr_AngleAccel, $_gSpr_AngleSpeedMax, $_gSpr_AngleInnertie, _
 	$_gSpr_AngleOriDeg, $_gSpr_AngleOriRad, _
@@ -154,7 +154,9 @@ Func _GEng_Sprite_Draw(ByRef $hSprite, $iCalculateMovements = 1)
 	If Not __GEng_Sprite_IsSprite($hSprite) Then Return SetError(1, 0, 0)
 	If Not __GEng_Sprite_ContainsImage($hSprite) Then Return SetError(1, 0, 0)
 	; ---
+	;$t = TimerInit()
 	If $iCalculateMovements Then _GEng_Sprite_Move($hSprite)
+	;ConsoleWrite(TimerDiff($t) & @CRLF)
 	; ---
 	Local $hBuffer = $hSprite[$_gSpr_hBuffer]
 	Local $imgIndex = $hSprite[$_gSpr_iImg]

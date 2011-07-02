@@ -20,7 +20,7 @@
 	_GEng_Sprite_SpeedAdd(ByRef $hSprite, $x = 0, $y = 0)
 	_GEng_Sprite_AccelSet(ByRef $hSprite, $x, $y)
 	_GEng_Sprite_AccelAdd(ByRef $hSprite, $x = 0, $y = 0)
-	_GEng_Sprite_InnertieSet(ByRef $hSprite, $x, $y)
+	_GEng_Sprite_InnertieSet(ByRef $hSprite, $value)
 	_GEng_Sprite_AngleSet(ByRef $hSprite, $iAngle)
 	_GEng_Sprite_AngleAdd(ByRef $hSprite, $iAngle)
 	_GEng_Sprite_AngleSpeedSet(ByRef $hSprite, $iAngle = Default, $iMax = Default)
@@ -275,18 +275,16 @@ EndFunc
 ; Name...........:	_GEng_Sprite_InnertieSet
 ; Description....:	Modifie l'innertie d'un Sprite
 ; Parameters.....:	$hSprite = Objet Sprite
-;					$x, $y = Valeur de l'innertie sur les différents axes
-;						Une valeur laissé par défaut ne sera pas modifié
+;					$value = Valeur de l'innertie
 ; Return values..:	Succes - 1
 ;					Echec - 0 et @error = 1
 ; Author.........:	Matwachich
 ; Remarks........:	
 ; ===========================================================================================================
-Func _GEng_Sprite_InnertieSet(ByRef $hSprite, $x = Default, $y = Default)
+Func _GEng_Sprite_InnertieSet(ByRef $hSprite, $value)
 	If Not __GEng_Sprite_IsSprite($hSprite) Then Return SetError(1, 0, 0)
 	; ---
-	If $x <> Default Then $hSprite[$_gSpr_InnertieX] = $x
-	If $y <> Default Then $hSprite[$_gSpr_InnertieY] = $y
+	$hSprite[$_gSpr_Innertie] = $value
 	Return 1
 EndFunc
 

@@ -8,6 +8,27 @@
 
 #ce ----------------------------------------------------------------------------
 
+#Region ### Functions ###
+#cs
+- Main Functions
+	_GEng_Sound_Init($iSampleRate = 44100, $iStereo = 1)
+	_GEng_Sound_Shutdown()
+	_GEng_Sound_GlobalVolume($iVolume = Default)
+	_GEng_Sound_Load($sPath, $iLoop = 0)
+	_GEng_Sound_Play($hSound, $iRestart = 1)
+	_GEng_Sound_AttribSet($hSound, $iVolume = 1, $iPan = 0, $iPitch = 0)
+	_GEng_Sound_AttribGet($hSound, ByRef $iVolume, ByRef $iPan, ByRef $iPitch, ByRef $iDefaultSampleRate)
+	_GEng_Sound_SetLoop(ByRef $hSound, $iLoop)
+	_GEng_Sound_IsPlaying(ByRef $hSound)
+	_GEng_Sound_Pause(ByRef $hSound)
+	_GEng_Sound_Stop(ByRef $hSound)
+	_GEng_Sound_Free(ByRef $hSound)
+	__GEng_Sound_CreateDll()
+	__BASS__DeleteDllAfterExit()
+#ce
+#EndRegion ###
+
+
 #include "Bass\bass.au3"
 
 ; # FUNCTION # ==============================================================================================
