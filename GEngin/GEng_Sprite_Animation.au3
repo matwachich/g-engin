@@ -8,6 +8,8 @@
 
 #ce ----------------------------------------------------------------------------
 
+;File: Animation
+
 #Region ### Functions ###
 #cs
 - Main Functions
@@ -33,6 +35,25 @@
 ;						que ce sprite est animé par _GEng_Sprite_Animate, l'animation commence à la frame
 ;						spécifié dans cette fonction (par défaut 1)
 ; ===========================================================================================================
+#cs
+Function: _GEng_Sprite_AnimRewind
+	Reset the animation parameters of a Sprite Object
+
+Prototype:
+	> _GEng_Sprite_AnimRewind(ByRef $hSprite, $iFrame = 1)
+
+Parameters:
+	$hSprite - Sprite Object
+	$iFrame - Frame number to initialise the Sprite Object to
+
+Returns:
+	Succes - 1
+	Failed - 0 And @error = 1
+
+Remarks:
+	This function must be called at the end of a sprite animation (<_GEng_Sprite_Animate>), 
+	so that the next you'll animate that sprite, the animation starts at $iFrame frame
+#ce
 Func _GEng_Sprite_AnimRewind(ByRef $hSprite, $iFrame = 1)
 	If Not __GEng_Sprite_IsSprite($hSprite) Then Return SetError(1, 0, 0)
 	; ---
@@ -58,6 +79,28 @@ EndFunc
 ; 						Si l'animation commence par la frame 1 et que vous mettez comme StopFrame 1,
 ; 						la fonction ne s'arrétera qu'après avoir fait un tour, et pas des le début
 ; ===========================================================================================================
+#cs
+Function: _GEng_Sprite_Animate
+	Animate a Sprite Object with a given Animation Object
+
+Prototype:
+	> _GEng_Sprite_Animate(ByRef $hSprite, ByRef $hAnim, $iStopFrame = Default)
+
+Parameters:
+	$hSprite - Sprite Object
+	$hAnim - Animation Object
+	$iStopFrame - (Optional) Stop frame (see remarks)
+
+Returns:
+	Succes - 1. (See remarks)
+	Failed - 0 And @error = 1
+
+Remarks:
+	When $iStopFrame is reached, this function returns -1.
+	
+	If the animation starts at frame 1, and $iStopFrame = 1, the function doesn't returns
+	-1 in the begining, but only after one animation loop.
+#ce
 Func _GEng_Sprite_Animate(ByRef $hSprite, ByRef $hAnim, $iStopFrame = Default)
 	If Not __GEng_Sprite_IsSprite($hSprite) Then Return SetError(1, 0, 0)
 	If Not __GEng_Anim_IsAnim($hAnim) Then Return SetError(1, 0, 0)
@@ -105,6 +148,20 @@ EndFunc
 ; Author.........:	Matwachich
 ; Remarks........:	
 ; ===========================================================================================================
+#cs
+Function: _GEng_Sprite_AnimDelayMultiplierGet
+	Get the value of the Frame delay multiplier of a Sprite Object
+
+Prototype:
+	> _GEng_Sprite_AnimDelayMultiplierGet(ByRef $hSprite)
+
+Parameters:
+	$hSprite - Sprite Object
+
+Returns:
+	Succes - Multiplier value
+	Failed - 0 And @error = 1
+#ce
 Func _GEng_Sprite_AnimDelayMultiplierGet(ByRef $hSprite)
 	If Not __GEng_Sprite_IsSprite($hSprite) Then Return SetError(1, 0, 0)
 	; ---
@@ -121,6 +178,25 @@ EndFunc
 ; Author.........:	Matwachich
 ; Remarks........:	
 ; ===========================================================================================================
+#cs
+Function: _GEng_Sprite_AnimDelayMultiplierSet
+	Set the value of the Frame delay multiplier of a Sprite Object
+
+Prototype:
+	> _GEng_Sprite_AnimDelayMultiplierSet(ByRef $hSprite, $iVal)
+
+Parameters:
+	$hSprite - Sprite Object
+	$iVal - Multiplier value
+
+Returns:
+	Succes - 1
+	Failed - 0 And @error = 1
+
+Remarks:
+	For example, if $iVal = 2 than every animation applied to this sprite will occure
+	2 timer faster.
+#ce
 Func _GEng_Sprite_AnimDelayMultiplierSet(ByRef $hSprite, $iVal)
 	If Not __GEng_Sprite_IsSprite($hSprite) Then Return SetError(1, 0, 0)
 	; ---

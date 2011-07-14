@@ -8,6 +8,10 @@
 
 #ce ----------------------------------------------------------------------------
 
+; For natural Docs
+
+;File: System
+
 #Region ### Functions ###
 #cs
 - Main Functions
@@ -30,6 +34,32 @@ Enum Step *2 $GEng_Debug_Pens = 1, $GEng_Debug_Sprites, $GEng_Debug_Vectors, $GE
 ; Author.........:	Matwachich
 ; Remarks........:	
 ; ===========================================================================================================
+#cs
+Function: _GEng_Start
+	Starts G-Engin, and creates a display window.
+
+Prototype:
+	> _GEng_Start($sTitle, $iW, $iH, $iX = -1, $iY = -1, $iStyle = -1, $iExtStyle = -1)
+
+Parameters:
+	sTitle - The title of the dialog box.
+	iW - The width of the window.
+	iH - The height of the window.
+	iX - The left side of the dialog box. By default (-1), the window is centered. If defined, top must also be defined.
+	iY - The top of the dialog box. Default (-1) is centered.
+	iStyle - defines the style of the window. See GUI Control Styles Appendix (AutoIt3 Doc).
+	
+		Use -1 for the default style which includes a combination of *$WS_MINIMIZEBOX*, *$WS_CAPTION*, *$WS_POPUP*, *$WS_SYSMENU* styles.
+		
+		Some styles are always included: *$WS_CLIPSIBLINGS*, and *$WS_SYSMENU* if *$WS_MAXIMIZEBOX* or *$WS_SIZEBOX* is specified.
+		
+	iExtStyle - defines the extended style of the window.
+		See the Extended Style Table in GuiCreate Doc. -1 is the default.
+
+Returns:
+	Succes - 1
+	Failed - 0 And @error = 1
+#ce
 Func _GEng_Start($sTitle, $iW, $iH, $iX = -1, $iY = -1, $iStyle = -1, $iExtStyle = -1)
 	If __GEng_IsStarted() Then Return SetError(1, 0, 0)
 	; ---
@@ -61,6 +91,19 @@ EndFunc
 ; Author.........:	Matwachich
 ; Remarks........:	
 ; ===========================================================================================================
+#cs
+Function: _GEng_Shutdown
+	Stops G-Engin, deletes the display window, and free all the ressources.
+
+Prototype:
+	> _GEng_Shutdown()
+
+Parameters:
+	Nothing
+
+Returns:
+	Nothing
+#ce
 Func _GEng_Shutdown()
 	__GEng_Image_DisposeAll()
 	; ---
@@ -97,6 +140,36 @@ EndFunc
 ;						$GEng_Debug_Pens
 ;					Cette fonction appel _GDIPlus_Startup, tout comme _GEng_Start
 ; ===========================================================================================================
+#cs
+Function: _GEng_SetDebug
+	Change debug mode, or get it's current status
+
+Prototype:
+	> _GEng_SetDebug($mode = Default)
+
+Parameters:
+	mode - One of the following:
+	
+	- *Default* Get the status of debug mode
+	- *0* : Deactivate debug mode
+	
+	_Combination of_
+		- *$GEng_Debug_Pens* Only Creates the colors needed to manualy draw with the _GEng_Debug_xxx Functions (parameter $iDbgPen)
+		- *$GEng_Debug_Sprites* Draws the sprites boxes
+		- *$GEng_Debug_Vectors* Draw the vectors (Speed and Acceleration)
+		- *$GEng_Debug_Collisions* Draw the collisions
+
+Returns:
+	If mode = Default - The Debug mode
+	Else - 1 / 0 And @error = 1
+
+Remarks:
+	The debug mode is usefull to see the collisions: when a collision occures between two sprites, their hit boxes are displayed in red.
+	
+	If the flags $GEng_Debug_Sprites, $GEng_Debug_Vectors and $GEng_Debug_Collisions are set, the flag $GEng_Debug_Pens is automatically set.
+	
+	This function calls _GDIPlus_Startup, just life <_GEng_Start>
+#ce
 Func _GEng_SetDebug($mode = Default)
 	If $mode = Default Then Return $__GEng_Debug
 	; ---
@@ -118,6 +191,8 @@ Func _GEng_SetDebug($mode = Default)
 			$__GEng_Debug = 0
 			Return SetError(1, 0, 0)
 	EndSelect
+	; ---
+	Return SetError(0, 0, 1)
 EndFunc
 
 

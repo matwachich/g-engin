@@ -8,6 +8,8 @@
 
 #ce ----------------------------------------------------------------------------
 
+;File: Collisions
+
 #Region ### Functions ###
 #cs
 - Main Functions
@@ -29,7 +31,7 @@
 
 
 ; pour les tests de collision avec les bord de la fenètre
-Global $GEng_ScrBorder_Top = 1, $GEng_ScrBorder_Bot = 2, $GEng_ScrBorder_Left = 3, $GEng_ScrBorder_Right = 4
+Enum $GEng_ScrBorder_Top = 1, $GEng_ScrBorder_Bot, $GEng_ScrBorder_Left, $GEng_ScrBorder_Right
 
 ; $iType: 0 - point, 1 - Carré, 2 - Ellipse
 ; # FUNCTION # ==============================================================================================
@@ -53,6 +55,32 @@ Global $GEng_ScrBorder_Top = 1, $GEng_ScrBorder_Bot = 2, $GEng_ScrBorder_Left = 
 ; Author.........:	Matwachich
 ; Remarks........:	
 ; ===========================================================================================================
+#cs
+Function: _GEng_Sprite_CollisionSet
+	Define the collision shape of a Sprite Object
+
+Prototype:
+	> _GEng_Sprite_CollisionSet(ByRef $hSprite, $iType, $x = Default, $y = Default, $w = Default, $h = Default)
+
+Parameters:
+	$hSprite - Sprite Object
+	$iType - Defines which shape to use. Can be one of the following:
+	
+	- *0:* Dot
+		$x, $y - Sprite's relative position of the collision point
+		$w, $h - Not used
+	- *1:* Rectangle (AABB)
+		$x, $y - Upper left corner of the bounding box (sprites relative)
+		$w, $h - Size of the bounding box (widht, height)
+	- *2:* Circle
+		$x, $y - Circle's center point position
+		$w - Radius
+		$h - Not used
+
+Returns:
+	Succes - 1
+	Failed - 0 And @error = 1
+#ce
 Func _GEng_Sprite_CollisionSet(ByRef $hSprite, $iType, $x = Default, $y = Default, $w = Default, $h = Default)
 	If Not __GEng_Sprite_IsSprite($hSprite) Then Return SetError(1, 0, 0)
 	; ---
@@ -140,6 +168,35 @@ EndFunc
 ;						(sprites qui se collent, collision manquée...). A term, il est possible
 ;						qu'une bibliothèque physique externe soit exploitée par G-Engin
 ; ===========================================================================================================
+#cs
+Function: _GEng_Sprite_Collision
+	Test if 2 sprites collides
+
+Prototype:
+	> _GEng_Sprite_Collision(ByRef $hSprite1, ByRef $hSprite2, $iScrBorderPosition = 0, $iDynamique = 0, $iPrecision = 0)
+
+Parameters:
+	$hSprite1 - Sprite Object
+	$hSprite2 - Sprite Object *OR* one of the followings:
+	
+		- *$GEng_ScrBorder_Top* -> Upper screen edge
+		- *$GEng_ScrBorder_Bot* -> Bottom screen edge
+		- *$GEng_ScrBorder_Left* -> Left screen edge
+		- *$GEng_ScrBorder_Right* -> Right screen edge
+	
+	$iScrBorderPosition - Distance between the screen edge and the collision ligne
+	$iDynamique - If TRUE, then the 2 tested sprites will collide dynamically
+	$iPrecision - Defines the precision of the dynamic collision anti-bugs algorithm, 
+		high values can really slow your program, so increase only if you encounter bugs.
+
+Returns:
+	Succes - 1
+	Failed - 0 And @error = 1
+
+Remarks:
+	The dynamic collision system is rudimentary and buggy (sticking sprites, missing some collisions especially
+	at high speed).
+#ce
 Func _GEng_Sprite_Collision(ByRef $hSprite1, ByRef $hSprite2, $iScrBorderPosition = 0, $iDynamique = 0, $iPrecision = 0)
 	If Not __GEng_Sprite_IsSprite($hSprite1) Then Return SetError(1, 0, 0)
 	; ---
@@ -163,6 +220,28 @@ EndFunc
 ; Author.........:	Matwachich
 ; Remarks........:	
 ; ===========================================================================================================
+#cs
+Function: _GEng_Sprite_CollisionScrBorders
+	Test collision between a Sprite Object and all screen borders.
+
+Prototype:
+	> _GEng_Sprite_CollisionScrBorders(ByRef $hSprite, $iDynamique = 0)
+
+Parameters:
+	$hSprite - Sprite Object
+	$iDynamique - Dynamics collisions ON/OFF
+
+Returns:
+	Succes - If no collision 0
+	
+		If collision occures, returns one of the following
+		- *$GEng_ScrBorder_Top* -> Collision with the upper screen edge
+		- *$GEng_ScrBorder_Bot* -> Collision with the bottom screen edge
+		- *$GEng_ScrBorder_Left* -> Collision with the left screen edge
+		- *$GEng_ScrBorder_Right* -> Collision with the right screen edge
+		
+	Failed - 0 And @error = 1
+#ce
 Func _GEng_Sprite_CollisionScrBorders(ByRef $hSprite, $iDynamique = 0)
 	If Not __GEng_Sprite_IsSprite($hSprite) Then Return SetError(1, 0, 0)
 	; ---

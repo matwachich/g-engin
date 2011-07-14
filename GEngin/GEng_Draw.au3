@@ -8,6 +8,8 @@
 
 #ce ----------------------------------------------------------------------------
 
+;File: System
+
 #Region ### Functions ###
 #cs
 - Main Functions
@@ -27,6 +29,20 @@
 ; Author.........:	Matwachich
 ; Remarks........:	Inutile et couteux en ressource si vous avez un sprite qui fait office de background
 ; ===========================================================================================================
+#cs
+Function: _GEng_ScrFlush
+	Flush the screen with a bakcground color
+
+Prototype:
+	> _GEng_ScrFlush($iBkColor = 0xFFFFFFFF)
+
+Parameters:
+	$iBkColor - Background color (0xAARRGGBB)
+
+Returns:
+	Succes - 1
+	Failed - 0 And @error = 1
+#ce
 Func _GEng_ScrFlush($iBkColor = 0xFFFFFFFF)
 	Return _GDIPlus_GraphicsClear($__GEng_hBuffer, $iBkColor)
 EndFunc
@@ -40,6 +56,20 @@ EndFunc
 ; Author.........:	Matwachich
 ; Remarks........:	Inspiré par "Sinus Scroller By UEZ"
 ; ===========================================================================================================
+#cs
+Function: _GEng_ScrUpdate
+	Validate all the drawings (Sprites, Text) and update the screen
+
+Prototype:
+	> _GEng_ScrUpdate()
+
+Parameters:
+	Nothing
+
+Returns:
+	Succes - 1
+	Failed - 0 And @error = 1
+#ce
 Func _GEng_ScrUpdate()
 	;Return _GDIPlus_GraphicsDrawImage($__GEng_hGraphic, $__GEng_hBitmap, 0, 0)
 	; --- Fait gagner env. 2ms!
@@ -57,6 +87,29 @@ EndFunc
 ; Author.........:	Matwachich
 ; Remarks........:	
 ; ===========================================================================================================
+#cs
+Function: _GEng_FPS_Get
+	Returns the FPS
+
+Prototype:
+	> _GEng_FPS_Get($iDelay = 1000)
+
+Parameters:
+	$iDelay - Delay to return the FPS value (in ms) (see remarks)
+
+Returns:
+	If iDelay reached - FPS, @extended = Frame generation time, @error = 0
+	If iDelay not reached yet - -1, @extended = 0, @error = 1
+
+Remarks:
+	The FPS value is calculated and returned every $iDelay ms.
+
+Example:
+	> $fps = _GEng_FPS_Get()
+	> If $fps <> -1 Then
+	> 	Update your FPS diplay here
+	> EndIf
+#ce
 Func _GEng_FPS_Get($iDelay = 1000)
 	Local $t, $ret, $err, $ext
 	If TimerDiff($__GEng_FPSDisplayTimer) >= $iDelay Or $__GEng_FPSDisplayTimer = 0 Then

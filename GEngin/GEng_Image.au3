@@ -9,6 +9,10 @@
 #ce ----------------------------------------------------------------------------
 #Include <Memory.au3>
 
+; For natural Docs
+
+;File: Images
+
 #Region ### Functions ###
 #cs
 - Main Functions
@@ -41,6 +45,28 @@ Global $__GEng_Images[1] = [0]
 ; Author.........:	Matwachich
 ; Remarks........:	
 ; ===========================================================================================================
+#cs
+Function: _GEng_ImageLoad
+	Creates an image object from a file, or a rectangular part of a file
+
+Prototype:
+	> _GEng_ImageLoad($sPath, $imgW = Default, $imgH = Default, $x = Default, $y = Default, $w = Default, $h = Default)
+
+Parameters:
+	sPath - Path the file (supports bmp, gif, jpg, png, tiff, emf)
+	width, height - Size of the image object (default = size of the image file)
+	
+	You can load only a rectangle from the image file, use the following parameters to do so
+	You must specify all the next 4 parameters to take a rectangle
+	
+	x, y - Top left corners position of the rectangle
+	w, h - Size of the rectangle
+
+Returns:
+	Succes - Image Object
+	Failed - 0 And @error = 1
+
+#ce
 Func _GEng_ImageLoad($sPath, $imgW = Default, $imgH = Default, $x = Default, $y = Default, $w = Default, $h = Default)
 	Local $hImg = _GDIPlus_ImageLoadFromFile($sPath)
 	If $hImg = -1 Then Return SetError(1, 0, 0)
@@ -56,6 +82,64 @@ EndFunc
 ; Author.........:	UEZ, ProgAndy
 ; Remarks........:	
 ; ===========================================================================================================
+#cs
+Function: _GEng_ImageLoadStream
+	Creates an image object from a string representing binary image file data
+
+Prototype:
+	> _GEng_ImageLoadStream($pic, $imgW = Default, $imgH = Default, $x = Default, $y = Default, $w = Default, $h = Default)
+
+Parameters:
+	pic - String Representing binary image file data
+	The rest - See <_GEng_ImageLoad>
+
+Returns:
+	Succes - Image Object
+	Failed - 0 And @error = 1
+
+Thanks:
+	UEZ, ProgAndy
+
+Example:
+	A function to convert a file to a binary string (Thanks Tlem!)
+	
+	You can adapt this function to not re-create the file to the hard drive, and to only
+	procude the binary string needed by _GEng_ImageLoadStream
+	
+	(Start code)
+	Func _FileToBinaryString()
+		Local $file = FileOpenDialog("Select File", @DesktopDir, "All (*)")
+		If @error Then Exit
+
+		Local $Fname = StringTrimLeft($file, StringInStr($file, "\", 1, -1))
+		Local $FuncName = StringReplace($Fname, ".", "_")
+		$FuncName = StringRegExpReplace($FuncName, '[^\w]', '')
+		$FuncName = StringRegExpReplace($FuncName, '[^\D]', '')
+
+		Local $hF = FileOpen($file, 16)
+		Local $read = FileRead($hF)
+		FileClose($hF)
+
+		Local $strReg = StringRegExp($read, '.{1,128}', 3)
+
+		Local $str = "Func _File_" & $FuncName & "($sPath)" & @CRLF
+		$str &= '	Local $string = ""' & @CRLF
+		For $i In $strReg
+			$str &= '	$string &= "' & $i & '"' & @CRLF
+		Next
+		$str &= "	Local $hF = FileOpen($sPath, 18)" & @CRLF
+		$str &= "	If $hF = -1 Then Return SetError(1, 0, 0)" & @CRLF
+		$str &= "	FileWrite($hF, $string)" & @CRLF
+		$str &= "	FileClose($hF)" & @CRLF
+		$str &= "	Return SetError(0, FileGetSize($sPath), 1)" & @CRLF
+		$str &= "EndFunc" & @CRLF
+
+		ClipPut($str)
+		MsgBox(64, "File To Binary String", "Data in Clipboard")
+	EndFunc
+	(End)
+
+#ce
 Func _GEng_ImageLoadStream($pic, $imgW = Default, $imgH = Default, $x = Default, $y = Default, $w = Default, $h = Default)
 	;thanks to ProgAndy for mem allocation lines
 	Local $memBitmap, $len, $tMem, $hImage, $hData, $pData, $hStream, $hBitmapFromStream

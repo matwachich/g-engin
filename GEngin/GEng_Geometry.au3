@@ -8,6 +8,8 @@
 
 #ce ----------------------------------------------------------------------------
 
+;File: Geometry functions
+
 #Region ### Functions ###
 #cs
 - Main Functions
@@ -42,6 +44,25 @@
 ; Remarks........:	Cette fonction est idéal pour toujours avoir la position d'un point du sprite malgré
 ;						sa rotation
 ; ===========================================================================================================
+#cs
+Function: _GEng_Sprite_PointGet
+	Returns the word's relatvie position of a sprite's relative point
+
+Prototype:
+	> _GEng_Sprite_PointGet(ByRef $hSprite, $iImgX, $iImgY, ByRef $x, ByRef $y)
+
+Parameters:
+	$hSprite - Sprite Object
+	$iImgX, $iImgY - Sprite's relative position
+	$x, $y - Vars that will contain the word's relative position
+
+Returns:
+	Succes - 1
+	Failed - 0 And @error = 1
+
+Remarks:
+	This function takes into account the rotation of the Sprite Object
+#ce
 Func _GEng_Sprite_PointGet(ByRef $hSprite, $iImgX, $iImgY, ByRef $x, ByRef $y)
 	If Not __GEng_Sprite_IsSprite($hSprite) Then Return SetError(1, 0, 0)
 	; --- ; position par rapport à l'origine
@@ -64,6 +85,7 @@ Func _GEng_Sprite_PointGet(ByRef $hSprite, $iImgX, $iImgY, ByRef $x, ByRef $y)
 	Return 1
 EndFunc
 
+;NameSpace: Point to Point
 
 ; # FUNCTION # ==============================================================================================
 ; Name...........:	_GEng_PointToPoint_Dist
@@ -74,6 +96,21 @@ EndFunc
 ; Author.........:	Matwachich
 ; Remarks........:	
 ; ===========================================================================================================
+#cs
+Function: _GEng_PointToPoint_Dist
+	Returns the distance between 2 points
+
+Prototype:
+	> _GEng_PointToPoint_Dist($x0, $y0, $x, $y)
+
+Parameters:
+	$x0, $y0 - First point
+	$x, $y - Second point
+
+Returns:
+	Succes - Distance value
+	Failed - 0 And @error = 1
+#ce
 Func _GEng_PointToPoint_Dist($x0, $y0, $x, $y)
 	$x = $x - $x0
 	$y = $y - $y0
@@ -93,6 +130,21 @@ EndFunc
 ; Author.........:	Matwachich
 ; Remarks........:	
 ; ===========================================================================================================
+#cs
+Function: _GEng_PointToPoint_Angle
+	Returns the angle between 2 points
+
+Prototype:
+	> _GEng_PointToPoint_Angle($x0, $y0, $x, $y)
+
+Parameters:
+	$x0, $y0 - First point
+	$x, $y - Second point
+
+Returns:
+	Succes - Angle value
+	Failed - 0 And @error = 1
+#ce
 Func _GEng_PointToPoint_Angle($x0, $y0, $x, $y)
 	If $x0 = $x And $y0 = $y Then Return 0
 	; ---
@@ -119,6 +171,23 @@ EndFunc
 ; Author.........:	Matwachich
 ; Remarks........:	
 ; ===========================================================================================================
+#cs
+Function: _GEng_PointToPoint_Vector
+	Returns a vector oriented from the first point to the second
+
+Prototype:
+	> _GEng_PointToPoint_Vector($x0, $y0, $x, $y, $iGrandeur = Default)
+
+Parameters:
+	$x0, $y0 - First point
+	$x, $y - Second point
+	$iGrandeur - Lenght of the vector (If Default, then the distance between
+		the 2 points is taken as lenght)
+
+Returns:
+	Succes - Array representing a vector ([0] = x, [1] = y)
+	Failed - 0 And @error = 1
+#ce
 Func _GEng_PointToPoint_Vector($x0, $y0, $x, $y, $iGrandeur = Default)
 	Local $angle = _GEng_PointToPoint_Angle($x0, $y0, $x, $y)
 	; ---
@@ -130,6 +199,7 @@ EndFunc
 
 ; ##############################################################
 
+;NameSpace: Sprite to Point
 
 ; # FUNCTION # ==============================================================================================
 ; Name...........:	_GEng_SpriteToPoint_Dist
@@ -140,6 +210,21 @@ EndFunc
 ; Author.........:	Matwachich
 ; Remarks........:	
 ; ===========================================================================================================
+#cs
+Function: _GEng_SpriteToPoint_Dist
+	Returns the distance between a Sprite Object and a point
+
+Prototype:
+	> _GEng_SpriteToPoint_Dist(ByRef $hSprite, $x, $y)
+
+Parameters:
+	$hSprite - Sprite Object
+	$x, $y - Point
+
+Returns:
+	Succes - Distance value
+	Failed - 0 And @error = 1
+#ce
 Func _GEng_SpriteToPoint_Dist(ByRef $hSprite, $x, $y)
 	If Not __GEng_Sprite_IsSprite($hSprite) Then Return SetError(1, 0, 0)
 	; ---
@@ -165,6 +250,25 @@ EndFunc
 ; Remarks........:	L'angle retourné est l'angle par rapport au point d'origine de hSprite, et de l'angle 0
 ;						Il sera compris entre 0 et 359
 ; ===========================================================================================================
+#cs
+Function: _GEng_SpriteToPoint_Angle
+	Returns the angle between a Sprite Object and a point
+
+Prototype:
+	> _GEng_SpriteToPoint_Angle(ByRef $hSprite, $x, $y)
+
+Parameters:
+	$hSprite - Sprite Object
+	$x, $y - Point
+
+Returns:
+	Succes - Angle value (0 - 359)
+	Failed - 0 And @error = 1
+
+Remarks:
+	The angle returned is the absolute (word's relative) angle, and will be always 
+	in the range 0-359
+#ce
 Func _GEng_SpriteToPoint_Angle(ByRef $hSprite, $x, $y)
 	If Not __GEng_Sprite_IsSprite($hSprite) Then Return SetError(1, 0, 0)
 	; ---
@@ -195,6 +299,28 @@ EndFunc
 ;					Retourne la différence d'angle entre hSprite et la position donné (Utile pour SetAngleSpeed)
 ;   					(De 0 à 180 => Sens horaire, De 0 à -179 => Send Anti-Horaire)
 ; ===========================================================================================================
+#cs
+Function: _GEng_SpriteToPoint_AngleDiff
+	Returns the angle between a Sprite Object and a point, relativelly to the
+	actual angle of the Sprite Object
+
+Prototype:
+	> _GEng_SpriteToPoint_AngleDiff(ByRef $hSprite, $x, $y)
+
+Parameters:
+	$hSprite - Sprite Object
+	$x, $y - Point
+
+Returns:
+	Succes - Angle value (-180 - 0 - 180)
+	Failed - 0 And @error = 1
+
+Remarks:
+	The angle returned is relative to the angle of the Sprite Object, it will be in the range
+	- -180 - 0 if the point is at the left of the Sprite (counter-clockwise)
+	- 0 - 180 if the point is at the right of the Sprite (clockwise)
+	
+#ce
 Func _GEng_SpriteToPoint_AngleDiff(ByRef $hSprite, $x, $y) ; 0.2 ms 
 	If Not __GEng_Sprite_IsSprite($hSprite) Then Return SetError(1, 0, 0)
 	; ---
@@ -244,6 +370,23 @@ EndFunc
 ; Author.........:	Matwachich
 ; Remarks........:	
 ; ===========================================================================================================
+#cs
+Function: _GEng_SpriteToPoint_Vector
+	Returns a vector oriented from a Sprite Object to a point
+
+Prototype:
+	> _GEng_SpriteToPoint_Vector(ByRef $hSprite, $x, $y, $iGrandeur = Default)
+
+Parameters:
+	$hSprite - Sprite Object
+	$x, $y - Point
+	$iGrandeur - Lenght of the vector (If Default, then the distance between
+		the Sprite Object and the points is taken as lenght)
+
+Returns:
+	Succes - Array representing a vector ([0] = x, [1] = y)
+	Failed - 0 And @error = 1
+#ce
 Func _GEng_SpriteToPoint_Vector(ByRef $hSprite, $x, $y, $iGrandeur = Default)
 	If Not __GEng_Sprite_IsSprite($hSprite) Then Return SetError(1, 0, 0)
 	; ---
@@ -256,6 +399,8 @@ EndFunc
 
 ; ##############################################################
 
+;NameSpace: Sprite to Sprite
+
 ; # FUNCTION # ==============================================================================================
 ; Name...........:	_GEng_SpriteToSprite_Dist
 ; Description....:	Calcule la distance (pixels) entre 2 objets Sprite
@@ -264,6 +409,20 @@ EndFunc
 ; Author.........:	Matwachich
 ; Remarks........:	
 ; ===========================================================================================================
+#cs
+Function: _GEng_SpriteToSprite_Dist
+	Returns the distance between 2 Sprite Objects
+
+Prototype:
+	> _GEng_SpriteToSprite_Dist(ByRef $hSprite, ByRef $hSprite2)
+
+Parameters:
+	$hSprite & $hSprite2 - Sprite Objects
+
+Returns:
+	Succes - Distance value
+	Failed - 0 And @error = 1
+#ce
 Func _GEng_SpriteToSprite_Dist(ByRef $hSprite, ByRef $hSprite2)
 	If Not __GEng_Sprite_IsSprite($hSprite) Then Return SetError(1, 0, 0)
 	If Not __GEng_Sprite_IsSprite($hSprite2) Then Return SetError(1, 0, 0)
@@ -281,6 +440,20 @@ EndFunc
 ; Author.........:	Matwachich
 ; Remarks........:	
 ; ===========================================================================================================
+#cs
+Function: _GEng_SpriteToSprite_Angle
+	Returns the angle from the first Sprite Object to the second
+
+Prototype:
+	> _GEng_SpriteToSprite_Angle(ByRef $hSprite, ByRef $hSprite2)
+
+Parameters:
+	$hSprite & $hSprite2 - First and second Sprite Objects
+
+Returns:
+	Succes - Angle value (in degrees)
+	Failed - 0 And @error = 1
+#ce
 Func _GEng_SpriteToSprite_Angle(ByRef $hSprite, ByRef $hSprite2)
 	If Not __GEng_Sprite_IsSprite($hSprite) Then Return SetError(1, 0, 0)
 	If Not __GEng_Sprite_IsSprite($hSprite2) Then Return SetError(1, 0, 0)
@@ -298,6 +471,27 @@ EndFunc
 ; Author.........:	Matwachich
 ; Remarks........:	Idem _GEng_SpriteToPoint_AngleDiff
 ; ===========================================================================================================
+#cs
+Function: _GEng_SpriteToSprite_AngleDiff
+	Returns the angle between a Sprite Object and another, relativelly to the
+	actual angle of the first Sprite Object
+
+Prototype:
+	> _GEng_SpriteToSprite_AngleDiff(ByRef $hSprite, ByRef $hSprite2)
+
+Parameters:
+	$hSprite & $hSprite2 - Sprite Object
+
+Returns:
+	Succes - Angle value (-180 - 0 - 180)
+	Failed - 0 And @error = 1
+
+Remarks:
+	The angle returned is relative to the angle of the Sprite Object, it will be in the range
+	- -180 - 0 if the point is at the left of the Sprite (counter-clockwise)
+	- 0 - 180 if the point is at the right of the Sprite (clockwise)
+	
+#ce
 Func _GEng_SpriteToSprite_AngleDiff(ByRef $hSprite, ByRef $hSprite2)
 	If Not __GEng_Sprite_IsSprite($hSprite) Then Return SetError(1, 0, 0)
 	If Not __GEng_Sprite_IsSprite($hSprite2) Then Return SetError(1, 0, 0)
@@ -317,6 +511,22 @@ EndFunc
 ; Author.........:	Matwachich
 ; Remarks........:	
 ; ===========================================================================================================
+#cs
+Function: _GEng_SpriteToSprite_Vector
+	Returns a vector oriented from a Sprite Object to another
+
+Prototype:
+	> _GEng_SpriteToSprite_Vector(ByRef $hSprite, ByRef $hSprite2, $iGrandeur = Default)
+
+Parameters:
+	$hSprite & $hSprite2 - Sprite Objects
+	$iGrandeur - Lenght of the vector (If Default, then the distance between
+		the Sprite Objects is taken as lenght)
+
+Returns:
+	Succes - Array representing a vector ([0] = x, [1] = y)
+	Failed - 0 And @error = 1
+#ce
 Func _GEng_SpriteToSprite_Vector(ByRef $hSprite, ByRef $hSprite2, $iGrandeur = Default)
 	If Not __GEng_Sprite_IsSprite($hSprite) Then Return SetError(1, 0, 0)
 	If Not __GEng_Sprite_IsSprite($hSprite2) Then Return SetError(1, 0, 0)
@@ -327,6 +537,8 @@ Func _GEng_SpriteToSprite_Vector(ByRef $hSprite, ByRef $hSprite2, $iGrandeur = D
 EndFunc
 
 ; ##############################################################
+
+;NameSpace: Misc
 
 ; # FUNCTION # ==============================================================================================
 ; Name...........:	_GEng_AngleToVector
@@ -339,6 +551,21 @@ EndFunc
 ; Author.........:	Matwachich
 ; Remarks........:	
 ; ===========================================================================================================
+#cs
+Function: _GEng_AngleToVector
+	Returns a vector from an Angle and a Lenght
+
+Prototype:
+	> _GEng_AngleToVector($iAngle, $iGrandeur = 1)
+
+Parameters:
+	$iAngle - Angle value (in degrees)
+	$iGrandeur - Lenght of the vector
+
+Returns:
+	Succes - Array representing a vector ([0] = x, [1] = y)
+	Failed - 0 And @error = 1
+#ce
 Func _GEng_AngleToVector($iAngle, $iGrandeur = 1) ; OK
 	$iAngle = __GEng_GeometryDeg2Rad(__GEng_GeometryReduceAngle($iAngle))
 	; ---
@@ -357,6 +584,20 @@ EndFunc
 ; Author.........:	Matwachich
 ; Remarks........:	Fonction pas très utile vu l'existance de _GEng_PointToPoint_Angle & _GEng_SpriteToPoint_Angle
 ; ===========================================================================================================
+#cs
+Function: _GEng_VectorToAngle
+	Returns an Angle from a Vector
+
+Prototype:
+	> _GEng_VectorToAngle($difX, $difY)
+
+Parameters:
+	$difX & $difY - Components of the vector
+
+Returns:
+	Succes - Angle value (in degrees)
+	Failed - 0 And @error = 1
+#ce
 Func _GEng_VectorToAngle($difX, $difY) ; OK
 	If $difX = 0 And $difY = 0 Then Return 0
 	; ---

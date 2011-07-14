@@ -8,6 +8,8 @@
 
 #ce ----------------------------------------------------------------------------
 
+;File: Creation
+
 #Region ### Functions ###
 #cs
 - Main Functions
@@ -48,7 +50,6 @@ Global Enum _
 	$_gSpr_ColorMatrix, $_gSpr_ColorMatrixPtr, $_gSpr_hImgAttrib, $_gSpr_UseColorMatrix, _
 	$_gSpr_Masse
 
-
 ; # FUNCTION # ==============================================================================================
 ; Name...........:	_GEng_Sprite_Create
 ; Description....:	Créer un Objet Sprite
@@ -58,6 +59,20 @@ Global Enum _
 ; Author.........:	Matwachich
 ; Remarks........:	
 ; ===========================================================================================================
+#cs
+Function: _GEng_Sprite_Create
+	Creates a Sprite Object
+
+Prototype:
+	> _GEng_Sprite_Create($hImage = Default)
+
+Parameters:
+	$hImage - If specified, then <_GEng_Sprite_ImageSetw> will be called, and the sprite will be assigned *hImage* Image object
+
+Returns:
+	Succes - The Sprite Object
+	Failed - 0 And @error = 1
+#ce
 Func _GEng_Sprite_Create($hImage = Default)
 	Local $hSprite[$__GEng_SpritesArrayUB]
 	__GEng_Sprite_InitArray($hSprite)
@@ -84,6 +99,31 @@ EndFunc
 ;						alors la taille du sprite est initialisé à la taille de l'image assigné
 ;						(appel à _GEng_Sprite_SizeSet)
 ; ===========================================================================================================
+#cs
+Function: _GEng_Sprite_ImageSet
+	Assigne an image object, or a part of it to a sprite
+
+Prototype:
+	> _GEng_Sprite_ImageSet(ByRef $hSprite, ByRef $hImage, $x = Default, $y = Default, $w = Default, $h = Default)
+
+Parameters:
+	$hSprite - The Sprite Object
+	$hImage - The image object to assigne
+	
+	Use the parameters below to specify the rectangle of the image object to assign to the sprite
+	
+	$x, $y - Top left corner position of the rectangle
+	$w, $h - Size of the rectangle
+
+Returns:
+	Succes - 1
+	Failed - 0 And @error = 1
+
+Remarks:
+	The rectangle here is different from the one of <_GEng_ImageLoad>:
+	- Here, we take a part of an Image Object
+	- In <_GEng_ImageLoad>, we take a part of an image file
+#ce
 Func _GEng_Sprite_ImageSet(ByRef $hSprite, ByRef $hImage, $x = Default, $y = Default, $w = Default, $h = Default) ; If Default => 0,0,ImgW,ImgH
 	If Not __GEng_Sprite_IsSprite($hSprite) Then Return SetError(1, 0, 0)
 	If Not __GEng_Image_IsImage($hImage) Then Return SetError(1, 0, 0)
@@ -125,6 +165,22 @@ EndFunc
 ; Author.........:	Matwachich
 ; Remarks........:	
 ; ===========================================================================================================
+#cs
+Function: _GEng_Sprite_ImageSetRect
+	Specifiy the part (rectangle) of the Image Object actually assigned to the Sprite that will be drawn
+
+Prototype:
+	> _GEng_Sprite_ImageSetRect(ByRef $hSprite, $x, $y, $w, $h, $InitSize = 0)
+
+Parameters:
+	$hSprite - Sprite Object
+	$x, $y, $w, $h - Rectangle
+	$InitSize - If TRUE, the size of the sprite will be set to the size of the rectangle
+
+Returns:
+	Succes - 1
+	Failed - 0 And @error = 1
+#ce
 Func _GEng_Sprite_ImageSetRect(ByRef $hSprite, $x, $y, $w, $h, $InitSize = 0)
 	If Not __GEng_Sprite_IsSprite($hSprite) Then Return SetError(1, 0, 0)
 	; ---
@@ -150,6 +206,25 @@ EndFunc
 ; Author.........:	Matwachich
 ; Remarks........:	Un sprite fix (arrière plan, objet de décore immobile) devrai toujour avoir $iCalculateMovements = 0
 ; ===========================================================================================================
+#cs
+Function: _GEng_Sprite_Draw
+	Draws a sprite at it's current position and angle
+
+Prototype:
+	> _GEng_Sprite_Draw(ByRef $hSprite, $iCalculateMovements = 1)
+
+Parameters:
+	$hSprite - Sprite Object
+	$iCalculateMovements - If TRUE, then sprite is concidered as dynamique, so speed, acceleration, 
+		innertia... will ba calculated befor drawing.
+
+Returns:
+	Succes - 1
+	Failed - 0 And @error = 1
+
+Remarks:
+	A static sprite (such as background image, static scenery) should always have $iCalculateMovements = 0
+#ce
 Func _GEng_Sprite_Draw(ByRef $hSprite, $iCalculateMovements = 1)
 	If Not __GEng_Sprite_IsSprite($hSprite) Then Return SetError(1, 0, 0)
 	If Not __GEng_Sprite_ContainsImage($hSprite) Then Return SetError(1, 0, 0)
@@ -158,8 +233,8 @@ Func _GEng_Sprite_Draw(ByRef $hSprite, $iCalculateMovements = 1)
 	If $iCalculateMovements Then _GEng_Sprite_Move($hSprite)
 	;ConsoleWrite(TimerDiff($t) & @CRLF)
 	; ---
-	Local $hBuffer = $hSprite[$_gSpr_hBuffer]
-	Local $imgIndex = $hSprite[$_gSpr_iImg]
+	;Local $hBuffer = $hSprite[$_gSpr_hBuffer]
+	;Local $imgIndex = $hSprite[$_gSpr_iImg]
 	; ---
 	Local $rotDeg = $hSprite[$_gSpr_AngleDeg]
 	Local $rotRad = $hSprite[$_gSpr_AngleRad]
@@ -174,13 +249,13 @@ Func _GEng_Sprite_Draw(ByRef $hSprite, $iCalculateMovements = 1)
 	Local $ret
 	If $rotDeg = 0 Then ; Si pas de rotation => Dessine sur le buffer principal
 		If $hSprite[$_gSpr_UseColorMatrix] Then
-			$ret = _GDIPlus_GraphicsDrawImageRectRectIA($__GEng_hBuffer, $__GEng_Images[$imgIndex], _
+			$ret = _GDIPlus_GraphicsDrawImageRectRectIA($__GEng_hBuffer, $__GEng_Images[$hSprite[$_gSpr_iImg]], _
 						$sheetX, $sheetY, $sheetW, $sheetH, _ ; region de l'image d'origin
 						$posX - $oriX, $posY - $oriY, _ ; position à l'écran
 						$sizeW, $sizeH, _ ; taille à l'écran
 						$hSprite[$_gSpr_hImgAttrib])
 		Else
-			$ret = _GDIPlus_GraphicsDrawImageRectRect($__GEng_hBuffer, $__GEng_Images[$imgIndex], _
+			$ret = _GDIPlus_GraphicsDrawImageRectRect($__GEng_hBuffer, $__GEng_Images[$hSprite[$_gSpr_iImg]], _
 						$sheetX, $sheetY, $sheetW, $sheetH, _ ; region de l'image d'origin
 						$posX - $oriX, $posY - $oriY, _ ; position à l'écran
 						$sizeW, $sizeH) ; taille à l'écran
@@ -206,16 +281,16 @@ Func _GEng_Sprite_Draw(ByRef $hSprite, $iCalculateMovements = 1)
 		Local $matrix = _GDIPlus_MatrixCreate()
 		_GDIPlus_MatrixRotate($matrix, $rotDeg)
 		_GDIPlus_MatrixTranslate($matrix, $posX * Cos(-$rotRad) - $posY * Sin(-$rotRad), $posX * Sin(-$rotRad) + $posY * Cos(-$rotRad))
-		_GDIPlus_GraphicsSetTransform($hBuffer, $matrix)
+		_GDIPlus_GraphicsSetTransform($hSprite[$_gSpr_hBuffer], $matrix)
 		; ---
 		If $hSprite[$_gSpr_UseColorMatrix] Then
-			$ret = _GDIPlus_GraphicsDrawImageRectRectIA($hBuffer, $__GEng_Images[$imgIndex], _
+			$ret = _GDIPlus_GraphicsDrawImageRectRectIA($hSprite[$_gSpr_hBuffer], $__GEng_Images[$hSprite[$_gSpr_iImg]], _
 						$sheetX, $sheetY, $sheetW, $sheetH, _
 						-1 * $oriX, -1 * $oriY, _
 						$sizeW, $sizeH, _
 						$hSprite[$_gSpr_hImgAttrib])
 		Else
-			$ret = _GDIPlus_GraphicsDrawImageRectRect($hBuffer, $__GEng_Images[$imgIndex], _
+			$ret = _GDIPlus_GraphicsDrawImageRectRect($hSprite[$_gSpr_hBuffer], $__GEng_Images[$hSprite[$_gSpr_iImg]], _
 						$sheetX, $sheetY, $sheetW, $sheetH, _
 						-1 * $oriX, -1 * $oriY, _
 						$sizeW, $sizeH)
@@ -227,8 +302,8 @@ Func _GEng_Sprite_Draw(ByRef $hSprite, $iCalculateMovements = 1)
 				_GEng_Debug_DrawCircle(1, $posX, $posY, 2)
 				_GEng_Debug_DrawCircle(3, $posX - $oriX, $posY - $oriY, 2)
 				; ---
-				_GEng_Debug_DrawVector(1, 0, 0, 30, 0, $hBuffer)
-				_GEng_Debug_DrawVector(1, 0, 0, 0, 30, $hBuffer)
+				_GEng_Debug_DrawVector(1, 0, 0, 30, 0, $hSprite[$_gSpr_hBuffer])
+				_GEng_Debug_DrawVector(1, 0, 0, 0, 30, $hSprite[$_gSpr_hBuffer])
 			EndIf
 			If BitAnd($__GEng_Debug, $GEng_Debug_Vectors) Then
 				_GEng_Debug_DrawVector(2, $hSprite[$_gSpr_PosX], $hSprite[$_gSpr_PosY], _
@@ -256,6 +331,20 @@ EndFunc
 ; Author.........:	Matwachich
 ; Remarks........:	
 ; ===========================================================================================================
+#cs
+Function: _GEng_Sprite_Delete
+	Delete a Sprite Object
+
+Prototype:
+	> _GEng_Sprite_Delete(ByRef $hSprite)
+
+Parameters:
+	$hSprite - Sprite Object
+
+Returns:
+	Succes - 1
+	Failed - 0 And @error = 1
+#ce
 Func _GEng_Sprite_Delete(ByRef $hSprite)
 	If Not __GEng_Sprite_IsSprite($hSprite) Then Return SetError(1, 0, 0)
 	; ---

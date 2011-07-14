@@ -8,6 +8,8 @@
 
 #ce ----------------------------------------------------------------------------
 
+;File: Sound
+
 #Region ### Functions ###
 #cs
 - Main Functions
@@ -42,6 +44,21 @@
 ; Author.........:	Matwachich
 ; Remarks........:	
 ; ===========================================================================================================
+#cs
+Function: _GEng_Sound_Init
+	Initialize the sound system
+
+Prototype:
+	> _GEng_Sound_Init($iSampleRate = 44100, $iStereo = 1)
+
+Parameters:
+	$iSampleRate - Sample rate (Default = 44100)
+	$iStereo - TRUE/FALSE
+
+Returns:
+	Succes - 1
+	Failed - 0 And @error = BASS Error code And @extended = BASS Error string (Description)
+#ce
 Func _GEng_Sound_Init($iSampleRate = 44100, $iStereo = 1)
 	__GEng_Sound_CreateDll()
 	_Bass_Startup()
@@ -63,6 +80,19 @@ EndFunc
 ; Author.........:	Matwachich
 ; Remarks........:	
 ; ===========================================================================================================
+#cs
+Function: _GEng_Sound_Shutdown
+	Shutdown sound system and free ressources
+
+Prototype:
+	> _GEng_Sound_Shutdown()
+
+Parameters:
+	Nothing
+
+Returns:
+	Succes - 1
+#ce
 Func _GEng_Sound_Shutdown()
 	_Bass_Stop()
 	_BASS_Free()
@@ -80,6 +110,23 @@ EndFunc
 ; Author.........:	Matwachich
 ; Remarks........:	Optionelle car appelé automatiquement à la fin du script
 ; ===========================================================================================================
+#cs
+Function: _GEng_Sound_GlobalVolume
+	Set or Get the global application sound volum
+
+Prototype:
+	> _GEng_Sound_GlobalVolume($iVolume = Default)
+
+Parameters:
+	$iVolume - Sound volum (0 to 1.0)
+
+Returns:
+	Succes - Either
+	- 1 (If $iVolume <> Default)
+	- Sound volum value (If $iVolume = Default)
+	
+	Failed - 0 And @error = BASS Error code And @extended = BASS Error string (Description)
+#ce
 Func _GEng_Sound_GlobalVolume($iVolume = Default)
 	Local $ret
 	If $iVolume = Default Then
@@ -98,7 +145,7 @@ EndFunc
 ; # FUNCTION # ==============================================================================================
 ; Name...........:	_GEng_Sound_Load
 ; Description....:	Charge un fichier audio
-; Parameters.....:	$sPAath = Chemin du fichier
+; Parameters.....:	$sPath = Chemin du fichier
 ;					$iLoop = Spécifie si le son doit être joué en boucle ou pas
 ;						Defaut = 0 (pas en boucle)
 ; Return values..:	Succes - Objet Sound
@@ -107,6 +154,24 @@ EndFunc
 ; Author.........:	Matwachich
 ; Remarks........:	
 ; ===========================================================================================================
+#cs
+Function: _GEng_Sound_Load
+	Loads a sound into a Sound Object
+
+Prototype:
+	> _GEng_Sound_Load($sPath, $iLoop = 0)
+
+Parameters:
+	$sPath - Path of the file to load
+	$iLoop - Specify if the Sound Object should be played in loop or not (TRUE/FALSE)
+
+Returns:
+	Succes - Sound Object
+	Failed - 0 And @error = BASS Error code And @extended = BASS Error string (Description)
+
+Remarks:
+	Sound files supported are: MP3, MP2, MP1, OGG, WAV, AIFF
+#ce
 Func _GEng_Sound_Load($sPath, $iLoop = 0)
 	If Not FileExists($sPath) Then Return SetError(1, 0, 0)
 	; ---
@@ -130,6 +195,21 @@ EndFunc
 ; Author.........:	Matwachich
 ; Remarks........:	
 ; ===========================================================================================================
+#cs
+Function: _GEng_Sound_Play
+	Play a Sound Object
+
+Prototype:
+	> _GEng_Sound_Play($hSound, $iRestart = 1)
+
+Parameters:
+	$hSound - Sound Object
+	$iRestart - Sprcify if the sound should be played from the begining (TRUE/FALSE)
+
+Returns:
+	Succes - 1
+	Failed - 0 And @error = BASS Error code And @extended = BASS Error string (Description)
+#ce
 Func _GEng_Sound_Play($hSound, $iRestart = 1)
 	Local $ret = _BASS_ChannelPlay($hSound, $iRestart)
 	If @error Then Return SetError(@error, _value2constant(@error), $ret)
@@ -145,6 +225,28 @@ EndFunc
 ; Author.........:	Matwachich
 ; Remarks........:	
 ; ===========================================================================================================
+#cs
+Function: _GEng_Sound_AttribSet
+	Adjust the attributes of a Sound Object
+
+Prototype:
+	> _GEng_Sound_AttribSet($hSound, $iVolume = 1, $iPan = 0, $iPitch = 0)
+
+Parameters:
+	$hSound - Sound Object
+	$iVolume - Individual volum of the Sound Object (0 to 1.0)
+	$iPan - The panning/balance of the Sound Object
+	
+	- -1 = Full left
+	- +1 = Full right
+	- 0 = Center
+	
+	$iPitch - Pitch (0 = Reset to original value/sample rate)
+
+Returns:
+	Succes - 1
+	Failed - 0 And @error = BASS Error code And @extended = BASS Error string (Description)
+#ce
 Func _GEng_Sound_AttribSet($hSound, $iVolume = 1, $iPan = 0, $iPitch = 0)
 	Local $ret
 	; ---
@@ -171,6 +273,24 @@ EndFunc
 ; Author.........:	Matwachich
 ; Remarks........:	
 ; ===========================================================================================================
+#cs
+Function: _GEng_Sound_AttribGet
+	Get the attributes of a Sound Object
+
+Prototype:
+	> _GEng_Sound_AttribGet($hSound, ByRef $iVolume, ByRef $iPan, ByRef $iPitch, ByRef $iDefaultSampleRate)
+
+Parameters:
+	$hSound - Sound Object
+	$iVolume - Var that will contain the Sound Object's volum
+	$iPan - Var that will contain the Sound Object's panning/balance
+	$iPitch - Var that will contain the Sound Object's Pitch
+	$iDefaultSampleRate - Var that will contain the Sound Object's original sample rate
+
+Returns:
+	Succes - 1
+	Failed - 0 And @error = BASS Error code And @extended = BASS Error string (Description)
+#ce
 Func _GEng_Sound_AttribGet($hSound, ByRef $iVolume, ByRef $iPan, ByRef $iPitch, ByRef $iDefaultSampleRate)
 	Local $ret, $ret2
 	; ---
@@ -201,6 +321,21 @@ EndFunc
 ; Author.........:	Matwachich
 ; Remarks........:	
 ; ===========================================================================================================
+#cs
+Function: _GEng_Sound_SetLoop
+	Specify if a sound object should be played in loop
+
+Prototype:
+	> _GEng_Sound_SetLoop(ByRef $hSound, $iLoop)
+
+Parameters:
+	$hSound - Sound Object
+	$iLoop - TRUE/FALSE
+
+Returns:
+	Succes - 1
+	Failed - 0 And @error = BASS Error code And @extended = BASS Error string (Description)
+#ce
 Func _GEng_Sound_SetLoop(ByRef $hSound, $iLoop)
 	Local $ret
 	If $iLoop Then
@@ -226,6 +361,26 @@ EndFunc
 ; Author.........:	Matwachich
 ; Remarks........:	Voir BASS_ChannelIsActive (bass.dll)
 ; ===========================================================================================================
+#cs
+Function: _GEng_Sound_IsPlaying
+	Get the status of a Sound Object
+
+Prototype:
+	> _GEng_Sound_IsPlaying(ByRef $hSound)
+
+Parameters:
+	$hSound - Sound Object
+
+Returns:
+	Succes - One of the following
+	
+	- 0 => Stop
+	- 1 => Play
+	- -1 => Pause
+	- -2 => Stalled
+	
+	Failed - 0 And @error = BASS Error code And @extended = BASS Error string (Description)
+#ce
 Func _GEng_Sound_IsPlaying(ByRef $hSound)
 	Local $ret = _BASS_ChannelIsActive($hSound)
 	If @error Then Return SetError(@error, _value2constant(@error), 0)
@@ -254,6 +409,20 @@ EndFunc
 ; Author.........:	Matwachich
 ; Remarks........:	
 ; ===========================================================================================================
+#cs
+Function: _GEng_Sound_Pause
+	Pause a Sound Object
+
+Prototype:
+	> _GEng_Sound_Pause(ByRef $hSound)
+
+Parameters:
+	$hSound - Sound Object
+
+Returns:
+	Succes - 1
+	Failed - 0 And @error = BASS Error code And @extended = BASS Error string (Description)
+#ce
 Func _GEng_Sound_Pause(ByRef $hSound)
 	Local $ret = _BASS_ChannelPause($hSound)
 	If @error Then Return SetError(@error, _value2constant(@error), $ret)
@@ -270,6 +439,20 @@ EndFunc
 ; Author.........:	Matwachich
 ; Remarks........:	
 ; ===========================================================================================================
+#cs
+Function: _GEng_Sound_Stop
+	Stop a Sound Object
+
+Prototype:
+	> _GEng_Sound_Stop(ByRef $hSound)
+
+Parameters:
+	$hSound - Sound Object
+
+Returns:
+	Succes - 1
+	Failed - 0 And @error = BASS Error code And @extended = BASS Error string (Description)
+#ce
 Func _GEng_Sound_Stop(ByRef $hSound)
 	Local $ret = _BASS_ChannelStop($hSound)
 	If @error Then Return SetError(@error, _value2constant(@error), $ret)
@@ -284,6 +467,20 @@ EndFunc
 ; Author.........:	Matwachich
 ; Remarks........:	
 ; ===========================================================================================================
+#cs
+Function: _GEng_Sound_Free
+	Delete and free the ressources used by a Sound Object
+
+Prototype:
+	> _GEng_Sound_Free(ByRef $hSound)
+
+Parameters:
+	$hSound - Sound Object
+
+Returns:
+	Succes - 1
+	Failed - 0 And @error = BASS Error code And @extended = BASS Error string (Description)
+#ce
 Func _GEng_Sound_Free(ByRef $hSound)
 	_BASS_StreamFree($hSound)
 	$hSound = 0

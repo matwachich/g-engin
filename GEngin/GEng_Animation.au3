@@ -8,6 +8,8 @@
 
 #ce ----------------------------------------------------------------------------
 
+;File: Animation
+
 #Region ### Functions ###
 #cs
 - Main Functions
@@ -27,6 +29,20 @@
 ; Author.........:	Matwachich
 ; Remarks........:	
 ; ===========================================================================================================
+#cs
+Function: _GEng_Anim_Create
+	Create an Animation Object
+
+Prototype:
+	> _GEng_Anim_Create()
+
+Parameters:
+	Nothing
+
+Returns:
+	Succes - 1
+	Failed - 0 And @error = 1
+#ce
 Func _GEng_Anim_Create()
 	Local $a[1][6] ; Index Img, x, y, w, h, fram duration
 	$a[0][0] = 0
@@ -42,6 +58,20 @@ EndFunc
 ; Author.........:	Matwachich
 ; Remarks........:	
 ; ===========================================================================================================
+#cs
+Function: _GEng_Anim_FrameCount
+	Get the number of frames in an Animation Object
+
+Prototype:
+	> _GEng_Anim_FrameCount(ByRef $hAnim)
+
+Parameters:
+	$hAnim - Animation Object
+
+Returns:
+	Succes - 1
+	Failed - 0 And @error = 1
+#ce
 Func _GEng_Anim_FrameCount(ByRef $hAnim)
 	If Not __GEng_Anim_IsAnim($hAnim) Then Return SetError(1, 0, 0)
 	; ---
@@ -63,6 +93,27 @@ EndFunc
 ; Author.........:	Matwachich
 ; Remarks........:	
 ; ===========================================================================================================
+#cs
+Function: _GEng_Anim_FrameAdd
+	Add a frame to an Animation Object
+
+Prototype:
+	> _GEng_Anim_FrameAdd(ByRef $hAnim, ByRef $hImage, $iFramDuration, $x = Default, $y = Default, $w = Default, $h = Default)
+
+Parameters:
+	$hAnim - Animation Object
+	$hImage - Image Object
+	$iFrameDuration - duration of the frame (in ms)
+	
+	Use the parameters below to specify the rectangle of the Image Object to assign to the frame
+	
+	$x, $y - Top left corner position of the rectangle
+	$w, $h - Size of the rectangle
+
+Returns:
+	Succes - 1
+	Failed - 0 And @error = 1
+#ce
 Func _GEng_Anim_FrameAdd(ByRef $hAnim, ByRef $hImage, $iFramDuration, $x = Default, $y = Default, $w = Default, $h = Default)
 	If Not __GEng_Anim_IsAnim($hAnim) Then Return SetError(1, 0, 0)
 	If Not __GEng_Image_IsImage($hImage) Then Return SetError(1, 0, 0)
@@ -106,6 +157,25 @@ EndFunc
 ; Author.........:	Matwachich
 ; Remarks........:	
 ; ===========================================================================================================
+#cs
+Function: _GEng_Anim_FrameMod
+	Modify an Animation Object's frame
+
+Prototype:
+	> _GEng_Anim_FrameMod(ByRef $hAnim, $iFrameNumber, ByRef $hImage, $iFramDuration = Default, $x = Default, $y = Default, $w = Default, $h = Default)
+
+Parameters:
+	$hAnim - Animation Object
+	$iFrameNumber - 1-based index of the frame to modify
+	
+	Other parameters - see <_GEng_Anim_FrameAdd>
+	
+	PS: A parameters ommited (Default) will not be modified
+
+Returns:
+	Succes - 1
+	Failed - 0 And @error = 1
+#ce
 Func _GEng_Anim_FrameMod(ByRef $hAnim, $iFrameNumber, ByRef $hImage, $iFramDuration = Default, _
 									$x = Default, $y = Default, $w = Default, $h = Default)
 	If Not __GEng_Anim_IsAnim($hAnim) Then Return SetError(1, 0, 0)

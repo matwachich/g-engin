@@ -8,6 +8,8 @@
 
 #ce ----------------------------------------------------------------------------
 
+;File: Text
+
 #Region ### Functions ###
 #cs
 - Main Functions
@@ -28,6 +30,7 @@
 #ce
 #EndRegion ###
 
+;NameSpace: Font
 
 ; # FUNCTION # ==============================================================================================
 ; Name...........:	_GEng_Font_Create
@@ -40,11 +43,45 @@
 ; Author.........:	Matwachich
 ; Remarks........:	
 ; ===========================================================================================================
+#cs
+Function: _GEng_Font_Create
+	Creates a Font Object to be used by Text Object
+
+Prototype:
+	> _GEng_Font_Create($sFontName = "Arial", $iFontSize = 10, $iFontStyle = 0, $iFormat = 0)
+
+Parameters:
+	$sFontName - Name of the font
+	$iFontSize - Font size (In pixels)
+	$iFontStyle - The style of the typeface. Can be a combination of the following
+		
+		- 0 - Normal weight or thickness of the typeface
+		- 1 - Bold typeface
+		- 2 - Italic typeface
+		- 4 - Underline
+		- 8 - Strikethrough
+	
+	$iFormat - Format flags. Can be one or more of the following
+	
+		- 0x0001 - Specifies that reading order is right to left
+		- 0x0002 - Specifies that individual lines of text are drawn vertically on the display device
+		- 0x0004 - Specifies that parts of characters are allowed to overhang the string's layout rectangle
+		- 0x0020 - Specifies that Unicode layout control characters are displayed with a representative character
+		- 0x0400 - Specifies that an alternate font is used for characters that are not supported in the requested font
+		- 0x0800 - Specifies that the space at the end of each line is included in a string measurement
+		- 0x1000 - Specifies that the wrapping of text to the next line is disabled
+		- 0x2000 - Specifies that only entire lines are laid out in the layout rectangle
+		- 0x4000 - Specifies that characters overhanging the layout rectangle and text extending outside the layout rectangle are allowed to show
+
+Returns:
+	Succes - Font Object
+	Failed - 0 And @error = 1
+#ce
 Func _GEng_Font_Create($sFontName = "Arial", $iFontSize = 10, $iFontStyle = 0, $iFormat = 0)
 	Local $hFamily = _GDIPlus_FontFamilyCreate($sFontName)
 	Local $ret[2] = [ _
 		_GDIPlus_StringFormatCreate($iFormat), _
-		_GDIPlus_FontCreate($hFamily, $iFontSize, $iFontStyle) _
+		_GDIPlus_FontCreate($hFamily, $iFontSize, $iFontStyle, 2) _
 		]
 	; ---
 	_GDIPlus_FontFamilyDispose($hFamily)
@@ -61,6 +98,23 @@ EndFunc
 ; Author.........:	Matwachich
 ; Remarks........:	Doit être appeler à la fin du script pour chaque objet Font créer
 ; ===========================================================================================================
+#cs
+Function: _GEng_Font_Delete
+	Deletes a Font Object
+
+Prototype:
+	> _GEng_Font_Delete(ByRef $hFont)
+
+Parameters:
+	$hFont - Font Object
+
+Returns:
+	Succes - 1
+	Failed - 0 And @error = 1
+
+Remarks:
+	Must be called at the end of the program to free ressources
+#ce
 Func _GEng_Font_Delete(ByRef $hFont)
 	If Not __GEng_Text_IsFont($hFont) Then Return SetError(1, 0, 0)
 	; ---
@@ -73,6 +127,8 @@ Func _GEng_Font_Delete(ByRef $hFont)
 EndFunc
 
 ; ##############################################################
+
+;NameSpace: Text Rectangle
 
 ; # FUNCTION # ==============================================================================================
 ; Name...........:	_GEng_Text_Create
@@ -88,6 +144,28 @@ EndFunc
 ; Remarks........:	Il est préférable de laisser $iWidth et $iHeight à 0 (par défaut) pour que les dimensions
 ;						du rectangle soient calculées automatiquement et être sur que tout le texte sera affiché
 ; ===========================================================================================================
+#cs
+Function: _GEng_Text_Create
+	Creates a Text Object.
+
+Prototype:
+	> _GEng_Text_Create(ByRef $hFont, $sText = "", $iColor = 0xFFFFFFFF, $iPosX = 0, $iPosY = 0, $iWidth = 0, $iHeight = 0)
+
+Parameters:
+	$hFont - Font Object to use (see <_GEng_Font_Create>)
+	$sText - Text String
+	$iColor - Color of the text (0xAARRVVBB)
+	$iPosX, $iPosY - Position of the top left corner of the rectangle containing the text
+	$iWidth, $iHeight - Dimensions of the rectangle containing the text (see remarks)
+
+Returns:
+	Succes - Text Object
+	Failed - 0 And @error = 1
+
+Remarks:
+	It is better to let the parameters _$iWidth_ & _$iHeight_ so that these dimension will be calculated
+	automatically, and to be sure that the entire text will be displayed
+#ce
 Func _GEng_Text_Create(ByRef $hFont, $sText = "", $iColor = 0xFFFFFFFF, $iPosX = 0, $iPosY = 0, $iWidth = 0, $iHeight = 0)
 	If Not __GEng_Text_IsFont($hFont) Then Return SetError(1, 0, 0)
 	; ---
@@ -106,6 +184,44 @@ Func _GEng_Text_Create(ByRef $hFont, $sText = "", $iColor = 0xFFFFFFFF, $iPosX =
 EndFunc
 
 ; # FUNCTION # ==============================================================================================
+; Name...........:	_GEng_Text_Delete
+; Description....:	Supprime un objet Text
+; Parameters.....:	$hTxtRect = Objet Text
+; Return values..:	Succes - 1
+;					Echec - 0 et @error = 1
+; Author.........:	Matwachich
+; Remarks........:	Supprimer un Objet Text ne supprime pas l'objet Font associé
+; ===========================================================================================================
+#cs
+Function: _GEng_Text_Delete
+	Delete a Text Object
+
+Prototype:
+	> _GEng_Text_Delete(ByRef $hTxtRect)
+
+Parameters:
+	$hTxtRect - Text Object
+
+Returns:
+	Succes - 1
+	Failed - 0 And @error = 1
+
+Remarks:
+	Must be called at the end of the program to free ressources.
+	
+	Deleting a Text Object doesn't deletes the associated font.
+#ce
+Func _GEng_Text_Delete(ByRef $hTxtRect)
+	If Not __GEng_Text_IsTextRect($hTxtRect) Then Return SetError(1, 0, 0)
+	; ---
+	$hTxtRect[2] = 0
+	_GDIPlus_BrushDispose($hTxtRect[3])
+	$hTxtRect = 0
+	; ---
+	Return 1
+EndFunc
+
+; # FUNCTION # ==============================================================================================
 ; Name...........:	_GEng_Text_FontSet
 ; Description....:	Change la police (objet Font) utilisé par un Objet Text
 ; Parameters.....:	$hTxtRect = Objet Text
@@ -115,6 +231,21 @@ EndFunc
 ; Author.........:	Matwachich
 ; Remarks........:	
 ; ===========================================================================================================
+#cs
+Function: _GEng_Text_FontSet
+	Modify the Font Object of a Text Object
+
+Prototype:
+	> _GEng_Text_FontSet(ByRef $hTxtRect, $hFont = Default)
+
+Parameters:
+	$hTxtRect - Text Object to modify
+	$hFont - Font Object
+
+Returns:
+	Succes - 1
+	Failed - 0 And @error = 1
+#ce
 Func _GEng_Text_FontSet(ByRef $hTxtRect, $hFont = Default)
 	If Not __GEng_Text_IsTextRect($hTxtRect) Then Return SetError(1, 0, 0)
 	; ---
@@ -137,6 +268,21 @@ EndFunc
 ; Author.........:	Matwachich
 ; Remarks........:	
 ; ===========================================================================================================
+#cs
+Function: _GEng_Text_StringSet
+	Modify the text string of a Text Object
+
+Prototype:
+	> _GEng_Text_StringSet(ByRef $hTxtRect, $sText = Default)
+
+Parameters:
+	$hTxtRect - Text Object to modify
+	$sText - New text string
+
+Returns:
+	Succes - 1
+	Failed - 0 And @error = 1
+#ce
 Func _GEng_Text_StringSet(ByRef $hTxtRect, $sText = Default)
 	If Not __GEng_Text_IsTextRect($hTxtRect) Then Return SetError(1, 0, 0)
 	; ---
@@ -158,6 +304,20 @@ EndFunc
 ; Author.........:	Matwachich
 ; Remarks........:	
 ; ===========================================================================================================
+#cs
+Function: _GEng_Text_StringGet
+	Returns the actual text string of a Text Object
+
+Prototype:
+	> _GEng_Text_StringGet(ByRef $hTxtRect)
+
+Parameters:
+	$hTxtRect - Text Object to modify
+
+Returns:
+	Succes - Text string
+	Failed - 0 And @error = 1
+#ce
 Func _GEng_Text_StringGet(ByRef $hTxtRect)
 	If Not __GEng_Text_IsTextRect($hTxtRect) Then Return SetError(1, 0, 0)
 	; ---
@@ -174,6 +334,27 @@ EndFunc
 ; Author.........:	Matwachich
 ; Remarks........:	Un paramètre laissé par défaut ne sera pas modifier
 ; ===========================================================================================================
+#cs
+Function: _GEng_Text_PosSet
+	Changes the position and the dimensions of the rectangle containing the text of a Text Object
+
+Prototype:
+	> _GEng_Text_PosSet(ByRef $hTxtRect, $iPosX = Default, $iPosY = Default, $iWidth = Default, $iHeight = Default)
+
+Parameters:
+	$hTxtRect - Text Object to modify
+	$iPosX, $iPosY - Position of the top left corner of the rectangle containing the text
+	$iWidth, $iHeight - Dimensions of the rectangle containing the text
+
+Returns:
+	Succes - 1
+	Failed - 0 And @error = 1
+
+Remarks:
+	A default parameter will not be modified.
+	
+	Concerning $iWidth & $iHeight, same remark as <_GEng_Text_Create>
+#ce
 Func _GEng_Text_PosSet(ByRef $hTxtRect, $iPosX = Default, $iPosY = Default, $iWidth = Default, $iHeight = Default)
 	If Not __GEng_Text_IsTextRect($hTxtRect) Then Return SetError(1, 0, 0)
 	; ---
@@ -197,6 +378,22 @@ EndFunc
 ; Author.........:	Matwachich
 ; Remarks........:	
 ; ===========================================================================================================
+#cs
+Function: _GEng_Text_PosGet
+	Get the position and dimensions of a Text Object
+
+Prototype:
+	> _GEng_Text_PosGet(ByRef $hTxtRect, ByRef $iPosX, ByRef $iPosY, ByRef $iWidth, ByRef $iHeight)
+
+Parameters:
+	$hTxtRect - Text Object
+	$iPosX, $iPosY - Vars that will contain the position of the top left corner of the rectangle containing the text
+	$iWidth, $iHeight - Vars that will contain the dimensions of the rectangle containing the text
+
+Returns:
+	Succes - 1
+	Failed - 0 And @error = 1
+#ce
 Func _GEng_Text_PosGet(ByRef $hTxtRect, ByRef $iPosX, ByRef $iPosY, ByRef $iWidth, ByRef $iHeight)
 	If Not __GEng_Text_IsTextRect($hTxtRect) Then Return SetError(1, 0, 0)
 	; ---
@@ -221,6 +418,22 @@ EndFunc
 ; Author.........:	Matwachich
 ; Remarks........:	
 ; ===========================================================================================================
+#cs
+Function: _GEng_Text_SizeMeasure
+	Returns the dimension needed to display $sText with $hFont
+
+Prototype:
+	> _GEng_Text_SizeMeasure(ByRef $hFont, $sText, ByRef $w, ByRef $h)
+
+Parameters:
+	$hFont - Font Object
+	$sText - Text string to measure
+	$w, $h - Vars that will contain the needed Width and Height
+
+Returns:
+	Succes - 1
+	Failed - 0 And @error = 1
+#ce
 Func _GEng_Text_SizeMeasure(ByRef $hFont, $sText, ByRef $w, ByRef $h)
 	If Not __GEng_Text_IsFont($hFont) Then Return SetError(1, 0, 0)
 	; ---
@@ -246,6 +459,21 @@ EndFunc
 ; Author.........:	Matwachich
 ; Remarks........:	
 ; ===========================================================================================================
+#cs
+Function: _GEng_Text_ColorSet
+	Change the color of a Text Object
+
+Prototype:
+	> _GEng_Text_ColorSet(ByRef $hTxtRect, $iColor)
+
+Parameters:
+	$hTxtRect - Text Object
+	$iColor - New color (0xAARRVVBB)
+
+Returns:
+	Succes - 1
+	Failed - 0 And @error = 1
+#ce
 Func _GEng_Text_ColorSet(ByRef $hTxtRect, $iColor)
 	If Not __GEng_Text_IsTextRect($hTxtRect) Then Return SetError(1, 0, 0)
 	; ---
@@ -261,30 +489,25 @@ EndFunc
 ; Author.........:	Matwachich
 ; Remarks........:	Doit être appeler pour chaque frame (dans la boucle principale)
 ; ===========================================================================================================
+#cs
+Function: _GEng_Text_Draw
+	Draw a Text Object
+
+Prototype:
+	> _GEng_Text_Draw(ByRef $hTxtRect)
+
+Parameters:
+	$hTxtRect - Text Object
+
+Returns:
+	Succes - 1
+	Failed - 0 And @error = 1
+#ce
 Func _GEng_Text_Draw(ByRef $hTxtRect)
 	If Not __GEng_Text_IsTextRect($hTxtRect) Then Return SetError(1, 0, 0)
 	; ---
 	Local $hFont = $hTxtRect[0]
 	Return _GDIPlus_GraphicsDrawStringEx($__GEng_hBuffer, $hTxtRect[1], $hFont[1], $hTxtRect[2], $hFont[0], $hTxtRect[3])
-EndFunc
-
-; # FUNCTION # ==============================================================================================
-; Name...........:	_GEng_Text_Delete
-; Description....:	Supprime un objet Text
-; Parameters.....:	$hTxtRect = Objet Text
-; Return values..:	Succes - 1
-;					Echec - 0 et @error = 1
-; Author.........:	Matwachich
-; Remarks........:	Supprimer un Objet Text ne supprime pas l'objet Font associé
-; ===========================================================================================================
-Func _GEng_Text_Delete(ByRef $hTxtRect)
-	If Not __GEng_Text_IsTextRect($hTxtRect) Then Return SetError(1, 0, 0)
-	; ---
-	$hTxtRect[2] = 0
-	_GDIPlus_BrushDispose($hTxtRect[3])
-	$hTxtRect = 0
-	; ---
-	Return 1
 EndFunc
 
 ; ##############################################################
