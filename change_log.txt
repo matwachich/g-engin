@@ -2,6 +2,10 @@ Legende:
 +: Ajout, -: Délétion, !: Correction, *: Modification
 -----------------------------------------------------
 
+=== v 1.2.2 ===
+- +: Ajout de l'anti-aliasing pour les text (merci UEZ!)
+- *: Correction d'une fuite de mémoire dans _GEng_ImageLoadStream (Merci UEZ!)
+
 === v 1.2.1 ===
 - +: Documentation complète
 - *: Le calcule de l'innertie de mouvement est plus précis

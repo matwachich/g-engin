@@ -76,6 +76,7 @@ Func _GEng_Start($sTitle, $iW, $iH, $iX = -1, $iY = -1, $iStyle = -1, $iExtStyle
 	$__GEng_hBuffer = __GEng_GetBuffer()
 	; ---
 	_GDIPlus_GraphicsSetInterpolationMode($__GEng_hGraphic, 7) ; je l'ajoute sans vraiement voir de résultat!
+	DllCall($ghGDIPDll, "uint", "GdipSetTextRenderingHint", "handle", $__GEng_hBuffer, "int", 4) ; Thanks UEZ! (1.2.2)
 	; ---
 	$__GEng_hDC = _WinAPI_GetDC($__GEng_hGui)
 	$__GEng_hCompatibleDC = _WinAPI_CreateCompatibleDC($__GEng_hDC)

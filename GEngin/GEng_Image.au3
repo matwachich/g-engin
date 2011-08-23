@@ -141,22 +141,28 @@ Example:
 
 #ce
 Func _GEng_ImageLoadStream($pic, $imgW = Default, $imgH = Default, $x = Default, $y = Default, $w = Default, $h = Default)
-	;thanks to ProgAndy for mem allocation lines
+	;thanks to ProgAndy for mem allocation lines (now ta=hanks UEZ for memory leak correction
+	;   http://www.autoitscript.com/forum/topic/132103-udf-g-engin/page__view__findpost__p__920873
 	Local $memBitmap, $len, $tMem, $hImage, $hData, $pData, $hStream, $hBitmapFromStream
-	$memBitmap = Binary($pic) ;load image  saved in variable (memory) and convert it to binary
-    $len =  BinaryLen($memBitmap) ;get length of image
-
-    $hData  = _MemGlobalAlloc($len, 0x0002) ;allocates movable memory  ($GMEM_MOVEABLE = 0x0002)
+    $memBitmap = Binary($pic) ;load image  saved in variable (memory) and convert it to binary
+    $len = BinaryLen($memBitmap) ;get length of image
+	
+    $hData  = _MemGlobalAlloc($len, $GMEM_MOVEABLE) ;allocates movable memory  ($GMEM_MOVEABLE = 0x0002)
     $pData = _MemGlobalLock($hData)  ;translate the handle into a pointer
     $tMem =  DllStructCreate("byte[" & $len & "]", $pData) ;create struct
-     DllStructSetData($tMem, 1, $memBitmap) ;fill struct with image data
-    _MemGlobalUnlock($hData) ;decrements the lock count associated with a memory object that was allocated with GMEM_MOVEABLE
-
+    DllStructSetData($tMem, 1, $memBitmap) ;fill struct with image data
+    _MemGlobalUnlock($hData) ;decrements the lock count  associated with a memory object that was allocated with GMEM_MOVEABLE
+    
 	$hStream = _WinAPI_CreateStreamOnHGlobal($pData) ;Creates a stream object that uses an HGLOBAL memory handle to store the stream contents
-	$hBitmapFromStream = _GDIPlus_BitmapCreateFromStream($hStream) ;Creates a Bitmap object based on an IStream COM interface
-	$tMem = ""
+    $hBitmapFromStream = _GDIPlus_BitmapCreateFromStream($hStream) ;Creates a Bitmap object based on an IStream COM interface
+    
+	Local $tVARIANT = DllStructCreate("word vt;word r1;word r2;word r3;ptr data; ptr")
+    Local $aCall = DllCall("oleaut32.dll", "long", "DispCallFunc", "ptr", $hStream, "dword", 8 + 8 * @AutoItX64, "dword", 4, "dword", 23, "dword", 0, "ptr", 0, "ptr", 0, "ptr", DllStructGetPtr($tVARIANT))
+    $tMem = 0
+	
 	Return __GEng_ImageLoadDo($hBitmapFromStream, $imgW, $imgH, $x, $y, $w, $h)
 EndFunc
+
 
 ; ==============================================================
 ; ### Internals

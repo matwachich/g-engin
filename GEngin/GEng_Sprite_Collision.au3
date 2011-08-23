@@ -31,7 +31,7 @@
 
 
 ; pour les tests de collision avec les bord de la fenètre
-Enum $GEng_ScrBorder_Top = 1, $GEng_ScrBorder_Bot, $GEng_ScrBorder_Left, $GEng_ScrBorder_Right
+Global $GEng_ScrBorder_Top = 1, $GEng_ScrBorder_Bot, $GEng_ScrBorder_Left, $GEng_ScrBorder_Right
 
 ; $iType: 0 - point, 1 - Carré, 2 - Ellipse
 ; # FUNCTION # ==============================================================================================
@@ -582,11 +582,12 @@ EndFunc
 
 ; Thanks: http://stackoverflow.com/questions/401847/circle-rectangle-collision-detection-intersection/3491126#3491126
 Func __GEng_CircleVsRect($cX, $cY, $cR, $rX, $rY, $rW, $rH)
-	Local $rcX, $rcY
-	$rcX = $rX + ($rW / 2)
-	$rcY = $rY + ($rH / 2)
-	; ---
 	Local $w = $rW / 2, $h = $rH / 2
+	; ---
+	Local $rcX, $rcY
+	$rcX = $rX + $w
+	$rcY = $rY + $h
+	; ---
 	Local $dx = Abs($rcX - $cX)
 	Local $dy = Abs($rcY - $cY)
 	; ---

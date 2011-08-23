@@ -10,8 +10,10 @@
 		Il est basé sur GDI+.
 		
 	Version 1.2.1: (02/07/2011)
+	- +: Documentation complète
 	- *: Le calcule de l'innertie de mouvement est plus précis
 	- *: Il n'y plus qu'un seul paramètre Innertie (et pas 2)
+	- *: La taille d'une police est exprimé en pixels (_GEng_Font_Create)
 		
 	Version 1.2: (10/06/2011)
 	- +: Paramètre $iDynamique pour _GEng_Sprite_Collision et _GEng_Sprite_CollisionScrBorders qui permet d'activer le calcule
