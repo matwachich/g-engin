@@ -77,16 +77,29 @@ Returns:
 	Succes - Font Object
 	Failed - 0 And @error = 1
 #ce
-Func _GEng_Font_Create($sFontName = "Arial", $iFontSize = 10, $iFontStyle = 0, $iFormat = 0)
-	Local $hFamily = _GDIPlus_FontFamilyCreate($sFontName)
-	Local $ret[2] = [ _
-		_GDIPlus_StringFormatCreate($iFormat), _
-		_GDIPlus_FontCreate($hFamily, $iFontSize, $iFontStyle, 2) _
-		]
-	; ---
-	_GDIPlus_FontFamilyDispose($hFamily)
-	; ---
-	Return $ret
+;Func _GEng_Font_Create($sFontName = "Arial", $iFontSize = 10, $iFontStyle = 0, $iFormat = 0)
+;	Local $hFamily = _GDIPlus_FontFamilyCreate($sFontName)
+;	Local $ret[2] = [ _
+;		_GDIPlus_StringFormatCreate($iFormat), _
+;		_GDIPlus_FontCreate($hFamily, $iFontSize, $iFontStyle, 2) _
+;		]
+;	; ---
+;	_GDIPlus_FontFamilyDispose($hFamily)
+;	; ---
+;	Return $ret
+;EndFunc
+
+Func _GEng_Font_Create($sFontName = "Arial", $iFontSize = 10, $iFontStyle = 0, $iFormat = 0, $iAlign = 0)
+    Local $hFamily = _GDIPlus_FontFamilyCreate($sFontName)
+    Local $ret[2] = [ _
+        _GDIPlus_StringFormatCreate($iFormat), _
+        _GDIPlus_FontCreate($hFamily, $iFontSize, $iFontStyle, 2) _
+        ]
+        _GDIPlus_StringFormatSetAlign($ret[0], $iAlign)
+    ; ---
+    _GDIPlus_FontFamilyDispose($hFamily)
+    ; ---
+    Return $ret
 EndFunc
 
 ; # FUNCTION # ==============================================================================================

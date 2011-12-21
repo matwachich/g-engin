@@ -31,7 +31,7 @@
 
 
 ; pour les tests de collision avec les bord de la fenètre
-Global $GEng_ScrBorder_Top = 1, $GEng_ScrBorder_Bot, $GEng_ScrBorder_Left, $GEng_ScrBorder_Right
+Global $GEng_ScrBorder_Top = 1, $GEng_ScrBorder_Bot = 2, $GEng_ScrBorder_Left = 3, $GEng_ScrBorder_Right = 4
 
 ; $iType: 0 - point, 1 - Carré, 2 - Ellipse
 ; # FUNCTION # ==============================================================================================
