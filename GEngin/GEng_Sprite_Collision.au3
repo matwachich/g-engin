@@ -34,27 +34,28 @@
 Global $GEng_ScrBorder_Top = 1, $GEng_ScrBorder_Bot = 2, $GEng_ScrBorder_Left = 3, $GEng_ScrBorder_Right = 4
 
 ; $iType: 0 - point, 1 - Carré, 2 - Ellipse
-; # FUNCTION # ==============================================================================================
-; Name...........:	_GEng_Sprite_CollisionSet
-; Description....:	Spécifie la forme et la taille de la hit-box d'un sprite
-; Parameters.....:	$hSprite = Objet Sprite
-;					$iType = Forme de la hit-box, dont dépend $x, $y, $w, $h
-;						0 - Point
-;							$x, $y = Coordonnées du point (par défaut: Point d'origine du sprite)
-;							$w, $h = pas pris en concidération
-;						1 - Rectangle
-;							$x, $y = Coordonnées du point supérieur gauche du rectangle (par défaut: 0, 0)
-;										(Par rapport au sprite, pas à l'écran)
-;							$w, $h = largeur et hauteur du rectangle (par défaut: Largeur et hauteur du sprite)
-;						2 - Cercle
-;							$x, $y = Coordonnées du centre du cercle (par défaut: Point d'origine du sprite)
-;							$w = Rayon du cercle (par défaut: (Largeur + Hauteur)/4)
-;							$h = pas pris en concidération
-; Return values..:	Succes - 1
-;					Echec - 0 et @error = 1
-; Author.........:	Matwachich
-; Remarks........:	
-; ===========================================================================================================
+; #FUNCTION# ;===============================================================================
+; Name...........: _GEng_Sprite_CollisionSet
+; Description ...: Spécifie la forme et la taille de la hit-box d'un sprite
+; Syntax.........: _GEng_Sprite_CollisionSet(ByRef $hSprite, $iType, $x = Default, $y = Default, $w = Default, $h = Default)
+; Parameters ....: $hSprite = Objet Sprite
+;                  $iType = Forme de la hit-box, dont dépend $x, $y, $w, $h
+;                  	0 - Point
+;                  		$x, $y = Coordonnées du point (par défaut: Point d'origine du sprite)
+;                  		$w, $h = pas pris en concidération
+;                  	1 - Rectangle
+;                  		$x, $y = Coordonnées du point supérieur gauche du rectangle (par défaut: 0, 0)
+;                  					(Par rapport au sprite, pas à l'écran)
+;                  		$w, $h = largeur et hauteur du rectangle (par défaut: Largeur et hauteur du sprite)
+;                  	2 - Cercle
+;                  		$x, $y = Coordonnées du centre du cercle (par défaut: Point d'origine du sprite)
+;                  		$w = Rayon du cercle (par défaut: (Largeur + Hauteur)/4)
+;                  		$h = pas pris en concidération
+; Return values .: Succes - 1
+;                  Echec - 0 et @error = 1
+; Author ........: Matwachich
+; Remarks .......: 
+; ;==========================================================================================
 #cs
 Function: _GEng_Sprite_CollisionSet
 	Define the collision shape of a Sprite Object
@@ -144,30 +145,31 @@ Func _GEng_Sprite_CollisionSet(ByRef $hSprite, $iType, $x = Default, $y = Defaul
 EndFunc
 
 
-; # FUNCTION # ==============================================================================================
-; Name...........:	_GEng_SpriteCollision
-; Description....:	Test si il y a collision entre 2 sprites
-; Parameters.....:	$hSprite1 = Objet Sprite
-;					$hSprite2 = Objet Sprite OU une de ces constantes:
-;						$GEng_ScrBorder_Top -> Bord supérieur de l'écran
-;						$GEng_ScrBorder_Bot -> Bord inférieur
-;						$GEng_ScrBorder_Left -> Bord gauche
-;						$GEng_ScrBorder_Right -> Bord droit
-;					$iScrBorderPosition = Distance entre le bord réel de l'écran, et la ligne limite de collision
-;					$iDynamique = 1 -> Calcules dynamique des collision (collision élastique)
-;								  0 -> N'influence pas le mouvement des objets en collision (Par défaut)
-;					$iPrecision = Degré de précision dans les collision dynamiques. ne l'augmentez que si
-;						vos sprites se collent l'un à l'autre lors d'une collision.
-; Return values..:	Succes - 1
-;					Echec - 0 et @error = 1
-; Author.........:	Matwachich
-; Remarks........:	Le calcule de collision dynamique (avec $iPrecision = 10) prend 8 à 20 fois plus de temps 
-;						qu'une détection uniquement (passe de 0.15 ms à au max: 3 ms) selon la vitesse et l'angle
-;						de collision des sprites
-;					Le système de collision dynamqie est plus que rudimentaire, il arrive qu'il bug
-;						(sprites qui se collent, collision manquée...). A term, il est possible
-;						qu'une bibliothèque physique externe soit exploitée par G-Engin
-; ===========================================================================================================
+; #FUNCTION# ;===============================================================================
+; Name...........: _GEng_SpriteCollision
+; Description ...: Test si il y a collision entre 2 sprites
+; Syntax.........: _GEng_Sprite_Collision(ByRef $hSprite1, ByRef $hSprite2, $iScrBorderPosition = 0, $iDynamique = 0, $iPrecision = 0)
+; Parameters ....: $hSprite1 = Objet Sprite
+;                  $hSprite2 = Objet Sprite OU une de ces constantes:
+;                  	$GEng_ScrBorder_Top -> Bord supérieur de l'écran
+;                  	$GEng_ScrBorder_Bot -> Bord inférieur
+;                  	$GEng_ScrBorder_Left -> Bord gauche
+;                  	$GEng_ScrBorder_Right -> Bord droit
+;                  $iScrBorderPosition = Distance entre le bord réel de l'écran, et la ligne limite de collision
+;                  $iDynamique = 1 -> Calcules dynamique des collision (collision élastique)
+;                  			  0 -> N'influence pas le mouvement des objets en collision (Par défaut)
+;                  $iPrecision = Degré de précision dans les collision dynamiques. ne l'augmentez que si
+;                  	vos sprites se collent l'un à l'autre lors d'une collision.
+; Return values .: Succes - 1
+;                  Echec - 0 et @error = 1
+; Author ........: Matwachich
+; Remarks .......: Le calcule de collision dynamique (avec $iPrecision = 10) prend 8 à 20 fois plus de temps 
+;                  	qu'une détection uniquement (passe de 0.15 ms à au max: 3 ms) selon la vitesse et l'angle
+;                  	de collision des sprites
+;                  Le système de collision dynamqie est plus que rudimentaire, il arrive qu'il bug
+;                  	(sprites qui se collent, collision manquée...). A term, il est possible
+;                  	qu'une bibliothèque physique externe soit exploitée par G-Engin
+; ;==========================================================================================
 #cs
 Function: _GEng_Sprite_Collision
 	Test if 2 sprites collides
@@ -206,20 +208,21 @@ Func _GEng_Sprite_Collision(ByRef $hSprite1, ByRef $hSprite2, $iScrBorderPositio
 	Return $collision
 EndFunc
 
-; # FUNCTION # ==============================================================================================
-; Name...........:	_GEng_Sprite_CollisionScrBorders
-; Description....:	Test la collision entre un sprite et tous les bords de l'écran
-; Parameters.....:	$hSprite = Objet Sprite
-;					$iDynamique = 1 -> Calcules dynamique des collision (collision élastique)
-;								  0 -> N'influence pas le mouvement des objets en collision (Par défaut)
-; Return values..:	Succes
-;						Si collision:
-;						$GEng_ScrBorder_Top, $GEng_ScrBorder_Bot, $GEng_ScrBorder_Left, $GEng_ScrBorder_Right
-;						Pas de collision: 0
-;					Echec - 0 et @error = 1
-; Author.........:	Matwachich
-; Remarks........:	
-; ===========================================================================================================
+; #FUNCTION# ;===============================================================================
+; Name...........: _GEng_Sprite_CollisionScrBorders
+; Description ...: Test la collision entre un sprite et tous les bords de l'écran
+; Syntax.........: _GEng_Sprite_CollisionScrBorders(ByRef $hSprite, $iDynamique = 0)
+; Parameters ....: $hSprite = Objet Sprite
+;                  $iDynamique = 1 -> Calcules dynamique des collision (collision élastique)
+;                  			  0 -> N'influence pas le mouvement des objets en collision (Par défaut)
+; Return values .: Succes
+;                  	Si collision:
+;                  	$GEng_ScrBorder_Top, $GEng_ScrBorder_Bot, $GEng_ScrBorder_Left, $GEng_ScrBorder_Right
+;                  	Pas de collision: 0
+;                  Echec - 0 et @error = 1
+; Author ........: Matwachich
+; Remarks .......: 
+; ;==========================================================================================
 #cs
 Function: _GEng_Sprite_CollisionScrBorders
 	Test collision between a Sprite Object and all screen borders.

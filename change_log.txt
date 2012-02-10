@@ -4,7 +4,10 @@ Legende:
 
 === v 1.2.2 ===
 - +: Ajout de l'anti-aliasing pour les text (merci UEZ!)
+- +: Paramètre $iAlign pour _GEng_Font_Create (Merci )
+- +: _GEng_Sprite_MassGet
 - *: Correction d'une fuite de mémoire dans _GEng_ImageLoadStream (Merci UEZ!)
+- *: New valid functions header, and calltips (FR, EN)
 
 === v 1.2.1 ===
 - +: Documentation complète

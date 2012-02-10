@@ -33,17 +33,18 @@
 
 #include "Bass\bass.au3"
 
-; # FUNCTION # ==============================================================================================
-; Name...........:	_GEng_Sound_Init
-; Description....:	Initialisation des fonctionnalitées Audio
-; Parameters.....:	$iSampleRate = Taux d'échantillonage (Defaut 44100)
-;					$iStereo = 1 -> Stéréo, 0 -> Mono
-; Return values..:	Succes - 1
-;					Echec - 0 et
-;						@error = Erreur Bass, @extended = Decription de l'erreur
-; Author.........:	Matwachich
-; Remarks........:	
-; ===========================================================================================================
+; #FUNCTION# ;===============================================================================
+; Name...........: _GEng_Sound_Init
+; Description ...: Initialisation des fonctionnalitées Audio
+; Syntax.........: _GEng_Sound_Init($iSampleRate = 44100, $iStereo = 1)
+; Parameters ....: $iSampleRate = Taux d'échantillonage (Defaut 44100)
+;                  $iStereo = 1 -> Stéréo, 0 -> Mono
+; Return values .: Succes - 1
+;                  Echec - 0 et
+;                  	@error = Erreur Bass, @extended = Decription de l'erreur
+; Author ........: Matwachich
+; Remarks .......:
+; ;==========================================================================================
 #cs
 Function: _GEng_Sound_Init
 	Initialize the sound system
@@ -72,14 +73,15 @@ Func _GEng_Sound_Init($iSampleRate = 44100, $iStereo = 1)
 	;_BASS_SetConfig($BASS_CONFIG_UPDATEPERIOD, 20)
 EndFunc
 
-; # FUNCTION # ==============================================================================================
-; Name...........:	_GEng_Sound_Shutdown
-; Description....:	Stop les fonctionnalitées Audio et libère les ressources
-; Parameters.....:	
-; Return values..:	1
-; Author.........:	Matwachich
-; Remarks........:	
-; ===========================================================================================================
+; #FUNCTION# ;===============================================================================
+; Name...........: _GEng_Sound_Shutdown
+; Description ...: Stop les fonctionnalitées Audio et libère les ressources
+; Syntax.........: _GEng_Sound_Shutdown()
+; Parameters ....:
+; Return values .: 1
+; Author ........: Matwachich
+; Remarks .......:
+; ;==========================================================================================
 #cs
 Function: _GEng_Sound_Shutdown
 	Shutdown sound system and free ressources
@@ -100,16 +102,17 @@ Func _GEng_Sound_Shutdown()
 	Return 1
 EndFunc
 
-; # FUNCTION # ==============================================================================================
-; Name...........:	_GEng_Sound_GlobalVolume
-; Description....:	Change/récupère la valeur du volume sonore global de l'application
-; Parameters.....:	$iVolume = Niveau du volume (de 0 à 1)
-;						Si Defaut - la fonction retourne le volume actuel
-; Return values..:	Succes - 1 ou niveau du volume (de 0 à 1)
-;					Echec - @error = Erreur Bass, @extended = Decription de l'erreur
-; Author.........:	Matwachich
-; Remarks........:	Optionelle car appelé automatiquement à la fin du script
-; ===========================================================================================================
+; #FUNCTION# ;===============================================================================
+; Name...........: _GEng_Sound_GlobalVolume
+; Description ...: Change/récupère la valeur du volume sonore global de l'application
+; Syntax.........: _GEng_Sound_GlobalVolume($iVolume = Default)
+; Parameters ....: $iVolume = Niveau du volume (de 0 à 1)
+;                  	Si Defaut - la fonction retourne le volume actuel
+; Return values .: Succes - 1 ou niveau du volume (de 0 à 1)
+;                  Echec - @error = Erreur Bass, @extended = Decription de l'erreur
+; Author ........: Matwachich
+; Remarks .......: Optionelle car appelé automatiquement à la fin du script
+; ;==========================================================================================
 #cs
 Function: _GEng_Sound_GlobalVolume
 	Set or Get the global application sound volum
@@ -124,7 +127,7 @@ Returns:
 	Succes - Either
 	- 1 (If $iVolume <> Default)
 	- Sound volum value (If $iVolume = Default)
-	
+
 	Failed - 0 And @error = BASS Error code And @extended = BASS Error string (Description)
 #ce
 Func _GEng_Sound_GlobalVolume($iVolume = Default)
@@ -142,18 +145,19 @@ EndFunc
 
 ; ##############################################################
 
-; # FUNCTION # ==============================================================================================
-; Name...........:	_GEng_Sound_Load
-; Description....:	Charge un fichier audio
-; Parameters.....:	$sPath = Chemin du fichier
-;					$iLoop = Spécifie si le son doit être joué en boucle ou pas
-;						Defaut = 0 (pas en boucle)
-; Return values..:	Succes - Objet Sound
-;					Echec - 0 et
-;						@error = Erreur Bass, @extended = Decription de l'erreur
-; Author.........:	Matwachich
-; Remarks........:	
-; ===========================================================================================================
+; #FUNCTION# ;===============================================================================
+; Name...........: _GEng_Sound_Load
+; Description ...: Charge un fichier audio
+; Syntax.........: _GEng_Sound_Load($sPath, $iLoop = 0)
+; Parameters ....: $sPath = Chemin du fichier
+;                  $iLoop = Spécifie si le son doit être joué en boucle ou pas
+;                  	Defaut = 0 (pas en boucle)
+; Return values .: Succes - Objet Sound
+;                  Echec - 0 et
+;                  	@error = Erreur Bass, @extended = Decription de l'erreur
+; Author ........: Matwachich
+; Remarks .......:
+; ;==========================================================================================
 #cs
 Function: _GEng_Sound_Load
 	Loads a sound into a Sound Object
@@ -184,17 +188,18 @@ Func _GEng_Sound_Load($sPath, $iLoop = 0)
 	Return $hSound
 EndFunc
 
-; # FUNCTION # ==============================================================================================
-; Name...........:	_GEng_Sound_Play
-; Description....:	Joue un son préalablement chargé
-; Parameters.....:	$hSound = Objet Sound (retourné par _GEng_Sound_Load)
-;					$iRestart = Spécifie si le son doit être joué du début
-; Return values..:	Succes - 1
-;					Echec - 0 et
-;						@error = Erreur Bass, @extended = Decription de l'erreur
-; Author.........:	Matwachich
-; Remarks........:	
-; ===========================================================================================================
+; #FUNCTION# ;===============================================================================
+; Name...........: _GEng_Sound_Play
+; Description ...: Joue un son préalablement chargé
+; Syntax.........: _GEng_Sound_Play($hSound, $iRestart = 1)
+; Parameters ....: $hSound = Objet Sound (retourné par _GEng_Sound_Load)
+;                  $iRestart = Spécifie si le son doit être joué du début
+; Return values .: Succes - 1
+;                  Echec - 0 et
+;                  	@error = Erreur Bass, @extended = Decription de l'erreur
+; Author ........: Matwachich
+; Remarks .......:
+; ;==========================================================================================
 #cs
 Function: _GEng_Sound_Play
 	Play a Sound Object
@@ -217,14 +222,22 @@ Func _GEng_Sound_Play($hSound, $iRestart = 1)
 	Return $ret
 EndFunc
 
-; # FUNCTION # ==============================================================================================
-; Name...........:	_GEng_Sound_AttribSet
-; Description....:	
-; Parameters.....:	
-; Return values..:	
-; Author.........:	Matwachich
-; Remarks........:	
-; ===========================================================================================================
+; #FUNCTION# ;===============================================================================
+; Name...........: _GEng_Sound_AttribSet
+; Description ...: Ajuste les attributs d'un objet Sound
+; Syntax.........: _GEng_Sound_AttribSet($hSound, $iVolume = 1, $iPan = 0, $iPitch = 0)
+; Parameters ....: $hSound - Objet Sound
+;                  $iVolume - Volume individule de l'objet (0 to 1.0)
+;                  $iPan - La balance
+;                  |-1 = Full left
+;                  |+1 = Full right
+;                  |0 = Center
+;                  $iPitch - Pitch (0 = Réinitialise à la valeur originale/Taux d'échantillonage)
+; Return values .: Succes - 1
+;                  Failed - 0 And @error = BASS Error code And @extended = BASS Error string (Description)
+; Author ........: Matwachich
+; Remarks .......:
+; ;==========================================================================================
 #cs
 Function: _GEng_Sound_AttribSet
 	Adjust the attributes of a Sound Object
@@ -236,11 +249,11 @@ Parameters:
 	$hSound - Sound Object
 	$iVolume - Individual volum of the Sound Object (0 to 1.0)
 	$iPan - The panning/balance of the Sound Object
-	
+
 	- -1 = Full left
 	- +1 = Full right
 	- 0 = Center
-	
+
 	$iPitch - Pitch (0 = Reset to original value/sample rate)
 
 Returns:
@@ -265,14 +278,20 @@ Func _GEng_Sound_AttribSet($hSound, $iVolume = 1, $iPan = 0, $iPitch = 0)
 	Return 1
 EndFunc
 
-; # FUNCTION # ==============================================================================================
-; Name...........:	_GEng_Sound_AttribGet
-; Description....:	
-; Parameters.....:	
-; Return values..:	
-; Author.........:	Matwachich
-; Remarks........:	
-; ===========================================================================================================
+; #FUNCTION# ;===============================================================================
+; Name...........: _GEng_Sound_AttribGet
+; Description ...: Récupère les attributs d'un objet Sound
+; Syntax.........: _GEng_Sound_AttribGet($hSound, ByRef $iVolume, ByRef $iPan, ByRef $iPitch, ByRef $iDefaultSampleRate)
+; Parameters ....: $hSound - Objet Sound
+;                  $iVolume - Va contenir le volume individuel
+;                  $iPan - Va contenir la valeur de la balance
+;                  $iPitch - Va contenir la valeur du pitch
+;                  $iDefaultSampleRate - Va contenir le taux d'échantillonage original
+; Return values .: Succes - 1
+;                  Failed - 0 And @error = BASS Error code And @extended = BASS Error string (Description)
+; Author ........: Matwachich
+; Remarks .......:
+; ;==========================================================================================
 #cs
 Function: _GEng_Sound_AttribGet
 	Get the attributes of a Sound Object
@@ -310,17 +329,18 @@ Func _GEng_Sound_AttribGet($hSound, ByRef $iVolume, ByRef $iPan, ByRef $iPitch, 
 	Return 1
 EndFunc
 
-; # FUNCTION # ==============================================================================================
-; Name...........:	_GEng_Sound_SetLoop
-; Description....:	Spécifie si l'objet Sound doit être joué en boucle ou pas
-; Parameters.....:	$hSound = Objet Sound (retourné par _GEng_Sound_Load)
-;					$iLoop = 1 -> Boucle, 0 -> Pas de boucle
-; Return values..:	Succes - 1
-;					Echec - 0 et
-;						@error = Erreur Bass, @extended = Decription de l'erreur
-; Author.........:	Matwachich
-; Remarks........:	
-; ===========================================================================================================
+; #FUNCTION# ;===============================================================================
+; Name...........: _GEng_Sound_SetLoop
+; Description ...: Spécifie si l'objet Sound doit être joué en boucle ou pas
+; Syntax.........: _GEng_Sound_SetLoop(ByRef $hSound, $iLoop)
+; Parameters ....: $hSound = Objet Sound (retourné par _GEng_Sound_Load)
+;                  $iLoop = 1 -> Boucle, 0 -> Pas de boucle
+; Return values .: Succes - 1
+;                  Echec - 0 et
+;                  	@error = Erreur Bass, @extended = Decription de l'erreur
+; Author ........: Matwachich
+; Remarks .......:
+; ;==========================================================================================
 #cs
 Function: _GEng_Sound_SetLoop
 	Specify if a sound object should be played in loop
@@ -349,18 +369,19 @@ Func _GEng_Sound_SetLoop(ByRef $hSound, $iLoop)
 	Return 1
 EndFunc
 
-; # FUNCTION # ==============================================================================================
-; Name...........:	_GEng_Sound_IsPlaying
-; Description....:	Retourne le status d'un objet Sound
-; Parameters.....:	$hSound = Objet Sound (retourné par _GEng_Sound_Load)
-; Return values..:	Succes - 0 => Stop
-;							 1 => Play
-;							 -1 => Pause
-;							 -2 => Stalled
-;					Echec - @error = Erreur Bass, @extended = Decription de l'erreur
-; Author.........:	Matwachich
-; Remarks........:	Voir BASS_ChannelIsActive (bass.dll)
-; ===========================================================================================================
+; #FUNCTION# ;===============================================================================
+; Name...........: _GEng_Sound_IsPlaying
+; Description ...: Retourne le status d'un objet Sound
+; Syntax.........: _GEng_Sound_IsPlaying(ByRef $hSound)
+; Parameters ....: $hSound = Objet Sound (retourné par _GEng_Sound_Load)
+; Return values .: Succes - 0 => Stop
+;                  		 1 => Play
+;                  		 -1 => Pause
+;                  		 -2 => Stalled
+;                  Echec - @error = Erreur Bass, @extended = Decription de l'erreur
+; Author ........: Matwachich
+; Remarks .......: Voir BASS_ChannelIsActive (bass.dll)
+; ;==========================================================================================
 #cs
 Function: _GEng_Sound_IsPlaying
 	Get the status of a Sound Object
@@ -373,12 +394,12 @@ Parameters:
 
 Returns:
 	Succes - One of the following
-	
+
 	- 0 => Stop
 	- 1 => Play
 	- -1 => Pause
 	- -2 => Stalled
-	
+
 	Failed - 0 And @error = BASS Error code And @extended = BASS Error string (Description)
 #ce
 Func _GEng_Sound_IsPlaying(ByRef $hSound)
@@ -399,16 +420,17 @@ Func _GEng_Sound_IsPlaying(ByRef $hSound)
 	EndSwitch
 EndFunc
 
-; # FUNCTION # ==============================================================================================
-; Name...........:	_GEng_Sound_Pause
-; Description....:	Met en pause un objet Sound
-; Parameters.....:	$hSound = Objet Sound
-; Return values..:	Succes - 1
-;					Echec - 0 et
-;						@error = Erreur Bass, @extended = Decription de l'erreur
-; Author.........:	Matwachich
-; Remarks........:	
-; ===========================================================================================================
+; #FUNCTION# ;===============================================================================
+; Name...........: _GEng_Sound_Pause
+; Description ...: Met en pause un objet Sound
+; Syntax.........: _GEng_Sound_Pause(ByRef $hSound)
+; Parameters ....: $hSound = Objet Sound
+; Return values .: Succes - 1
+;                  Echec - 0 et
+;                  	@error = Erreur Bass, @extended = Decription de l'erreur
+; Author ........: Matwachich
+; Remarks .......:
+; ;==========================================================================================
 #cs
 Function: _GEng_Sound_Pause
 	Pause a Sound Object
@@ -429,16 +451,17 @@ Func _GEng_Sound_Pause(ByRef $hSound)
 	Return $ret
 EndFunc
 
-; # FUNCTION # ==============================================================================================
-; Name...........:	_GEng_Sound_Stop
-; Description....:	Stop un objet Sound
-; Parameters.....:	$hSound = Objet Sound
-; Return values..:	Succes - 1
-;					Echec - 0 et
-;						@error = Erreur Bass, @extended = Decription de l'erreur
-; Author.........:	Matwachich
-; Remarks........:	
-; ===========================================================================================================
+; #FUNCTION# ;===============================================================================
+; Name...........: _GEng_Sound_Stop
+; Description ...: Stop un objet Sound
+; Syntax.........: _GEng_Sound_Stop(ByRef $hSound)
+; Parameters ....: $hSound = Objet Sound
+; Return values .: Succes - 1
+;                  Echec - 0 et
+;                  	@error = Erreur Bass, @extended = Decription de l'erreur
+; Author ........: Matwachich
+; Remarks .......:
+; ;==========================================================================================
 #cs
 Function: _GEng_Sound_Stop
 	Stop a Sound Object
@@ -459,14 +482,15 @@ Func _GEng_Sound_Stop(ByRef $hSound)
 	Return $ret
 EndFunc
 
-; # FUNCTION # ==============================================================================================
-; Name...........:	_GEng_Sound_Free
-; Description....:	Supprime et libère les ressources d'un objet Sound
-; Parameters.....:	$hSound = Objet Sound
-; Return values..:	1
-; Author.........:	Matwachich
-; Remarks........:	
-; ===========================================================================================================
+; #FUNCTION# ;===============================================================================
+; Name...........: _GEng_Sound_Free
+; Description ...: Supprime et libère les ressources d'un objet Sound
+; Syntax.........: _GEng_Sound_Free(ByRef $hSound)
+; Parameters ....: $hSound = Objet Sound
+; Return values .: 1
+; Author ........: Matwachich
+; Remarks .......:
+; ;==========================================================================================
 #cs
 Function: _GEng_Sound_Free
 	Delete and free the ressources used by a Sound Object

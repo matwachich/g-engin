@@ -50,15 +50,16 @@ Global Enum _
 	$_gSpr_ColorMatrix, $_gSpr_ColorMatrixPtr, $_gSpr_hImgAttrib, $_gSpr_UseColorMatrix, _
 	$_gSpr_Masse
 
-; # FUNCTION # ==============================================================================================
-; Name...........:	_GEng_Sprite_Create
-; Description....:	Créer un Objet Sprite
-; Parameters.....:	$hImage = Objet Image à assigner au sprite (Optionel)
-;						Si Defaut, Objet Sprite vide
-; Return values..:	Objet Sprite
-; Author.........:	Matwachich
-; Remarks........:	
-; ===========================================================================================================
+; #FUNCTION# ;===============================================================================
+; Name...........: _GEng_Sprite_Create
+; Description ...: Créer un Objet Sprite
+; Syntax.........: _GEng_Sprite_Create($hImage = Default)
+; Parameters ....: $hImage = Objet Image à assigner au sprite (Optionel)
+;                  	Si Defaut, Objet Sprite vide
+; Return values .: Objet Sprite
+; Author ........: Matwachich
+; Remarks .......: 
+; ;==========================================================================================
 #cs
 Function: _GEng_Sprite_Create
 	Creates a Sprite Object
@@ -83,22 +84,23 @@ Func _GEng_Sprite_Create($hImage = Default)
 	Return $hSprite
 EndFunc
 
-; # FUNCTION # ==============================================================================================
-; Name...........:	_GEng_Sprite_ImageSet
-; Description....:	Assigne un objet Image à un Objet Sprite
-; Parameters.....:	$hSprite = Objet Sprite
-;					$hImage = Objet Image à assigner
-;					- Optionels: prendre une partie de l'objet Image (idéal pour les SpriteSheets)
-;						Doivent TOUS être spécifiés pour être pris en concidération
-;					$x, $y = coordonnées du point supérieur gauche du rectangle à prendre
-;					$w, $h = largeur et hauteur du rectangle à prendre
-; Return values..:	Succes - 1
-;					Echec - 0 et @error = 1
-; Author.........:	Matwachich
-; Remarks........:	Si il n'y avait aucune image associée au sprite lors de l'appel à cette fonction,
-;						alors la taille du sprite est initialisé à la taille de l'image assigné
-;						(appel à _GEng_Sprite_SizeSet)
-; ===========================================================================================================
+; #FUNCTION# ;===============================================================================
+; Name...........: _GEng_Sprite_ImageSet
+; Description ...: Assigne un objet Image à un Objet Sprite
+; Syntax.........: _GEng_Sprite_ImageSet(ByRef $hSprite, ByRef $hImage, $x = Default, $y = Default, $w = Default, $h = Default)
+; Parameters ....: $hSprite = Objet Sprite
+;                  $hImage = Objet Image à assigner
+;                  - Optionels: prendre une partie de l'objet Image (idéal pour les SpriteSheets)
+;                  	Doivent TOUS être spécifiés pour être pris en concidération
+;                  $x, $y = coordonnées du point supérieur gauche du rectangle à prendre
+;                  $w, $h = largeur et hauteur du rectangle à prendre
+; Return values .: Succes - 1
+;                  Echec - 0 et @error = 1
+; Author ........: Matwachich
+; Remarks .......: Si il n'y avait aucune image associée au sprite lors de l'appel à cette fonction,
+;                  	alors la taille du sprite est initialisé à la taille de l'image assigné
+;                  	(appel à _GEng_Sprite_SizeSet)
+; ;==========================================================================================
 #cs
 Function: _GEng_Sprite_ImageSet
 	Assigne an image object, or a part of it to a sprite
@@ -151,20 +153,21 @@ Func _GEng_Sprite_ImageSet(ByRef $hSprite, ByRef $hImage, $x = Default, $y = Def
 	Return 1
 EndFunc
 
-; # FUNCTION # ==============================================================================================
-; Name...........:	_GEng_Sprite_ImageSetRect
-; Description....:	Change le rectangle sélectioné de l'objet image actuellement assigné à l'objet sprite
-; Parameters.....:	$hSprite = Objet Sprite
-;					- Doivent TOUS être spécifiés pour être pris en concidération
-;					$x, $y = coordonnées du point supérieur gauche du rectangle à prendre
-;					$w, $h = largeur et hauteur du rectangle à prendre
-;					$InitSize = Si 1, la taille du sprite est initialisé à la taille du rectangle
-;						sélectioné de l'objet image
-; Return values..:	Succes - 1
-;					Echec - 0 et @error = 1
-; Author.........:	Matwachich
-; Remarks........:	
-; ===========================================================================================================
+; #FUNCTION# ;===============================================================================
+; Name...........: _GEng_Sprite_ImageSetRect
+; Description ...: Change le rectangle sélectioné de l'objet image actuellement assigné à l'objet sprite
+; Syntax.........: _GEng_Sprite_ImageSetRect(ByRef $hSprite, $x, $y, $w, $h, $InitSize = 0)
+; Parameters ....: $hSprite = Objet Sprite
+;                  - Doivent TOUS être spécifiés pour être pris en concidération
+;                  $x, $y = coordonnées du point supérieur gauche du rectangle à prendre
+;                  $w, $h = largeur et hauteur du rectangle à prendre
+;                  $InitSize = Si 1, la taille du sprite est initialisé à la taille du rectangle
+;                  	sélectioné de l'objet image
+; Return values .: Succes - 1
+;                  Echec - 0 et @error = 1
+; Author ........: Matwachich
+; Remarks .......: 
+; ;==========================================================================================
 #cs
 Function: _GEng_Sprite_ImageSetRect
 	Specifiy the part (rectangle) of the Image Object actually assigned to the Sprite that will be drawn
@@ -195,17 +198,18 @@ Func _GEng_Sprite_ImageSetRect(ByRef $hSprite, $x, $y, $w, $h, $InitSize = 0)
 	Return 1
 EndFunc
 
-; # FUNCTION # ==============================================================================================
-; Name...........:	_GEng_Sprite_Draw
-; Description....:	Déssine un sprite à l'écran selon ses attribut position
-; Parameters.....:	$hSprite = Objet Sprite
-;					$iCalculateMovements = Si 1, alors tous les mouvements du sprite sont calculé selon ses
-;						attribut vitesse, accélération, innertie. et Vitesse, accélération et innertie de rotation
-; Return values..:	Succes - 1
-;					Echec - 0 et @error = 1
-; Author.........:	Matwachich
-; Remarks........:	Un sprite fix (arrière plan, objet de décore immobile) devrai toujour avoir $iCalculateMovements = 0
-; ===========================================================================================================
+; #FUNCTION# ;===============================================================================
+; Name...........: _GEng_Sprite_Draw
+; Description ...: Déssine un sprite à l'écran selon ses attribut position
+; Syntax.........: _GEng_Sprite_Draw(ByRef $hSprite, $iCalculateMovements = 1)
+; Parameters ....: $hSprite = Objet Sprite
+;                  $iCalculateMovements = Si 1, alors tous les mouvements du sprite sont calculé selon ses
+;                  	attribut vitesse, accélération, innertie. et Vitesse, accélération et innertie de rotation
+; Return values .: Succes - 1
+;                  Echec - 0 et @error = 1
+; Author ........: Matwachich
+; Remarks .......: Un sprite fix (arrière plan, objet de décore immobile) devrai toujour avoir $iCalculateMovements = 0
+; ;==========================================================================================
 #cs
 Function: _GEng_Sprite_Draw
 	Draws a sprite at it's current position and angle
@@ -323,14 +327,15 @@ Func _GEng_Sprite_Draw(ByRef $hSprite, $iCalculateMovements = 1)
 	Return $ret
 EndFunc
 
-; # FUNCTION # ==============================================================================================
-; Name...........:	_GEng_Sprite_Delete
-; Description....:	Supprime un Objet Sprite
-; Parameters.....:	$hSprite = Objet Sprite
-; Return values..:	1
-; Author.........:	Matwachich
-; Remarks........:	
-; ===========================================================================================================
+; #FUNCTION# ;===============================================================================
+; Name...........: _GEng_Sprite_Delete
+; Description ...: Supprime un Objet Sprite
+; Syntax.........: _GEng_Sprite_Delete(ByRef $hSprite)
+; Parameters ....: $hSprite = Objet Sprite
+; Return values .: 1
+; Author ........: Matwachich
+; Remarks .......: 
+; ;==========================================================================================
 #cs
 Function: _GEng_Sprite_Delete
 	Delete a Sprite Object

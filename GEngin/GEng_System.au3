@@ -25,15 +25,16 @@
 
 Enum Step *2 $GEng_Debug_Pens = 1, $GEng_Debug_Sprites, $GEng_Debug_Vectors, $GEng_Debug_Collisions
 
-; # FUNCTION # ==============================================================================================
-; Name...........:	_GEng_Start
-; Description....:	Créer une fenètre d'affichage et lance GEngin
-; Parameters.....:	Idem GuiCreate()
-; Return values..:	Succes - 1
-;					Echec - 0 et @error = 1
-; Author.........:	Matwachich
-; Remarks........:	
-; ===========================================================================================================
+; #FUNCTION# ;===============================================================================
+; Name...........: _GEng_Start
+; Description ...: Créer une fenètre d'affichage et lance GEngin
+; Syntax.........: _GEng_Start($sTitle, $iW, $iH, $iX = -1, $iY = -1, $iStyle = -1, $iExtStyle = -1)
+; Parameters ....: Idem GuiCreate()
+; Return values .: Succes - 1
+;                  Echec - 0 et @error = 1
+; Author ........: Matwachich
+; Remarks .......: 
+; ;==========================================================================================
 #cs
 Function: _GEng_Start
 	Starts G-Engin, and creates a display window.
@@ -84,14 +85,15 @@ Func _GEng_Start($sTitle, $iW, $iH, $iX = -1, $iY = -1, $iStyle = -1, $iExtStyle
 	Return SetError(0, 0, 1)
 EndFunc
 
-; # FUNCTION # ==============================================================================================
-; Name...........:	_GEng_Shutdown
-; Description....:	Stop GEngin, supprime la fenètre d'affichage, et libère toutes les ressources
-; Parameters.....:	
-; Return values..:	
-; Author.........:	Matwachich
-; Remarks........:	
-; ===========================================================================================================
+; #FUNCTION# ;===============================================================================
+; Name...........: _GEng_Shutdown
+; Description ...: Stop GEngin, supprime la fenètre d'affichage, et libère toutes les ressources
+; Syntax.........: _GEng_Shutdown()
+; Parameters ....: 
+; Return values .: 
+; Author ........: Matwachich
+; Remarks .......: 
+; ;==========================================================================================
 #cs
 Function: _GEng_Shutdown
 	Stops G-Engin, deletes the display window, and free all the ressources.
@@ -123,24 +125,25 @@ Func _GEng_Shutdown()
 	GuiDelete($__GEng_hGui)
 EndFunc
 
-; # FUNCTION # ==============================================================================================
-; Name...........:	_GEng_SetDebug
-; Description....:	Active/Désactive/Récupère le status actuel du mode debug
-; Parameters.....:	$mode = 0 -> off, Defaut -> récupère la valeur du mode debug
-;						Ou: un/plusieurs de ces flags (additionnés)
-;					- $GEng_Debug_Pens = Créer les couleurs nécessaires au déssins manuels avec les fonctions
-;						_GEng_Debug_xxx (paramètre $iDbgPen)
-;					- $GEng_Debug_Sprites = Dessine les sprites
-;					- $GEng_Debug_Vectors = Dessine les vecteurs vitesse et accélération
-;					- $GEng_Debug_Collisions = Dessine les collisions
-; Return values..:	
-; Author.........:	Matwachich
-; Remarks........:	Le mode débug est surtout utile pour 'voir' les collisions
-;						Quand une collision a lieu, les hit-boxes des sprites en collision s'affichent en rouge
-;					Les modes $GEng_Debug_Sprites et $GEng_Debug_Collisions activent automatiquement
-;						$GEng_Debug_Pens
-;					Cette fonction appel _GDIPlus_Startup, tout comme _GEng_Start
-; ===========================================================================================================
+; #FUNCTION# ;===============================================================================
+; Name...........: _GEng_SetDebug
+; Description ...: Active/Désactive/Récupère le status actuel du mode debug
+; Syntax.........: _GEng_SetDebug($mode = Default)
+; Parameters ....: $mode = 0 -> off, Defaut -> récupère la valeur du mode debug
+;                  	Ou: un/plusieurs de ces flags (additionnés)
+;                  - $GEng_Debug_Pens = Créer les couleurs nécessaires au déssins manuels avec les fonctions
+;                  	_GEng_Debug_xxx (paramètre $iDbgPen)
+;                  - $GEng_Debug_Sprites = Dessine les sprites
+;                  - $GEng_Debug_Vectors = Dessine les vecteurs vitesse et accélération
+;                  - $GEng_Debug_Collisions = Dessine les collisions
+; Return values .: 
+; Author ........: Matwachich
+; Remarks .......: Le mode débug est surtout utile pour 'voir' les collisions
+;                  	Quand une collision a lieu, les hit-boxes des sprites en collision s'affichent en rouge
+;                  Les modes $GEng_Debug_Sprites et $GEng_Debug_Collisions activent automatiquement
+;                  	$GEng_Debug_Pens
+;                  Cette fonction appel _GDIPlus_Startup, tout comme _GEng_Start
+; ;==========================================================================================
 #cs
 Function: _GEng_SetDebug
 	Change debug mode, or get it's current status

@@ -32,18 +32,19 @@
 #ce
 #EndRegion ###
 
-; # FUNCTION # ==============================================================================================
-; Name...........:	_GEng_Sprite_PointGet
-; Description....:	Retourne la position d'un point dans un sprite
-; Parameters.....:	$hSprite = Objet Sprite
-;					$iImgX, $iImgY = Position du point recherché dans le sprite
-;					$x, $y = Vont contenir la position de ce point par rapport à l'écran
-; Return values..:	Succes - 1
-;					Echec - 0 et @error = 1
-; Author.........:	Matwachich
-; Remarks........:	Cette fonction est idéal pour toujours avoir la position d'un point du sprite malgré
-;						sa rotation
-; ===========================================================================================================
+; #FUNCTION# ;===============================================================================
+; Name...........: _GEng_Sprite_PointGet
+; Description ...: Retourne la position d'un point dans un sprite
+; Syntax.........: _GEng_Sprite_PointGet(ByRef $hSprite, $iImgX, $iImgY, ByRef $x, ByRef $y)
+; Parameters ....: $hSprite = Objet Sprite
+;                  $iImgX, $iImgY = Position du point recherché dans le sprite
+;                  $x, $y = Vont contenir la position de ce point par rapport à l'écran
+; Return values .: Succes - 1
+;                  Echec - 0 et @error = 1
+; Author ........: Matwachich
+; Remarks .......: Cette fonction est idéal pour toujours avoir la position d'un point du sprite malgré
+;                  	sa rotation
+; ;==========================================================================================
 #cs
 Function: _GEng_Sprite_PointGet
 	Returns the word's relatvie position of a sprite's relative point
@@ -87,15 +88,16 @@ EndFunc
 
 ;NameSpace: Point to Point
 
-; # FUNCTION # ==============================================================================================
-; Name...........:	_GEng_PointToPoint_Dist
-; Description....:	Calcule la distance (pixels) entre 2 points
-; Parameters.....:	$x0, $y0 = Coordonnées du premier point
-;					$x, $y = Coordonnées du second point
-; Return values..:	Distance (pixels)
-; Author.........:	Matwachich
-; Remarks........:	
-; ===========================================================================================================
+; #FUNCTION# ;===============================================================================
+; Name...........: _GEng_PointToPoint_Dist
+; Description ...: Calcule la distance (pixels) entre 2 points
+; Syntax.........: _GEng_PointToPoint_Dist($x0, $y0, $x, $y)
+; Parameters ....: $x0, $y0 = Coordonnées du premier point
+;                  $x, $y = Coordonnées du second point
+; Return values .: Distance (pixels)
+; Author ........: Matwachich
+; Remarks .......: 
+; ;==========================================================================================
 #cs
 Function: _GEng_PointToPoint_Dist
 	Returns the distance between 2 points
@@ -121,15 +123,16 @@ Func _GEng_PointToPoint_Dist($x0, $y0, $x, $y)
 EndFunc
 
 ; Retourne l'angle "brute", par rapport au point d'origine de hSprite (Utile pour SetAngle)
-; # FUNCTION # ==============================================================================================
-; Name...........:	_GEng_PointToPoint_Angle
-; Description....:	Retourne l'angle (degrés) entre le point premier point, et le second
-; Parameters.....:	$x0, $y0 = Coordonnées du premier point
-;					$x, $y = Coordonnées du second point
-; Return values..:	L'angle en degrés
-; Author.........:	Matwachich
-; Remarks........:	
-; ===========================================================================================================
+; #FUNCTION# ;===============================================================================
+; Name...........: _GEng_PointToPoint_Angle
+; Description ...: Retourne l'angle (degrés) entre le point premier point, et le second
+; Syntax.........: _GEng_PointToPoint_Angle($x0, $y0, $x, $y)
+; Parameters ....: $x0, $y0 = Coordonnées du premier point
+;                  $x, $y = Coordonnées du second point
+; Return values .: L'angle en degrés
+; Author ........: Matwachich
+; Remarks .......: 
+; ;==========================================================================================
 #cs
 Function: _GEng_PointToPoint_Angle
 	Returns the angle between 2 points
@@ -158,19 +161,20 @@ Func _GEng_PointToPoint_Angle($x0, $y0, $x, $y)
 	Return __GEng_GeometryRad2Deg($tmp)
 EndFunc
 
-; # FUNCTION # ==============================================================================================
-; Name...........:	_GEng_PointToPoint_Vector
-; Description....:	Retourne un vecteur (de grandeur variable) orienté du premier point, vers le second
-; Parameters.....:	$x0, $y0 = Coordonnées du premier point
-;					$x, $y = Coordonnées du second point
-;					$iGrandeur = Grandeur du vecteur
-;						Si Defaut - La grandeur sera égale à la distance entre les 2 points
-; Return values..:	Array représentant le vecteur
-;						[0] = x
-;						[1] = y
-; Author.........:	Matwachich
-; Remarks........:	
-; ===========================================================================================================
+; #FUNCTION# ;===============================================================================
+; Name...........: _GEng_PointToPoint_Vector
+; Description ...: Retourne un vecteur (de grandeur variable) orienté du premier point, vers le second
+; Syntax.........: _GEng_PointToPoint_Vector($x0, $y0, $x, $y, $iGrandeur = Default)
+; Parameters ....: $x0, $y0 = Coordonnées du premier point
+;                  $x, $y = Coordonnées du second point
+;                  $iGrandeur = Grandeur du vecteur
+;                  	Si Defaut - La grandeur sera égale à la distance entre les 2 points
+; Return values .: Array représentant le vecteur
+;                  	[0] = x
+;                  	[1] = y
+; Author ........: Matwachich
+; Remarks .......: 
+; ;==========================================================================================
 #cs
 Function: _GEng_PointToPoint_Vector
 	Returns a vector oriented from the first point to the second
@@ -201,15 +205,16 @@ EndFunc
 
 ;NameSpace: Sprite to Point
 
-; # FUNCTION # ==============================================================================================
-; Name...........:	_GEng_SpriteToPoint_Dist
-; Description....:	Calcule la distance (pixels) entre un sprite et un point
-; Parameters.....:	$hSprite = Objet sprite
-;					$x, $y = Coordonnées du point
-; Return values..:	Distance (pixels)
-; Author.........:	Matwachich
-; Remarks........:	
-; ===========================================================================================================
+; #FUNCTION# ;===============================================================================
+; Name...........: _GEng_SpriteToPoint_Dist
+; Description ...: Calcule la distance (pixels) entre un sprite et un point
+; Syntax.........: _GEng_SpriteToPoint_Dist(ByRef $hSprite, $x, $y)
+; Parameters ....: $hSprite = Objet sprite
+;                  $x, $y = Coordonnées du point
+; Return values .: Distance (pixels)
+; Author ........: Matwachich
+; Remarks .......: 
+; ;==========================================================================================
 #cs
 Function: _GEng_SpriteToPoint_Dist
 	Returns the distance between a Sprite Object and a point
@@ -240,16 +245,17 @@ Func _GEng_SpriteToPoint_Dist(ByRef $hSprite, $x, $y)
 EndFunc
 
 ; Retourne l'angle "brute", par rapport au point d'origine de hSprite (Utile pour SetAngle)
-; # FUNCTION # ==============================================================================================
-; Name...........:	_GEng_SpriteToPoint_Angle
-; Description....:	Retourne l'angle (degrés) entre un sprite et un point
-; Parameters.....:	$hSprite = Objet sprite
-;					$x, $y = Coordonnées du point
-; Return values..:	Angle (degrés)
-; Author.........:	Matwachich
-; Remarks........:	L'angle retourné est l'angle par rapport au point d'origine de hSprite, et de l'angle 0
-;						Il sera compris entre 0 et 359
-; ===========================================================================================================
+; #FUNCTION# ;===============================================================================
+; Name...........: _GEng_SpriteToPoint_Angle
+; Description ...: Retourne l'angle (degrés) entre un sprite et un point
+; Syntax.........: _GEng_SpriteToPoint_Angle(ByRef $hSprite, $x, $y)
+; Parameters ....: $hSprite = Objet sprite
+;                  $x, $y = Coordonnées du point
+; Return values .: Angle (degrés)
+; Author ........: Matwachich
+; Remarks .......: L'angle retourné est l'angle par rapport au point d'origine de hSprite, et de l'angle 0
+;                  	Il sera compris entre 0 et 359
+; ;==========================================================================================
 #cs
 Function: _GEng_SpriteToPoint_Angle
 	Returns the angle between a Sprite Object and a point
@@ -285,20 +291,21 @@ Func _GEng_SpriteToPoint_Angle(ByRef $hSprite, $x, $y)
 	Return __GEng_GeometryRad2Deg($tmp)
 EndFunc
 
-; # FUNCTION # ==============================================================================================
-; Name...........:	_GEng_SpriteToPoint_AngleDiff
-; Description....:	Retourne l'angle relatif à l'angle du sprite, entre ce dernier et un point
-; Parameters.....:	$hSprite = Objet sprite
-;					$x, $y = Coordonnées du point
-; Return values..:	Angle (degrés)
-; Author.........:	Matwachich
-; Remarks........:	L'angle retourné est l'angle par rapport au point d'origine de hSprite, et de l'angle de hSprite
-;						Il sera compris entre -179 - 0 - +180 
-;						(selon la position du point par rapport à *l'angle* du sprite)
-;					En d'autres termes:
-;					Retourne la différence d'angle entre hSprite et la position donné (Utile pour SetAngleSpeed)
+; #FUNCTION# ;===============================================================================
+; Name...........: _GEng_SpriteToPoint_AngleDiff
+; Description ...: Retourne l'angle relatif à l'angle du sprite, entre ce dernier et un point
+; Syntax.........: _GEng_SpriteToPoint_AngleDiff(ByRef $hSprite, $x, $y)
+; Parameters ....: $hSprite = Objet sprite
+;                  $x, $y = Coordonnées du point
+; Return values .: Angle (degrés)
+; Author ........: Matwachich
+; Remarks .......: L'angle retourné est l'angle par rapport au point d'origine de hSprite, et de l'angle de hSprite
+;                  	Il sera compris entre -179 - 0 - +180 
+;                  	(selon la position du point par rapport à *l'angle* du sprite)
+;                  En d'autres termes:
+;                  Retourne la différence d'angle entre hSprite et la position donné (Utile pour SetAngleSpeed)
 ;   					(De 0 à 180 => Sens horaire, De 0 à -179 => Send Anti-Horaire)
-; ===========================================================================================================
+; ;==========================================================================================
 #cs
 Function: _GEng_SpriteToPoint_AngleDiff
 	Returns the angle between a Sprite Object and a point, relativelly to the
@@ -359,17 +366,18 @@ Func _GEng_SpriteToPoint_AngleDiff(ByRef $hSprite, $x, $y) ; 0.2 ms
 	Return $result
 EndFunc
 
-; # FUNCTION # ==============================================================================================
-; Name...........:	_GEng_SpriteToPoint_Vector
-; Description....:	Retourne un vecteur (de grandeur variable) orienté du sprite, vers le point
-; Parameters.....:	$hSprite = Objet sprite
-;					$x, $y = Coordonnées du point
-; Return values..:	Array représentant le vecteur
-;						[0] = x
-;						[1] = y
-; Author.........:	Matwachich
-; Remarks........:	
-; ===========================================================================================================
+; #FUNCTION# ;===============================================================================
+; Name...........: _GEng_SpriteToPoint_Vector
+; Description ...: Retourne un vecteur (de grandeur variable) orienté du sprite, vers le point
+; Syntax.........: _GEng_SpriteToPoint_Vector(ByRef $hSprite, $x, $y, $iGrandeur = Default)
+; Parameters ....: $hSprite = Objet sprite
+;                  $x, $y = Coordonnées du point
+; Return values .: Array représentant le vecteur
+;                  	[0] = x
+;                  	[1] = y
+; Author ........: Matwachich
+; Remarks .......: 
+; ;==========================================================================================
 #cs
 Function: _GEng_SpriteToPoint_Vector
 	Returns a vector oriented from a Sprite Object to a point
@@ -401,14 +409,15 @@ EndFunc
 
 ;NameSpace: Sprite to Sprite
 
-; # FUNCTION # ==============================================================================================
-; Name...........:	_GEng_SpriteToSprite_Dist
-; Description....:	Calcule la distance (pixels) entre 2 objets Sprite
-; Parameters.....:	$hSprite1 & $hSprite2 = Objets sprite
-; Return values..:	Distance (Pixels)
-; Author.........:	Matwachich
-; Remarks........:	
-; ===========================================================================================================
+; #FUNCTION# ;===============================================================================
+; Name...........: _GEng_SpriteToSprite_Dist
+; Description ...: Calcule la distance (pixels) entre 2 objets Sprite
+; Syntax.........: _GEng_SpriteToSprite_Dist(ByRef $hSprite, ByRef $hSprite2)
+; Parameters ....: $hSprite1 & $hSprite2 = Objets sprite
+; Return values .: Distance (Pixels)
+; Author ........: Matwachich
+; Remarks .......: 
+; ;==========================================================================================
 #cs
 Function: _GEng_SpriteToSprite_Dist
 	Returns the distance between 2 Sprite Objects
@@ -432,14 +441,15 @@ Func _GEng_SpriteToSprite_Dist(ByRef $hSprite, ByRef $hSprite2)
 	Return _GEng_SpriteToPoint_Dist($hSprite, $x2, $y2)
 EndFunc
 
-; # FUNCTION # ==============================================================================================
-; Name...........:	_GEng_SpriteToSprite_Angle
-; Description....:	Retourne l'angle (degrés) entre 2 objets Sprite
-; Parameters.....:	$hSprite1 & $hSprite2 = Objets sprite
-; Return values..:	Angle (Degrés)
-; Author.........:	Matwachich
-; Remarks........:	
-; ===========================================================================================================
+; #FUNCTION# ;===============================================================================
+; Name...........: _GEng_SpriteToSprite_Angle
+; Description ...: Retourne l'angle (degrés) entre 2 objets Sprite
+; Syntax.........: _GEng_SpriteToSprite_Angle(ByRef $hSprite, ByRef $hSprite2)
+; Parameters ....: $hSprite1 & $hSprite2 = Objets sprite
+; Return values .: Angle (Degrés)
+; Author ........: Matwachich
+; Remarks .......: 
+; ;==========================================================================================
 #cs
 Function: _GEng_SpriteToSprite_Angle
 	Returns the angle from the first Sprite Object to the second
@@ -463,14 +473,15 @@ Func _GEng_SpriteToSprite_Angle(ByRef $hSprite, ByRef $hSprite2)
 	Return _GEng_SpriteToPoint_Angle($hSprite, $x2, $y2)
 EndFunc
 
-; # FUNCTION # ==============================================================================================
-; Name...........:	_GEng_SpriteToSprite_AngleDiff
-; Description....:	Retourne l'angle relatif à l'angle du premier sprite, entre ce dernier et le second sprite
-; Parameters.....:	$hSprite1 & $hSprite2 = Objets sprite
-; Return values..:	Angle (Degrés)
-; Author.........:	Matwachich
-; Remarks........:	Idem _GEng_SpriteToPoint_AngleDiff
-; ===========================================================================================================
+; #FUNCTION# ;===============================================================================
+; Name...........: _GEng_SpriteToSprite_AngleDiff
+; Description ...: Retourne l'angle relatif à l'angle du premier sprite, entre ce dernier et le second sprite
+; Syntax.........: _GEng_SpriteToSprite_AngleDiff(ByRef $hSprite, ByRef $hSprite2)
+; Parameters ....: $hSprite1 & $hSprite2 = Objets sprite
+; Return values .: Angle (Degrés)
+; Author ........: Matwachich
+; Remarks .......: Idem _GEng_SpriteToPoint_AngleDiff
+; ;==========================================================================================
 #cs
 Function: _GEng_SpriteToSprite_AngleDiff
 	Returns the angle between a Sprite Object and another, relativelly to the
@@ -501,16 +512,17 @@ Func _GEng_SpriteToSprite_AngleDiff(ByRef $hSprite, ByRef $hSprite2)
 	Return _GEng_SpriteToPoint_AngleDiff($hSprite, $x2, $y2)
 EndFunc
 
-; # FUNCTION # ==============================================================================================
-; Name...........:	_GEng_SpriteToSprite_Vector
-; Description....:	Retourne un vecteur (de grandeur variable) orienté du premier sprite, vers le second
-; Parameters.....:	$hSprite1 & $hSprite2 = Objets sprite
-; Return values..:	Array représentant le vecteur
-;						[0] = x
-;						[1] = y
-; Author.........:	Matwachich
-; Remarks........:	
-; ===========================================================================================================
+; #FUNCTION# ;===============================================================================
+; Name...........: _GEng_SpriteToSprite_Vector
+; Description ...: Retourne un vecteur (de grandeur variable) orienté du premier sprite, vers le second
+; Syntax.........: _GEng_SpriteToSprite_Vector(ByRef $hSprite, ByRef $hSprite2, $iGrandeur = Default)
+; Parameters ....: $hSprite1 & $hSprite2 = Objets sprite
+; Return values .: Array représentant le vecteur
+;                  	[0] = x
+;                  	[1] = y
+; Author ........: Matwachich
+; Remarks .......: 
+; ;==========================================================================================
 #cs
 Function: _GEng_SpriteToSprite_Vector
 	Returns a vector oriented from a Sprite Object to another
@@ -540,17 +552,18 @@ EndFunc
 
 ;NameSpace: Misc
 
-; # FUNCTION # ==============================================================================================
-; Name...........:	_GEng_AngleToVector
-; Description....:	Retourne un vecteur, à partire d'un angle et d'une grandeur
-; Parameters.....:	$iAngle = Angle du vecteur (Degrés)
-;					$iGrandeur = Grandeur du vecteur (Pixels)
-; Return values..:	Array représentant le vecteur
-;						[0] = x
-;						[1] = y
-; Author.........:	Matwachich
-; Remarks........:	
-; ===========================================================================================================
+; #FUNCTION# ;===============================================================================
+; Name...........: _GEng_AngleToVector
+; Description ...: Retourne un vecteur, à partire d'un angle et d'une grandeur
+; Syntax.........: _GEng_AngleToVector($iAngle, $iGrandeur = 1)
+; Parameters ....: $iAngle = Angle du vecteur (Degrés)
+;                  $iGrandeur = Grandeur du vecteur (Pixels)
+; Return values .: Array représentant le vecteur
+;                  	[0] = x
+;                  	[1] = y
+; Author ........: Matwachich
+; Remarks .......: 
+; ;==========================================================================================
 #cs
 Function: _GEng_AngleToVector
 	Returns a vector from an Angle and a Lenght
@@ -576,14 +589,15 @@ Func _GEng_AngleToVector($iAngle, $iGrandeur = 1) ; OK
 	Return $ret
 EndFunc
 
-; # FUNCTION # ==============================================================================================
-; Name...........:	_GEng_VectorToAngle
-; Description....:	Retourne l'angle d'un vecteur (similaire à _GEng_SpriteToPoint_Angle)
-; Parameters.....:	$difX, $difY = 
-; Return values..:	Angle (degrés)
-; Author.........:	Matwachich
-; Remarks........:	Fonction pas très utile vu l'existance de _GEng_PointToPoint_Angle & _GEng_SpriteToPoint_Angle
-; ===========================================================================================================
+; #FUNCTION# ;===============================================================================
+; Name...........: _GEng_VectorToAngle
+; Description ...: Retourne l'angle d'un vecteur (similaire à _GEng_SpriteToPoint_Angle)
+; Syntax.........: _GEng_VectorToAngle($difX, $difY)
+; Parameters ....: $difX, $difY = 
+; Return values .: Angle (degrés)
+; Author ........: Matwachich
+; Remarks .......: Fonction pas très utile vu l'existance de _GEng_PointToPoint_Angle & _GEng_SpriteToPoint_Angle
+; ;==========================================================================================
 #cs
 Function: _GEng_VectorToAngle
 	Returns an Angle from a Vector

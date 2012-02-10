@@ -20,15 +20,16 @@
 #EndRegion ###
 
 
-; # FUNCTION # ==============================================================================================
-; Name...........:	_GEng_ScrFlush
-; Description....:	Permet d'éffacer l'écran, en lui donnant une couleur
-; Parameters.....:	$iBkColor = Couleur avec la quelle remplire l'écran (Defaut = Blanc)
-; Return values..:	Succes - 1
-;					Echec - 0
-; Author.........:	Matwachich
-; Remarks........:	Inutile et couteux en ressource si vous avez un sprite qui fait office de background
-; ===========================================================================================================
+; #FUNCTION# ;===============================================================================
+; Name...........: _GEng_ScrFlush
+; Description ...: Permet d'éffacer l'écran, en lui donnant une couleur
+; Syntax.........: _GEng_ScrFlush($iBkColor = 0xFFFFFFFF)
+; Parameters ....: $iBkColor = Couleur avec la quelle remplire l'écran (Defaut = Blanc)
+; Return values .: Succes - 1
+;                  Echec - 0
+; Author ........: Matwachich
+; Remarks .......: Inutile et couteux en ressource si vous avez un sprite qui fait office de background
+; ;==========================================================================================
 #cs
 Function: _GEng_ScrFlush
 	Flush the screen with a bakcground color
@@ -47,15 +48,16 @@ Func _GEng_ScrFlush($iBkColor = 0xFFFFFFFF)
 	Return _GDIPlus_GraphicsClear($__GEng_hBuffer, $iBkColor)
 EndFunc
 
-; # FUNCTION # ==============================================================================================
-; Name...........:	_GEng_ScrUpdate
-; Description....:	Valider les opération de déssin (copie le hBitmap dans le hGraphic)
-; Parameters.....:	
-; Return values..:	Succes - 1
-;					Echec - 0
-; Author.........:	Matwachich
-; Remarks........:	Inspiré par "Sinus Scroller By UEZ"
-; ===========================================================================================================
+; #FUNCTION# ;===============================================================================
+; Name...........: _GEng_ScrUpdate
+; Description ...: Valider les opération de déssin (copie le hBitmap dans le hGraphic)
+; Syntax.........: _GEng_ScrUpdate()
+; Parameters ....: 
+; Return values .: Succes - 1
+;                  Echec - 0
+; Author ........: Matwachich
+; Remarks .......: Inspiré par "Sinus Scroller By UEZ"
+; ;==========================================================================================
 #cs
 Function: _GEng_ScrUpdate
 	Validate all the drawings (Sprites, Text) and update the screen
@@ -79,14 +81,15 @@ Func _GEng_ScrUpdate()
 	Return _WinAPI_BitBlt($__GEng_hDC, 0, 0, $__GEng_WinW, $__GEng_WinH, $__GEng_hCompatibleDC, 0, 0, 0x00CC0020) ; 0x00CC0020 = $SRCCOPY
 EndFunc
 
-; # FUNCTION # ==============================================================================================
-; Name...........:	_GEng_FPS_Get
-; Description....:	
-; Parameters.....:	
-; Return values..:	la valeur du FPS - @extended = temps de génération de la frame passé (ms)
-; Author.........:	Matwachich
-; Remarks........:	
-; ===========================================================================================================
+; #FUNCTION# ;===============================================================================
+; Name...........: _GEng_FPS_Get
+; Description ...: 
+; Syntax.........: _GEng_FPS_Get($iDelay = 1000)
+; Parameters ....: 
+; Return values .: la valeur du FPS - @extended = temps de génération de la frame passé (ms)
+; Author ........: Matwachich
+; Remarks .......: 
+; ;==========================================================================================
 #cs
 Function: _GEng_FPS_Get
 	Returns the FPS

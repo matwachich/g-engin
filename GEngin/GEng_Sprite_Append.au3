@@ -20,16 +20,17 @@
 #EndRegion ###
 
 
-; # FUNCTION # ==============================================================================================
-; Name...........:	_GEng_Sprite_ExtInfoAdd
-; Description....:	Attache une variable à un sprite
-; Parameters.....:	$hSprite = Objet Sprite
-;					$vInfo = Valeur à attaché
-; Return values..:	Succes - Index de la valeur attaché
-;					Echec - 0 et @error = 1
-; Author.........:	Matwachich
-; Remarks........:	par exemple: points de vie, nom du personnage ...
-; ===========================================================================================================
+; #FUNCTION# ;===============================================================================
+; Name...........: _GEng_Sprite_ExtInfoAdd
+; Description ...: Attache une variable à un sprite
+; Syntax.........: _GEng_Sprite_ExtInfoAdd(ByRef $hSprite, $vInfo)
+; Parameters ....: $hSprite = Objet Sprite
+;                  $vInfo = Valeur à attaché
+; Return values .: Succes - Index de la valeur attaché
+;                  Echec - 0 et @error = 1
+; Author ........: Matwachich
+; Remarks .......: par exemple: points de vie, nom du personnage ...
+; ;==========================================================================================
 #cs
 Function: _GEng_Sprite_ExtInfoAdd
 	Append some value to a Sprite Object
@@ -57,17 +58,18 @@ Func _GEng_Sprite_ExtInfoAdd(ByRef $hSprite, $vInfo)
 	Return $uB + 1 - $__GEng_SpritesArrayUB
 EndFunc
 
-; # FUNCTION # ==============================================================================================
-; Name...........:	_GEng_Sprite_ExtInfoSet
-; Description....:	Modifie la valeur d'une variable attaché à un sprite
-; Parameters.....:	$hSprite = Objet Sprite
-;					$iIndex = Index de la valeur à modifier (retourné par _GEng_Sprite_ExtInfoAdd)
-;					$vInfo = Valeur à attaché
-; Return values..:	Succes - 1
-;					Echec - 0 et @error = 1
-; Author.........:	Matwachich
-; Remarks........:	
-; ===========================================================================================================
+; #FUNCTION# ;===============================================================================
+; Name...........: _GEng_Sprite_ExtInfoSet
+; Description ...: Modifie la valeur d'une variable attaché à un sprite
+; Syntax.........: _GEng_Sprite_ExtInfoSet(ByRef $hSprite, $iIndex, $vInfo)
+; Parameters ....: $hSprite = Objet Sprite
+;                  $iIndex = Index de la valeur à modifier (retourné par _GEng_Sprite_ExtInfoAdd)
+;                  $vInfo = Valeur à attaché
+; Return values .: Succes - 1
+;                  Echec - 0 et @error = 1
+; Author ........: Matwachich
+; Remarks........:
+; ;==========================================================================================
 #cs
 Function: _GEng_Sprite_ExtInfoSet
 	Modifie an appended value.
@@ -94,16 +96,17 @@ Func _GEng_Sprite_ExtInfoSet(ByRef $hSprite, $iIndex, $vInfo)
 	Return 1
 EndFunc
 
-; # FUNCTION # ==============================================================================================
-; Name...........:	_GEng_Sprite_ExtInfoGet
-; Description....:	Récupère un valeur attaché à un sprite
-; Parameters.....:	$hSprite = Objet Sprite
-;					$iIndex = Index de la valeur à modifier (retourné par _GEng_Sprite_ExtInfoAdd)
-; Return values..:	Succes - la valeur attaché
-;					Echec - 0 et @error = 1
-; Author.........:	Matwachich
-; Remarks........:	
-; ===========================================================================================================
+; #FUNCTION# ;===============================================================================
+; Name...........: _GEng_Sprite_ExtInfoGet
+; Description ...: Récupère un valeur attaché à un sprite
+; Syntax.........: _GEng_Sprite_ExtInfoGet(ByRef $hSprite, $iIndex)
+; Parameters ....: $hSprite = Objet Sprite
+;                  $iIndex = Index de la valeur à modifier (retourné par _GEng_Sprite_ExtInfoAdd)
+; Return values .: Succes - la valeur attaché
+;                  Echec - 0 et @error = 1
+; Author ........: Matwachich
+; Remarks........:
+; ;==========================================================================================
 #cs
 Function: _GEng_Sprite_ExtInfoGet
 	Read an appended value

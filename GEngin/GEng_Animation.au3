@@ -21,14 +21,15 @@
 #ce
 #EndRegion ###
 
-; # FUNCTION # ==============================================================================================
-; Name...........:	_GEng_Anim_Create
-; Description....:	Créer un objet Animation
-; Parameters.....:	Aucun
-; Return values..:	Objet Animation ($oAnim)
-; Author.........:	Matwachich
-; Remarks........:	
-; ===========================================================================================================
+; #FUNCTION# ;===============================================================================
+; Name...........: _GEng_Anim_Create
+; Description ...: Créer un objet Animation
+; Syntax.........: _GEng_Anim_Create()
+; Parameters ....: Aucun
+; Return values .: Objet Animation ($oAnim)
+; Author ........: Matwachich
+; Remarks .......: 
+; ;==========================================================================================
 #cs
 Function: _GEng_Anim_Create
 	Create an Animation Object
@@ -49,15 +50,16 @@ Func _GEng_Anim_Create()
 	Return $a
 EndFunc
 
-; # FUNCTION # ==============================================================================================
-; Name...........:	_GEng_Anim_FrameCount
-; Description....:	Retourne le nombre de frames contenues dans un objet Animation
-; Parameters.....:	ByRef $hAnim = Objet Animation
-; Return values..:	Succes - Nombre de frames
-;					Echec - 0 et @error = 1
-; Author.........:	Matwachich
-; Remarks........:	
-; ===========================================================================================================
+; #FUNCTION# ;===============================================================================
+; Name...........: _GEng_Anim_FrameCount
+; Description ...: Retourne le nombre de frames contenues dans un objet Animation
+; Syntax.........: _GEng_Anim_FrameCount(ByRef $hAnim)
+; Parameters ....: ByRef $hAnim = Objet Animation
+; Return values .: Succes - Nombre de frames
+;                  Echec - 0 et @error = 1
+; Author ........: Matwachich
+; Remarks .......: 
+; ;==========================================================================================
 #cs
 Function: _GEng_Anim_FrameCount
 	Get the number of frames in an Animation Object
@@ -78,21 +80,22 @@ Func _GEng_Anim_FrameCount(ByRef $hAnim)
 	Return $hAnim[0][0]
 EndFunc
 
-; # FUNCTION # ==============================================================================================
-; Name...........:	_GEng_Anim_FrameAdd
-; Description....:	Ajoute une frame dans l'objet animation
-; Parameters.....:	ByRef $hAnim = Objet Animation
-;					ByRef $hImage = Objet Image
-;					$iFramDuration = Durée de la frame (ms)
-;					- Optionels: prendre une partie de l'objet Image (idéal pour les SpriteSheets)
-;						Doivent TOUS être spécifiés pour être pris en concidération
-;					$x, $y = coordonnées du point supérieur gauche du rectangle à prendre
-;					$w, $h = largeur et hauteur du rectangle à prendre
-; Return values..:	Succes - 1
-;					Echec - 0 et @error = 1
-; Author.........:	Matwachich
-; Remarks........:	
-; ===========================================================================================================
+; #FUNCTION# ;===============================================================================
+; Name...........: _GEng_Anim_FrameAdd
+; Description ...: Ajoute une frame dans l'objet animation
+; Syntax.........: _GEng_Anim_FrameAdd(ByRef $hAnim, ByRef $hImage, $iFramDuration, $x = Default, $y = Default, $w = Default, $h = Default)
+; Parameters ....: ByRef $hAnim = Objet Animation
+;                  ByRef $hImage = Objet Image
+;                  $iFramDuration = Durée de la frame (ms)
+;                  - Optionels: prendre une partie de l'objet Image (idéal pour les SpriteSheets)
+;                  	Doivent TOUS être spécifiés pour être pris en concidération
+;                  $x, $y = coordonnées du point supérieur gauche du rectangle à prendre
+;                  $w, $h = largeur et hauteur du rectangle à prendre
+; Return values .: Succes - 1
+;                  Echec - 0 et @error = 1
+; Author ........: Matwachich
+; Remarks .......: 
+; ;==========================================================================================
 #cs
 Function: _GEng_Anim_FrameAdd
 	Add a frame to an Animation Object
@@ -141,22 +144,23 @@ Func _GEng_Anim_FrameAdd(ByRef $hAnim, ByRef $hImage, $iFramDuration, $x = Defau
 	Return 1
 EndFunc
 
-; # FUNCTION # ==============================================================================================
-; Name...........:	_GEng_Anim_FrameMod
-; Description....:	Modifier une frame d'un Objet Animation
-; Parameters.....:	ByRef $hAnim = Objet Animation
-;					$iFrameNumber = Numéro de la frame à modifier (base 1)
-;					ByRef $hImage = Objet Image
-;					$iFramDuration = Durée de la frame (ms)
-;					- Optionels: prendre une partie de l'objet Image (idéal pour les SpriteSheets)
-;						Doivent TOUS être spécifiés pour être pris en concidération
-;					$x, $y = coordonnées du point supérieur gauche du rectangle à prendre
-;					$w, $h = largeur et hauteur du rectangle à prendre
-; Return values..:	Succes - 1
-;					Echec - 0 et @error = 1
-; Author.........:	Matwachich
-; Remarks........:	
-; ===========================================================================================================
+; #FUNCTION# ;===============================================================================
+; Name...........: _GEng_Anim_FrameMod
+; Description ...: Modifier une frame d'un Objet Animation
+; Syntax.........: _GEng_Anim_FrameMod(ByRef $hAnim, $iFrameNumber, ByRef $hImage, $iFramDuration = Default, $x = Default, $y = Default, $w = Default, $h = Default)
+; Parameters ....: ByRef $hAnim = Objet Animation
+;                  $iFrameNumber = Numéro de la frame à modifier (base 1)
+;                  ByRef $hImage = Objet Image
+;                  $iFramDuration = Durée de la frame (ms)
+;                  - Optionels: prendre une partie de l'objet Image (idéal pour les SpriteSheets)
+;                  	Doivent TOUS être spécifiés pour être pris en concidération
+;                  $x, $y = coordonnées du point supérieur gauche du rectangle à prendre
+;                  $w, $h = largeur et hauteur du rectangle à prendre
+; Return values .: Succes - 1
+;                  Echec - 0 et @error = 1
+; Author ........: Matwachich
+; Remarks .......: 
+; ;==========================================================================================
 #cs
 Function: _GEng_Anim_FrameMod
 	Modify an Animation Object's frame

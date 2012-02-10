@@ -30,21 +30,22 @@
 
 Global $__GEng_Images[1] = [0]
 
-; # FUNCTION # ==============================================================================================
-; Name...........:	_GEng_ImageLoad
-; Description....:	Charge un fichier image pour être utiliser par GEngin
-; Parameters.....:	$sPath
-;					- Optionels
-;					$width, $height = Taille de l'image (non spécifié => Taille du fichier)
-;					- Optionels: prendre une partie de l'objet Image (idéal pour les SpriteSheets)
-;						Doivent TOUS être spécifiés pour être pris en concidération
-;					$x, $y = coordonnées du point supérieur gauche du rectangle à prendre
-;					$w, $h = largeur et hauteur du rectangle à prendre
-; Return values..:	Succes - Objet Image
-;					Echec - 0 et @error = 1
-; Author.........:	Matwachich
-; Remarks........:	
-; ===========================================================================================================
+; #FUNCTION# ;===============================================================================
+; Name...........: _GEng_ImageLoad
+; Description ...: Charge un fichier image pour être utiliser par GEngin
+; Syntax.........: _GEng_ImageLoad($sPath, $imgW = Default, $imgH = Default, $x = Default, $y = Default, $w = Default, $h = Default)
+; Parameters ....: $sPath
+;                  - Optionels
+;                  $width, $height = Taille de l'image (non spécifié => Taille du fichier)
+;                  - Optionels: prendre une partie de l'objet Image (idéal pour les SpriteSheets)
+;                  	Doivent TOUS être spécifiés pour être pris en concidération
+;                  $x, $y = coordonnées du point supérieur gauche du rectangle à prendre
+;                  $w, $h = largeur et hauteur du rectangle à prendre
+; Return values .: Succes - Objet Image
+;                  Echec - 0 et @error = 1
+; Author ........: Matwachich
+; Remarks .......: 
+; ;==========================================================================================
 #cs
 Function: _GEng_ImageLoad
 	Creates an image object from a file, or a rectangular part of a file
@@ -74,14 +75,15 @@ Func _GEng_ImageLoad($sPath, $imgW = Default, $imgH = Default, $x = Default, $y 
 	Return __GEng_ImageLoadDo($hImg, $imgW, $imgH, $x, $y, $w, $h)
 EndFunc
 
-; # FUNCTION # ==============================================================================================
-; Name...........:	_GEng_ImageLoadStream
-; Description....:	
-; Parameters.....:	
-; Return values..:	
-; Author.........:	UEZ, ProgAndy
-; Remarks........:	
-; ===========================================================================================================
+; #FUNCTION# ;===============================================================================
+; Name...........: _GEng_ImageLoadStream
+; Description ...: 
+; Syntax.........: _GEng_ImageLoadStream($pic, $imgW = Default, $imgH = Default, $x = Default, $y = Default, $w = Default, $h = Default)
+; Parameters ....: 
+; Return values .: 
+; Author ........: UEZ, ProgAndy
+; Remarks .......: 
+; ;==========================================================================================
 #cs
 Function: _GEng_ImageLoadStream
 	Creates an image object from a string representing binary image file data
